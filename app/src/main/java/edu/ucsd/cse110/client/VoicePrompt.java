@@ -1,7 +1,13 @@
 package edu.ucsd.cse110.client;
 
-import javafx.scene.Node;
+import java.io.File;
 
-public class VoicePrompt extends Node {
-    
+public class VoicePrompt {
+    public static void startRecording() {
+
+	}
+
+	public static File stopRecording() {
+		return null;
+	}
 }

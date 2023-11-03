@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.api;
 
-public class WhisperInterface {
-    
+import java.io.File;
+
+public interface WhisperInterface {
+	public String transcribe(File file);
 }
