@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.client;
 
-public class VoicePrompt {
+import javafx.scene.Node;
+
+public class VoicePrompt extends Node {
     
 }
