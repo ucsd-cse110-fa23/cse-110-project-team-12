@@ -7,8 +7,6 @@ import api.ChatGPTInterface;
 import api.MockChatGPT;
 import api.MockWhisper;
 import api.WhisperInterface;
-import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -28,8 +26,9 @@ public class CreateRecipe extends VBox{
 	private ChatGPTInterface chatGPT;
 	
     public CreateRecipe() {
-        this.setPrefSize(400, 400);
-        this.setStyle("-fx-background-color: #000;");
+        this.setPrefSize(280, 290);
+		this.setMaxHeight(290);
+        this.setStyle("-fx-background-color: #5B5B5B;");
         this.page = 0;
 
 		this.whisper = new MockWhisper();
@@ -112,17 +111,8 @@ public class CreateRecipe extends VBox{
 }
 
 class CreateRecipeButton extends Button {
-    private Button createRecipeButton;
-    
     public CreateRecipeButton() {
-        createRecipeButton = new Button("+");
-        createRecipeButton.setOnAction(
-            e -> {
-                Scene scene = new Scene(new CreateRecipe(), 400, 400);
-                Stage stage = new Stage();
-                stage.setScene(scene);
-                stage.show();
-            }
-        );
+		super("+");
+		this.setStyle("-fx-background-color: #98D38E; -fx-border-width: 0; -fx-text-fill: white;");
     }
 }
