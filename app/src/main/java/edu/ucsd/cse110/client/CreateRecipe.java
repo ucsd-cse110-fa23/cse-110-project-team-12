@@ -1,4 +1,4 @@
-package client;
+package edu.ucsd.cse110.client;
 
 public class CreateRecipe {
     
