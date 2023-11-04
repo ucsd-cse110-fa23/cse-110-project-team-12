@@ -4,6 +4,6 @@ import java.io.File;
 
 public class MockWhisper implements WhisperInterface {
 	public String transcribe(File file) {
-		return null;
+		return "Lunch";
 	}
 }
