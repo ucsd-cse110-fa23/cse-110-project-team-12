@@ -2,7 +2,7 @@ package edu.ucsd.cse110.api;
 
 import java.io.File;
 
-public class MockWhisper implements WhisperInterface {
+public class WhisperMock implements WhisperInterface {
 	public String transcribe(File file) {
 		return "Lunch";
 	}
