@@ -1,13 +1,13 @@
 package edu.ucsd.cse110.api;
 
 // Mock ChatGPT to use for testing, construced with integer to set the model response
-public class MockChatGPT implements ChatGPTInterface {
+public class ChatGPTMock implements ChatGPTInterface {
 	private int desiredResponse;
 
 	/**
 	 * default constructor
 	 */
-	public MockChatGPT() {
+	public ChatGPTMock() {
 		this.desiredResponse = 1;
 	}
 
@@ -15,7 +15,7 @@ public class MockChatGPT implements ChatGPTInterface {
 	 * 
 	 * @param desiredResponse which given response you want
 	 */
-	public MockChatGPT(int desiredResponse) {
+	public ChatGPTMock(int desiredResponse) {
 		this.desiredResponse = desiredResponse;
 	}
 
@@ -115,7 +115,7 @@ public class MockChatGPT implements ChatGPTInterface {
 	}
 
 	public static void main(String[] args) {
-		ChatGPTInterface mock = new MockChatGPT(1);
+		ChatGPTInterface mock = new ChatGPTMock(1);
 		ChatGPTInterface real = new ChatGPT();
 		try {
 			System.out
