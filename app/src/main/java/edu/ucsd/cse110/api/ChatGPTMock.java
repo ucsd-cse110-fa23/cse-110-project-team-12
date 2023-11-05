@@ -113,17 +113,4 @@ public class ChatGPTMock implements ChatGPTInterface {
 		String[] result = { name, information };
 		return result;
 	}
-
-	public static void main(String[] args) {
-		ChatGPTInterface mock = new ChatGPTMock(1);
-		ChatGPTInterface real = new ChatGPT();
-		try {
-			System.out
-					.println("\n \n Mock GPT Test: \n \n" + mock.promptGPT("lunch", "I have chicken, lemon, pepper.")[1]);
-			System.out
-					.println("\n \n Real GPT Test: \n \n" + real.promptGPT("lunch", "I have chicken, lemon, pepper.")[1]);
-		} catch (Exception e) {
-			System.err.println("Error: " + e.getMessage());
-		}
-	}
 }
