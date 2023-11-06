@@ -6,6 +6,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 import java.io.File;
 
@@ -129,7 +130,7 @@ public class CreateRecipe extends StackPane {
 						catch (Exception exception) {
 							System.err.println(exception);
 						}
-						generatedRecipe = new Recipe(selectedIngredients, gptResult[1]);
+						generatedRecipe = new Recipe(gptResult[0], gptResult[1]);
 					}
 
 					page++;
@@ -182,7 +183,7 @@ public class CreateRecipe extends StackPane {
 		// generated recipe detailed view
 		else {
 			Label recipeTitle = new Label(generatedRecipe.getName());
-			recipeTitle.setFont(new Font("Helvetica Bold", 20));
+			recipeTitle.setFont(new Font("Helvetica Bold", 13));
 			recipeTitle.setPadding(new Insets(10, 0, 0, 0));
 			recipeTitle.setTextFill(Color.WHITE);
 

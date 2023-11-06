@@ -32,7 +32,7 @@ public class AppFrame extends BorderPane {
 		this.header = new Header();
 
 		whisper = new Whisper();
-		chatGPT = new ChatGPTMock(1);
+		chatGPT = new ChatGPT();
 		voicePrompt = new VoicePrompt("./voice.wav");
 
 		this.createRecipeButton = new CreateRecipeButton();	
