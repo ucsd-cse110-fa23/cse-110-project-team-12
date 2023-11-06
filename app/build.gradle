@@ -43,6 +43,13 @@ java {
     }
 }
 
+// So errors in test will display.
+test {
+    dependsOn cleanTest
+    testLogging.showStandardStreams = true
+}
+
+
 application {
     // Define the main class for the application.
     mainClass = 'edu.ucsd.cse110.App'
