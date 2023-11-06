@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.client;
 
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -14,6 +15,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.DropShadow;
 
 // takes the user through the recipe creation process
@@ -165,13 +167,45 @@ public class CreateRecipe extends StackPane {
             content.getChildren().addAll(mealTypeHeading, mealTypeText, pantryPrompt, recordButtonModule);
         } 
 
-		// generated recipe view
+		// generated recipe detailed view
 		else {
 			Label recipeTitle = new Label(generatedRecipe.getName());
 			recipeTitle.setFont(new Font("Helvetica Bold", 20));
-			recipeTitle.setPadding(new Insets(70, 0, 0, 0));
+			recipeTitle.setPadding(new Insets(10, 0, 0, 0));
 			recipeTitle.setTextFill(Color.WHITE);
-			content.getChildren().addAll(recipeTitle);
+
+			Label instructions = new Label(generatedRecipe.getInformation());
+			instructions.setStyle("-fx-background-color: transparent");
+			instructions.setFont(new Font("Helvetica", 11));
+			instructions.setTextFill(Color.WHITE);
+			
+			ScrollPane scrollPane = new ScrollPane(instructions);
+			scrollPane.setPadding(new Insets(5, 0, 0, 10));
+
+			Button cancelButton = new Button("Cancel");	
+			cancelButton.setStyle("-fx-background-color: #BC8B8B; -fx-background-radius: 4px");
+			cancelButton.setFont(new Font("Helvetica Bold", 10));
+			cancelButton.setTextFill(Color.WHITE);
+			cancelButton.setOnAction(
+				e -> {
+					appFrame.stopCreating();
+				}
+			);
+			Button saveButton = new Button("Save");
+			saveButton.setStyle("-fx-background-color: #98D38E; -fx-background-radius: 4px");
+			saveButton.setFont(new Font("Helvetica Bold", 10));
+			saveButton.setTextFill(Color.WHITE);
+			saveButton.setOnAction(
+				e -> {
+					appFrame.stopCreating();
+				}
+			);
+			HBox buttonBox = new HBox(cancelButton, saveButton);
+			buttonBox.setPadding(new Insets(7, 7, 7, 7));
+			buttonBox.setSpacing(183);
+
+			content.getChildren().addAll(recipeTitle, scrollPane, buttonBox);
+			this.getChildren().removeAll(backArrow, backButton);
         }
     }
 }
