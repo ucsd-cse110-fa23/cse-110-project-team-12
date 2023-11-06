@@ -1,5 +1,9 @@
 package edu.ucsd.cse110.api;
 
-public class WhisperMock {
-    
+import java.io.File;
+
+public class WhisperMock implements WhisperInterface {
+	public String transcribe(File file) {
+		return "Lunch";
+	}
 }
