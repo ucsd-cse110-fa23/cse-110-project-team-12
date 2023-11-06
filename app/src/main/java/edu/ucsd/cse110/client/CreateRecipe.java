@@ -35,7 +35,7 @@ public class CreateRecipe extends StackPane {
 	private Recipe generatedRecipe;
 
 	
-    public CreateRecipe(AppFrame appFrame) {
+    public CreateRecipe(AppFrame appFrame, WhisperInterface whisper, ChatGPTInterface chatGPT) {
 		this.appFrame = appFrame;
         this.setPrefSize(280, 290);
 		this.setMaxHeight(290);
@@ -44,8 +44,8 @@ public class CreateRecipe extends StackPane {
 		DropShadow dropShadow = new DropShadow(5, Color.BLACK);
 		this.setEffect(dropShadow);
         
-		whisper = new WhisperMock();
-		chatGPT = new ChatGPTMock(1);
+		this.whisper = whisper;
+		this.chatGPT = chatGPT;
 
 		content = new VBox();
 		content.setPrefSize(280, 290);
