@@ -75,15 +75,4 @@ public class ChatGPT implements ChatGPTInterface {
       return new String[] { "No response received", "" };
     }
   }
-
-  public static void main(String[] args) {
-    ChatGPT test = new ChatGPT();
-    try {
-      String[] result = test.promptGPT("dinner", "I have rice, beed, tapatio sauce, and garlic.");
-      System.out.println("Title: " + result[0]);
-      System.out.println("Recipe: " + result[1]);
-    } catch (Exception e) {
-      System.err.println("Error: " + e.getMessage());
-    }
-  }
 }
