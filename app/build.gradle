@@ -44,3 +44,12 @@ application {
     // Define the main class for the application.
     mainClass = 'edu.ucsd.cse110.App'
 }
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ["src/main/java"]
+            includes = ["**/*.css"]
+        }
+    }
+}
