@@ -9,3 +9,5 @@ build
 app/bin
 
 .DS_Store
+
+*.wav

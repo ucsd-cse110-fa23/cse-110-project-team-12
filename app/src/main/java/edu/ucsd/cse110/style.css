@@ -1,0 +1,180 @@
+* {
+	-primary: #98D38E;
+	-secondary: #BC8B8B;
+	-background: #5B5B5B;
+}
+
+#app-frame {
+	-fx-background-color: #FAF9F6;
+}
+
+#header {
+	-fx-background-color: -primary;
+	-fx-alignment: center;
+	-fx-pref-width: 325;
+	-fx-pref-height: 68;
+}
+
+#header-title {
+	-fx-text-fill: white;
+}
+
+#create-button {
+	-fx-background-color: transparent;
+	-fx-border-width: 0;
+	-fx-min-width: 37;
+	-fx-min-height: 37;
+}
+
+#create-circle {
+	-fx-fill: -primary;
+}
+
+#create-plus {
+	-fx-text-fill: white;
+}
+
+#record-background {
+	-fx-fill: -secondary;
+}
+
+#record-midground {
+	-fx-fill: -background;
+}
+
+#create-recipe {
+	-fx-background-color: -background;
+	-fx-opacity: 0.95;
+	-fx-pref-width: 280;
+	-fx-pref-height: 290;
+	-fx-max-height: 290;
+	-fx-alignment: top-left;
+}
+
+#content {
+	-fx-background-color: transparent;
+	-fx-pref-width: 280;
+	-fx-pref-height: 290;
+	-fx-alignment: top-center;
+}
+
+#back-arrow {
+	-fx-background-color: transparent;
+	-fx-text-fill: white;
+	-fx-padding: 5 0 0 5;
+}
+
+#back-button {
+	-fx-background-color: transparent;
+	-fx-pref-width: 20;
+	-fx-pref-height: 30;
+}
+
+#record-button {
+	-fx-background-color: -secondary;
+	-fx-border-width: 0;
+	-fx-min-width: 31;
+	-fx-min-height: 31;
+}
+
+#meal-options-heading, #meal-type-heading {
+	-fx-text-fill: white;
+	-fx-padding: 70 0 0 0;
+}
+
+#meal-options, #meal-type-text {
+	-fx-text-fill: white;
+	-fx-padding: 10 0 0 0;
+}
+
+#invalid-meal-type-warning {
+	-fx-text-fill: -secondary;
+	-fx-padding: 20 0 0 0;
+}
+
+#pantry-prompt {
+	-fx-text-fill: white;
+	-fx-padding: 55 0 0 0;
+}
+
+#recipe-title {
+	-fx-text-fill: white;
+	-fx-padding: 10 0 0 0;
+}
+
+#information {
+	-fx-text-fill: white;
+}
+
+#cancel-button {
+	-fx-background-color: -secondary;
+	-fx-background-radius: 4px;
+	-fx-text-fill: white;
+}
+
+#save-button {
+	-fx-background-color: -primary;
+	-fx-background-radius: 4px;
+	-fx-text-fill: white;
+}
+
+#button-box {
+	-fx-padding: 7;
+	-fx-spacing: 183;
+}
+
+.scroll-pane {
+	-fx-background-color: transparent;
+	-fx-padding: 5 0 0 10;
+	-fx-min-height: 230;
+}
+
+.viewport {
+	-fx-background-color: transparent;
+}
+
+.scroll-bar:horizontal, .scroll-bar:vertical{
+    -fx-background-color: transparent;
+}
+
+.increment-button, .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar:horizontal .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+	-fx-pref-height: 3;
+    -fx-background-radius: 0em;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+	-fx-pref-width: 3;
+    -fx-background-radius: 0em;
+}
+
+.scroll-bar:horizontal .thumb, .scroll-bar:vertical .thumb {
+    -fx-background-color: #868686;
+    -fx-background-radius: 5em;
+}
+
+.scroll-bar:vertical {
+    -fx-pref-width: 16.5;
+    -fx-padding: 3;
+}
+
+.scroll-bar:horizontal {
+    -fx-pref-height: 16.5;
+    -fx-padding: 3;
+}
+
+.scroll-bar, .scroll-bar:pressed, .scroll-bar:focused {
+    -fx-font-size: 15;
+}
+
+.scroll-pane > .corner {
+    -fx-background-color: transparent;
+}

@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.client;
 
+// This class represents a Recipe Object, that contains the name and information for a Recipe
 public class Recipe {
     private String name;
     private String information;
