@@ -15,7 +15,7 @@ public class WhisperTest {
             Whisper w = new Whisper();
             File f = new File("src/main/java/edu/ucsd/cse110/api/assets/iwantlunch.wav");
             String response = w.transcribe(f).toLowerCase();
-            assertTrue(response,response.contains("lunch"));
+            assertTrue(response.contains("lunch"));
         }
         catch (Exception e) {}
     }

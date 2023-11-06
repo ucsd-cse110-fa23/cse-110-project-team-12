@@ -1,19 +1,15 @@
 package edu.ucsd.cse110.api;
 
 import java.io.*;
-import java.util.Map;
 import java.net.*;
 import org.json.*;
 
 public class Whisper implements WhisperInterface {
-    private static final String API_ENDPOINT = "https://api.openai.com/v1/audio/transcriptions";
-    private static String TOKEN;
-    private static final String MODEL = "whisper-1";
+    private final String API_ENDPOINT = "https://api.openai.com/v1/audio/transcriptions";
+    private final String TOKEN = "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";
+    private final String MODEL = "whisper-1";
 
-    public Whisper(){
-        Map<String, String> env = System.getenv();
-        TOKEN = env.get("OPENAI_TOKEN");
-    }
+    public Whisper(){}
     
     private static void writeParameterToOutputStream(
     OutputStream outputStream,
