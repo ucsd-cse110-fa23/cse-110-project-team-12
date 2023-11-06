@@ -8,32 +8,35 @@ import javafx.scene.shape.Circle;
 
 // handles the UI for the record button
 class RecordButtonModule extends StackPane {
+	private static final String SECONDARY = "#BC8B8B";
+	private static final String BACKGROUND = "#5B5B5B";
+
+	private Circle recordBackground;
+	private Circle recordMidground;
 	private Button recordButton;
-	private Circle background;
-	private Circle midground;
 	private boolean recording;
 
 	public RecordButtonModule(Button recordButton, int topPadding) {
-		background = new Circle(28.5);
-		background.setFill(Color.web("#BC8B8B"));
-		midground = new Circle(24.5);
-		midground.setFill(Color.web("#5B5B5B"));
+		recordBackground = new Circle(28.5);
+		recordMidground = new Circle(24.5);
+		recordBackground.setId("record-background");
+		recordMidground.setId("record-midground");
 
 		this.recordButton = recordButton;
 		this.setPadding(new Insets(topPadding, 0, 0, 0));
-		this.getChildren().addAll(background, midground, recordButton);
+		this.getChildren().addAll(recordBackground, recordMidground, recordButton);
 	}
 
 	public void switchColor() {
 		if (!recording) {
 			recording = true;
-			midground.setFill(Color.web("#BC8B8B"));
-			recordButton.setStyle("-fx-background-color: #5B5B5B;");
+			recordMidground.setFill(Color.web(SECONDARY));
+			recordButton.setStyle("-fx-background-color: " + BACKGROUND + ";");
 		}
 		else {
 			recording = false;
-			midground.setFill(Color.web("#5B5B5B"));
-			recordButton.setStyle("-fx-background-color: #BC8B8B;");
+			recordMidground.setFill(Color.web(BACKGROUND));
+			recordButton.setStyle("-fx-background-color: " + SECONDARY + ";");
 		}
 	}
 

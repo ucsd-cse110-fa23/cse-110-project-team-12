@@ -17,11 +17,11 @@ public class MealTypeValidator {
     public static String parseMealType(String validMealTypeText) {
         validMealTypeText = validMealTypeText.toLowerCase();
         if (validMealTypeText.contains("breakfast"))
-            return "breakfast";
+            return "Breakfast";
         else if (validMealTypeText.contains("lunch"))
-            return "lunch";
+            return "Lunch";
         else if (validMealTypeText.contains("dinner"))
-            return "dinner";
+            return "Dinner";
         return "";
     }
 }
