@@ -31,10 +31,10 @@ public class MealTypeValidatorTest {
     public void testMealTypeParse() {
         // Contains good string.
         String mealText = "I would like to have Breakfast.";
-        assertTrue("breakfast".equals(MealTypeValidator.parseMealType(mealText)));
+        assertTrue("Breakfast".equals(MealTypeValidator.parseMealType(mealText)));
 
         // Contains good string.
         mealText = "please give me uhhhh dinnER, and uhhhh nevermind :)";
-        assertTrue("dinner".equals(MealTypeValidator.parseMealType(mealText)));
+        assertTrue("Dinner".equals(MealTypeValidator.parseMealType(mealText)));
     }
 }
