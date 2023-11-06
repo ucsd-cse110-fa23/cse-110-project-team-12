@@ -32,6 +32,7 @@ public class CreateRecipe extends StackPane {
 	private ChatGPTInterface chatGPT;
 	private VoicePromptInterface voicePrompt;
 	private String selectedMealType;
+	private boolean selectedMealTypeValid = true;
 	private String selectedIngredients;
 	private Recipe generatedRecipe;
 
@@ -81,7 +82,7 @@ public class CreateRecipe extends StackPane {
 						appFrame.stopCreating();
 					} 
 					else {
-						page--;
+						goToPrevPage();
 						updateUI();
 					}
 				}
@@ -104,6 +105,11 @@ public class CreateRecipe extends StackPane {
 						File mealTypeRecording = voicePrompt.stopRecording();
 						try {
 							selectedMealType = whisper.transcribe(mealTypeRecording);
+							selectedMealTypeValid = MealTypeValidator.validateMealType(selectedMealType);
+							if (selectedMealTypeValid) {
+								selectedMealType = MealTypeValidator.parseMealType(selectedMealType);
+								this.goToNextPage();
+							}
 						}
 						catch (Exception except) {
 							except.printStackTrace();
@@ -111,7 +117,7 @@ public class CreateRecipe extends StackPane {
 					}
 
 					// page 1 is the ingredient selection
-					if (page == 1) {
+					else if (page == 1) {
 						File ingredientsRecording = voicePrompt.stopRecording();
 						try {
 							selectedIngredients = whisper.transcribe(ingredientsRecording);
@@ -128,9 +134,9 @@ public class CreateRecipe extends StackPane {
 							System.err.println(exception);
 						}
 						generatedRecipe = new Recipe(selectedIngredients, gptResult[1]);
+						this.goToNextPage();
 					}
 
-					page++;
         			updateUI();
 				}
             }
@@ -152,8 +158,20 @@ public class CreateRecipe extends StackPane {
 			mealOptions.setPadding(new Insets(10, 0, 0, 0));
 			mealOptions.setTextFill(Color.WHITE);
 
-			recordButtonModule = new RecordButtonModule(recordButton, 55);
-            content.getChildren().addAll(mealOptionHeading, mealOptions, recordButtonModule);
+			
+			if (!selectedMealTypeValid) {
+				Label invalidMealTypeWarning = new Label("Invalid Meal Type");
+				invalidMealTypeWarning.setFont(new Font("Helvetica Bold", 17));
+				invalidMealTypeWarning.setPadding(new Insets(20, 0, 0, 0));
+				invalidMealTypeWarning.setTextFill(Color.web("#BC8B8B"));
+				recordButtonModule = new RecordButtonModule(recordButton, 17);
+
+            	content.getChildren().addAll(mealOptionHeading, mealOptions, invalidMealTypeWarning, recordButtonModule);
+			}
+			else {
+				recordButtonModule = new RecordButtonModule(recordButton, 55);
+				content.getChildren().addAll(mealOptionHeading, mealOptions, recordButtonModule);
+			}
         } 
 
 		// ingredient selection page
@@ -178,7 +196,7 @@ public class CreateRecipe extends StackPane {
         } 
 
 		// generated recipe view
-		else {
+		else if (this.page == 2) {
 			Label recipeTitle = new Label(generatedRecipe.getName());
 			recipeTitle.setFont(new Font("Helvetica Bold", 20));
 			recipeTitle.setPadding(new Insets(70, 0, 0, 0));
@@ -186,4 +204,12 @@ public class CreateRecipe extends StackPane {
 			content.getChildren().addAll(recipeTitle);
         }
     }
+
+	private void goToNextPage() {
+		this.page++;
+	}
+
+	private void goToPrevPage() {
+		this.page--;
+	}
 }
