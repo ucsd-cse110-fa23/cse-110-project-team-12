@@ -11,18 +11,20 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 // Class to send and receive API request calls
-public class ChatGPT implements ChatGPTInterface{
+public class ChatGPT implements ChatGPTInterface {
   private static final String API_ENDPOINT = "https://api.openai.com/v1/completions";
   private static final String API_KEY = "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";
   private static final String MODEL = "text-davinci-003";
+  private static final String promptPartOne = "For a ";
+  private static final String promptPartTwo = " type of meal, create a detailed recipe for me with the ingredients I will be giving to you. For the recipe, the first line of the message should be the title, and then include the ingredients/instructions. The ingredients are given by a user who is listing the ingredients they currently have for this meal they want to cook. The recipe generated can include fundamental ingredients like seasonings, spices, oil, and water, even if the user hasn't explicitly listed them. The key is to ensure that the recipe remains practical and accurate. Create a complete and coherent recipe. The ingredients are: ";
   private static final int MAX_TOKENS = 500;
 
   public String[] promptGPT(String mealType, String ingredients)
       throws IOException, InterruptedException, URISyntaxException {
 
     // Set request parameters
-    String prompt = "Make me a recipe for " + mealType
-        + " with the following ingredients:\n" + ingredients;
+    String prompt = promptPartOne + mealType
+        + promptPartTwo + ingredients;
 
     // Create a request body which you will pass into the request object
     JSONObject requestBody = new JSONObject();
@@ -71,17 +73,6 @@ public class ChatGPT implements ChatGPTInterface{
       return result;
     } else {
       return new String[] { "No response received", "" };
-    }
-  }
-
-  public static void main(String[] args) {
-    ChatGPT test = new ChatGPT();
-    try {
-      String[] result = test.promptGPT("dinner", "I have chicken, broccoli, garlic, and rice.");
-      System.out.println("Title: " + result[0]);
-      System.out.println("Recipe: " + result[1]);
-    } catch (Exception e) {
-      System.err.println("Error: " + e.getMessage());
     }
   }
 }
