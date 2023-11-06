@@ -69,6 +69,7 @@ public class ChatGPT implements ChatGPTInterface {
       String generatedText = choices.getJSONObject(0).getString("text");
       generatedText = generatedText.trim();
       String[] result = generatedText.split("\n", 2);
+	  result[0] = result[0].substring(1, result[0].length() - 1);
       result[1] = result[1].substring(0);
       return result;
     } else {

@@ -6,7 +6,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 
 import java.io.File;
 
@@ -137,8 +136,8 @@ public class CreateRecipe extends StackPane {
 							System.err.println(exception);
 						}
 						generatedRecipe = new Recipe(gptResult[0], gptResult[1]);
+						this.goToNextPage();
 					}
-
         			updateUI();
 				}
             }
