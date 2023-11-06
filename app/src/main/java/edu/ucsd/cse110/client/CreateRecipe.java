@@ -32,12 +32,13 @@ public class CreateRecipe extends StackPane {
 
 	private WhisperInterface whisper;
 	private ChatGPTInterface chatGPT;
+	private VoicePromptInterface voicePrompt;
 	private String selectedMealType;
 	private String selectedIngredients;
 	private Recipe generatedRecipe;
 
 	
-    public CreateRecipe(AppFrame appFrame, WhisperInterface whisper, ChatGPTInterface chatGPT) {
+    public CreateRecipe(AppFrame appFrame, WhisperInterface whisper, ChatGPTInterface chatGPT, VoicePromptInterface voicePrompt) {
 		this.appFrame = appFrame;
         this.setPrefSize(280, 290);
 		this.setMaxHeight(290);
@@ -48,6 +49,7 @@ public class CreateRecipe extends StackPane {
         
 		this.whisper = whisper;
 		this.chatGPT = chatGPT;
+		this.voicePrompt = voicePrompt;
 
 		content = new VBox();
 		content.setPrefSize(280, 290);
@@ -93,7 +95,7 @@ public class CreateRecipe extends StackPane {
 				if (!recording) {
 					recording = true;
 					recordButtonModule.switchColor();
-					VoicePrompt.startRecording();
+					voicePrompt.startRecording();
 				}
 				else {
 					recording = false;
@@ -101,14 +103,24 @@ public class CreateRecipe extends StackPane {
 
 					// page 0 is the meal type selection
 					if (page == 0) {
-						File mealTypeRecording = VoicePrompt.stopRecording();
-						selectedMealType = whisper.transcribe(mealTypeRecording);
+						File mealTypeRecording = voicePrompt.stopRecording();
+						try {
+							selectedMealType = whisper.transcribe(mealTypeRecording);
+						}
+						catch (Exception except) {
+							except.printStackTrace();
+						}
 					}
 
 					// page 1 is the ingredient selection
 					if (page == 1) {
-						File ingredientsRecording = VoicePrompt.stopRecording();
-						selectedIngredients = whisper.transcribe(ingredientsRecording);
+						File ingredientsRecording = voicePrompt.stopRecording();
+						try {
+							selectedIngredients = whisper.transcribe(ingredientsRecording);
+						}
+						catch (Exception except) {
+							except.printStackTrace();
+						}
 						
 						String[] gptResult = new String[2];
 						try {
@@ -117,7 +129,7 @@ public class CreateRecipe extends StackPane {
 						catch (Exception exception) {
 							System.err.println(exception);
 						}
-						generatedRecipe = new Recipe(gptResult[0], gptResult[1]);
+						generatedRecipe = new Recipe(selectedIngredients, gptResult[1]);
 					}
 
 					page++;

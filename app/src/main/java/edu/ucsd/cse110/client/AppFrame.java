@@ -1,7 +1,11 @@
 package edu.ucsd.cse110.client;
 
+import edu.ucsd.cse110.api.ChatGPT;
 import edu.ucsd.cse110.api.ChatGPTInterface;
 import edu.ucsd.cse110.api.ChatGPTMock;
+import edu.ucsd.cse110.api.VoicePrompt;
+import edu.ucsd.cse110.api.VoicePromptInterface;
+import edu.ucsd.cse110.api.Whisper;
 import edu.ucsd.cse110.api.WhisperInterface;
 import edu.ucsd.cse110.api.WhisperMock;
 import javafx.geometry.Insets;
@@ -16,17 +20,21 @@ public class AppFrame extends BorderPane {
 	private Spacer createRecipeSpacer;
 	private Button createButton;
 	private StackPane content;
-	
+
 	private WhisperInterface whisper;
 	private ChatGPTInterface chatGPT;
-
+	private VoicePromptInterface voicePrompt;
+	
 	private CreateRecipe createRecipe;
 	private boolean creatingRecipe;
 
     public AppFrame() {
 		this.header = new Header();
-		this.whisper = new WhisperMock();
-		this.chatGPT = new ChatGPTMock(1);
+
+		whisper = new Whisper();
+		chatGPT = new ChatGPTMock(1);
+		voicePrompt = new VoicePrompt("./voice.wav");
+
 		this.createRecipeButton = new CreateRecipeButton();	
 		this.createButton = createRecipeButton.getCreateButton();
 
@@ -48,7 +56,7 @@ public class AppFrame extends BorderPane {
             e -> {
 				if (!creatingRecipe) {
 					creatingRecipe = true;
-					createRecipe = new CreateRecipe(this, whisper, chatGPT);
+					createRecipe = new CreateRecipe(this, whisper, chatGPT, voicePrompt);
 					createRecipeSpacer = new Spacer(createRecipe, new Insets(30, 0, 0, 0), Pos.TOP_CENTER);
 					content.getChildren().add(createRecipeSpacer);
 				}
