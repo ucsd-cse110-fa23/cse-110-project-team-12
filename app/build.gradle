@@ -11,6 +11,7 @@ plugins {
 
     // FOR JAVAFX
     id 'org.openjfx.javafxplugin' version '0.0.12'
+    
 }
 
 repositories {
@@ -24,6 +25,10 @@ dependencies {
 
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:32.1.1-jre'
+
+    // https://mvnrepository.com/artifact/org.json/json
+    implementation group: 'org.json', name: 'json', version: '20230227'
+
 }
 
 javafx {
@@ -37,6 +42,13 @@ java {
         languageVersion = JavaLanguageVersion.of(18)
     }
 }
+
+// So errors in test will display.
+test {
+    dependsOn cleanTest
+    testLogging.showStandardStreams = true
+}
+
 
 application {
     // Define the main class for the application.
