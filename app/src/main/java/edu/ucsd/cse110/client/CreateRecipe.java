@@ -16,20 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 
-import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
-import javafx.stage.Stage;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.text.Font;
-
 // takes the user through the recipe creation process
 public class CreateRecipe extends StackPane {
 	private AppFrame appFrame; // helps call stopCreating when the creation ends
@@ -188,69 +174,4 @@ public class CreateRecipe extends StackPane {
 			content.getChildren().addAll(recipeTitle);
         }
     }
-}
-
-// handles the UI for the record button
-class RecordButtonModule extends StackPane {
-	private Button recordButton;
-	private Circle background;
-	private Circle midground;
-	private boolean recording;
-
-	public RecordButtonModule(Button recordButton, int topPadding) {
-		background = new Circle(28.5);
-		background.setFill(Color.web("#BC8B8B"));
-		midground = new Circle(24.5);
-		midground.setFill(Color.web("#5B5B5B"));
-
-		this.recordButton = recordButton;
-		this.setPadding(new Insets(topPadding, 0, 0, 0));
-		this.getChildren().addAll(background, midground, recordButton);
-	}
-
-	public void switchColor() {
-		if (!recording) {
-			recording = true;
-			midground.setFill(Color.web("#BC8B8B"));
-			recordButton.setStyle("-fx-background-color: #5B5B5B;");
-		}
-		else {
-			recording = false;
-			midground.setFill(Color.web("#5B5B5B"));
-			recordButton.setStyle("-fx-background-color: #BC8B8B;");
-		}
-	}
-
-	public void setTopPadding(int topPadding) {
-		this.setPadding(new Insets(topPadding, 0, 0, 0));
-	}
-}
-
-
-// Consistent Header for the PantryPal app
-class Header extends VBox {
-	private Label title;
-
-	Header() {
-		this.setPrefSize(325, 68);
-		this.setStyle("-fx-background-color: #98D38E;");
-		this.setAlignment(Pos.CENTER);
-		
-		DropShadow dropShadow = new DropShadow(15, Color.BLACK); 
-        this.setEffect(dropShadow);
-
-		title = new Label("PantryPal");
-		title.setFont(new Font("Helvetica Bold", 40));
-		title.setTextFill(Color.WHITE);
-		this.getChildren().add(title);
-	}
-}
-
-// Helps place buttons and boxs where they need to be in the AppFrame
-class Spacer extends HBox {
-	Spacer(Node node, Insets insets, Pos pos) {
-		super(node);
-		this.setPadding(insets);
-		this.setAlignment(pos);
-	}
 }
