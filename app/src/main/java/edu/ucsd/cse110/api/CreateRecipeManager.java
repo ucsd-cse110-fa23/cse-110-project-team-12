@@ -74,6 +74,10 @@ public class CreateRecipeManager {
         return selectedMealType;
     }
 
+    public String getSelectedIngredients(){
+        return selectedIngredients;
+    }
+
     public void startRecording() {
         if (isRecording)
             return;

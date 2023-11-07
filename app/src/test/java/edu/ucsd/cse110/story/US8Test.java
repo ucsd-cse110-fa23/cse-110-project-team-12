@@ -13,6 +13,9 @@ import edu.ucsd.cse110.api.VoicePromptMock;
 import edu.ucsd.cse110.api.WhisperInterface;
 import edu.ucsd.cse110.api.WhisperMock;
 
+import java.util.List;
+import java.util.ArrayList;
+
 public class US8Test {
     private CreateRecipeManager manager;
     private ChatGPTInterface chatGPT;
@@ -20,13 +23,20 @@ public class US8Test {
     private VoicePromptInterface voice;
 
     // Tests the BDD Scenario listed for US8
+    /*
+     * Given I am waiting for the recipe to be created
+     * When the recipe is created
+     * Then I am taken to the detailed view for the recipe
+     */
     @Test
-    public void testIfDetailedViewIsDisplayedAfterRecipeCreation() {
+    public void testUS8BDD1() {
 
         // Set up manager
         chatGPT = new ChatGPTMock();
         whisper = new WhisperMock();
-        voice = new VoicePromptMock(VoicePromptMock.PromptType.IngredientsList);
+        List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>(); 
+        promptTypes.add(VoicePromptMock.PromptType.IngredientsList);
+        voice = new VoicePromptMock(promptTypes);
         
         manager = new CreateRecipeManager(voice, whisper, chatGPT);
 
