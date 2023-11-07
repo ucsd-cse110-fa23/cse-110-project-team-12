@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.client;
 
+import edu.ucsd.cse110.api.AppFrameManager;
 import edu.ucsd.cse110.api.ChatGPT;
 import edu.ucsd.cse110.api.ChatGPTInterface;
 import edu.ucsd.cse110.api.CreateRecipeManager;
@@ -22,7 +23,7 @@ public class AppFrame extends BorderPane {
 	private VoicePromptInterface voicePrompt;
 	
 	private CreateRecipe createRecipe;
-	private boolean creatingRecipe;
+	private AppFrameManager appFrameManager;
 
     public AppFrame() {
 		this.header = new Header();
@@ -30,6 +31,8 @@ public class AppFrame extends BorderPane {
 		whisper = new Whisper();
 		chatGPT = new ChatGPT();
 		voicePrompt = new VoicePrompt("./voice.wav");
+
+		appFrameManager = new AppFrameManager();
 
 		this.createButtonModule = new CreateButtonModule();	
 		this.createButton = createButtonModule.getCreateButton();
@@ -45,22 +48,26 @@ public class AppFrame extends BorderPane {
     }
 
 	// adds functionality to the createRecipeButton
-	void addListeners() {
+	private void addListeners() {
 		createButton.setOnAction(
             e -> {
-				if (!creatingRecipe) {
-					creatingRecipe = true;
-					CreateRecipeManager manager = new CreateRecipeManager(voicePrompt, whisper, chatGPT);
-					createRecipe = new CreateRecipe(this, manager);
-					content.getChildren().add(createRecipe.getSpacer());
-				}
+				createRecipe();
             }
         );
 	}
 
+	public void createRecipe() {
+		if (!appFrameManager.getIsCreatingRecipe()) {
+			appFrameManager.stopCreating();
+			CreateRecipeManager manager = new CreateRecipeManager(voicePrompt, whisper, chatGPT);
+			createRecipe = new CreateRecipe(this, manager);
+			content.getChildren().add(createRecipe.getSpacer());
+		}
+	}
+
 	// reset AppFrame when the recipe creation stops
 	public void stopCreating() {
-		creatingRecipe = false;
+		appFrameManager.stopCreating();
 		content.getChildren().remove(createRecipe.getSpacer());
 	}
 }
