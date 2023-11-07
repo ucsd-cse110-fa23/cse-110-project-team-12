@@ -5,6 +5,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.List;
+import java.util.ArrayList;
 
 public class VoicePromptTest {
     @Test
@@ -14,7 +16,9 @@ public class VoicePromptTest {
     }
     @Test
     public void testVoicePromptMockConstructor(){
-        VoicePromptInterface vp = new VoicePromptMock(VoicePromptMock.PromptType.MealType);
+        List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
+        promptTypes.add(VoicePromptMock.PromptType.MealType);
+        VoicePromptInterface vp = new VoicePromptMock(promptTypes);
         assertNotNull(vp);
     }
     @Test
@@ -30,7 +34,9 @@ public class VoicePromptTest {
 
     @Test
     public void testVoicePromptMockSuccess() {
-        VoicePromptInterface vpm = new VoicePromptMock(VoicePromptMock.PromptType.MealType);
+        List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
+        promptTypes.add(VoicePromptMock.PromptType.MealType);
+        VoicePromptInterface vpm = new VoicePromptMock(promptTypes);
         vpm.startRecording();
         File f = vpm.stopRecording();
         assertTrue(f.exists());

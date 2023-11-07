@@ -11,3 +11,5 @@ app/bin
 .DS_Store
 
 *.wav
+
+!app/src/main/java/edu/ucsd/cse110/api/assets/*.wav
