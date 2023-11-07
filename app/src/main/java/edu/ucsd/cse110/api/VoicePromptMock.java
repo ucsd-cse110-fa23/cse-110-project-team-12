@@ -21,7 +21,7 @@ public class VoicePromptMock implements VoicePromptInterface {
         if (pt == PromptType.MealType)
             return new File("./src/main/java/edu/ucsd/cse110/api/assets/iwantlunch.wav");
         if (pt == PromptType.IngredientsList)
-            return new File("./src/main/java/edu/ucsd/cse110/api//assets/ingredients.wav");
+            return new File("./src/main/java/edu/ucsd/cse110/api/assets/ingredients.wav");
         return null;
     }
 }
