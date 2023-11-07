@@ -61,8 +61,13 @@ public class CreateRecipe extends StackPane {
 	private void addListeners() {
 		backButton.setOnAction(
             e -> {
-				createRecipeManager.goToPreviousPage();
-				updateUI();
+				if (createRecipeManager.getPage() == CreateRecipeManager.PageType.MealTypeInput) {
+					appFrame.stopCreating();
+				}
+				else {
+					createRecipeManager.goToPreviousPage();
+					updateUI();
+				}
             }
         );
 
