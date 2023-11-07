@@ -8,8 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.ucsd.cse110.api.AppFrameManager;
-import edu.ucsd.cse110.api.CreateRecipeManager;
-import edu.ucsd.cse110.client.AppFrame;
 
 public class US5Test {
     @Test
