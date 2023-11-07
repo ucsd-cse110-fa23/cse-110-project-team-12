@@ -2,12 +2,11 @@ package edu.ucsd.cse110.client;
 
 import edu.ucsd.cse110.api.ChatGPT;
 import edu.ucsd.cse110.api.ChatGPTInterface;
-import edu.ucsd.cse110.api.ChatGPTMock;
+import edu.ucsd.cse110.api.CreateRecipeManager;
 import edu.ucsd.cse110.api.VoicePrompt;
 import edu.ucsd.cse110.api.VoicePromptInterface;
 import edu.ucsd.cse110.api.Whisper;
 import edu.ucsd.cse110.api.WhisperInterface;
-import edu.ucsd.cse110.api.WhisperMock;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 
@@ -51,7 +50,8 @@ public class AppFrame extends BorderPane {
             e -> {
 				if (!creatingRecipe) {
 					creatingRecipe = true;
-					createRecipe = new CreateRecipe(this, voicePrompt, whisper, chatGPT);
+					CreateRecipeManager manager = new CreateRecipeManager(voicePrompt, whisper, chatGPT);
+					createRecipe = new CreateRecipe(this, manager);
 					content.getChildren().add(createRecipe.getSpacer());
 				}
             }

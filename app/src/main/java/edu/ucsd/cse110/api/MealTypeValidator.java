@@ -14,14 +14,14 @@ public class MealTypeValidator {
         return containsCount == 1;
     }
 
-    public static String parseMealType(String validMealTypeText) {
+    public static CreateRecipeManager.MealType parseMealType(String validMealTypeText) {
         validMealTypeText = validMealTypeText.toLowerCase();
         if (validMealTypeText.contains("breakfast"))
-            return "Breakfast";
+            return CreateRecipeManager.MealType.Breakfast;
         else if (validMealTypeText.contains("lunch"))
-            return "Lunch";
+            return CreateRecipeManager.MealType.Lunch;
         else if (validMealTypeText.contains("dinner"))
-            return "Dinner";
-        return "";
+            return CreateRecipeManager.MealType.Dinner;
+        return CreateRecipeManager.MealType.Invalid;
     }
 }
