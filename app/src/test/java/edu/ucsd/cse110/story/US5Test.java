@@ -13,7 +13,7 @@ import edu.ucsd.cse110.client.AppFrame;
 
 public class US5Test {
     @Test
-    public void TestCreateRecipe() {
+    public void TestUS5BDD1() {
         AppFrameManager appFrameManager = new AppFrameManager(); // Given I am in the home page of the app
 
         appFrameManager.createRecipe(); // When I click on the add button
@@ -22,7 +22,7 @@ public class US5Test {
     }
 
     @Test
-    public void TestDeleteRecipe() {
+    public void TestUS5BackButton() {
         // Open recipe.
         AppFrameManager appFrameManager = new AppFrameManager(); // Given I am in the home page of the app
         appFrameManager.createRecipe(); 
