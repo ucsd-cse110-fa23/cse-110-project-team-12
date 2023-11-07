@@ -11,7 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 
 // AppFrame that holds the RecipeList, createRecipeButton, createRecipe and more!
-public class AppFrame extends BorderPane {
+public class AppFrame extends BorderPane implements AppFrameInterface {
 	private Header header;
 	private StackPane content;
 	private CreateButtonModule createButtonModule;
@@ -45,7 +45,7 @@ public class AppFrame extends BorderPane {
     }
 
 	// adds functionality to the createRecipeButton
-	void addListeners() {
+	private void addListeners() {
 		createButton.setOnAction(
             e -> {
 				if (!creatingRecipe) {
