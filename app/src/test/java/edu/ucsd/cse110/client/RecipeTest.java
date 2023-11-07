@@ -11,29 +11,34 @@ public class RecipeTest {
     @Test
     public void testRecipeConstructor() {
         recipe = new Recipe("Banana Bread", "Bananas, Bread");
+
         assertNotNull(recipe);
-        assertEquals(recipe.getName(), "Banana Bread");
-        assertEquals(recipe.getInformation(), "Bananas, Bread");
+        assertEquals("Banana Bread", recipe.getName());
+        assertEquals("Bananas, Bread", recipe.getInformation());
     }
 
     @Test
     public void thisRecipeSetMethods() {
         recipe = new Recipe();
         assertNotNull(recipe);
+
         recipe.setName("Icecream Sandwich");
         recipe.setInformation("Ice Cream, Sandwich");
-        assertEquals(recipe.getName(), "Icecream Sandwich");
-        assertEquals(recipe.getInformation(), "Ice Cream, Sandwich");
+
+        assertEquals("Icecream Sandwich", recipe.getName());
+        assertEquals("Ice Cream, Sandwich", recipe.getInformation());
     }
 
     @Test
     public void testRecipeSetMethodsWithNonDefaultConstructor() {
         recipe = new Recipe("Banana Bread", "Bananas, Bread");
         assertNotNull(recipe);
+
         recipe.setName("Icecream Sandwich");
         recipe.setInformation("Ice Cream, Sandwich");
-        assertEquals(recipe.getName(), "Icecream Sandwich");
-        assertEquals(recipe.getInformation(), "Ice Cream, Sandwich");
+
+        assertEquals("Icecream Sandwich", recipe.getName());
+        assertEquals("Ice Cream, Sandwich", recipe.getInformation());
     }
 
 }

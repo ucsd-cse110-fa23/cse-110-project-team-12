@@ -30,13 +30,13 @@ public class US8Test {
         
         manager = new CreateRecipeManager(voice, whisper, chatGPT);
 
-        assertEquals(manager.getRecipe().getName(), "");
-        assertEquals(manager.getRecipe().getInformation(), "");  
+        assertEquals("", manager.getRecipe().getName());
+        assertEquals("", manager.getRecipe().getInformation());  
 
         // Part of set up, get to ingredients input page
-        assertEquals(manager.getPage(), CreateRecipeManager.PageType.MealTypeInput);
+        assertEquals(CreateRecipeManager.PageType.MealTypeInput, manager.getPage());
         manager.goToNextPage();
-        assertEquals(manager.getPage(), CreateRecipeManager.PageType.IngredientsInput);
+        assertEquals(CreateRecipeManager.PageType.IngredientsInput, manager.getPage());
 
 
         // Given I am waiting for the recipe to be created -> When the Recipe is created
@@ -44,10 +44,10 @@ public class US8Test {
 
 
         // Then I am taken to the detailed view for the recipe
-        assertEquals(manager.getPage(), CreateRecipeManager.PageType.DetailedView);
+        assertEquals(CreateRecipeManager.PageType.DetailedView, manager.getPage());
 
-        assertNotEquals(manager.getRecipe().getName(), "");
-        assertNotEquals(manager.getRecipe().getInformation(), "");   
+        assertNotEquals("", manager.getRecipe().getName());
+        assertNotEquals("", manager.getRecipe().getInformation());   
     }
 
     
