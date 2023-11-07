@@ -1,16 +1,21 @@
 package edu.ucsd.cse110.api;
 
 import java.io.File;
+import java.util.List;
 
 public class VoicePromptMock implements VoicePromptInterface {
     public enum PromptType {
         MealType,
+        InvalidNotMealType,
+        InvalidMultipleMealType,
         IngredientsList,
     }
-    PromptType pt;
+    List<PromptType> pt;
+    int promptIdx;
 
-    public VoicePromptMock(PromptType pt) {
+    public VoicePromptMock(List<PromptType> pt) {
         this.pt = pt;
+        this.promptIdx = 0;
     }
 
     public void startRecording() {
@@ -18,10 +23,16 @@ public class VoicePromptMock implements VoicePromptInterface {
 
     public File stopRecording() {
         System.out.println(System.getProperty("user.dir"));
-        if (pt == PromptType.MealType)
-            return new File("./src/main/java/edu/ucsd/cse110/api/assets/iwantlunch.wav");
-        if (pt == PromptType.IngredientsList)
-            return new File("./src/main/java/edu/ucsd/cse110/api/assets/ingredients.wav");
-        return null;
+        File f = null;
+        if (pt.get(promptIdx) == PromptType.MealType)
+            f = new File("./src/main/java/edu/ucsd/cse110/api/assets/iwantlunch.wav");
+        else if(pt.get(promptIdx) == PromptType.InvalidNotMealType)
+            f = new File("./src/main/java/edu/ucsd/cse110/api/assets/helloiwouldlikesupperplease.wav");
+        else if(pt.get(promptIdx) == PromptType.InvalidMultipleMealType)
+            f = new File("./src/main/java/edu/ucsd/cse110/api/assets/iwantlunchanddinner.wav");
+        else if (pt.get(promptIdx) == PromptType.IngredientsList)
+            f = new File("./src/main/java/edu/ucsd/cse110/api/assets/ingredients.wav");
+        promptIdx++;
+        return f;
     }
 }
