@@ -16,6 +16,18 @@ public class CreateRecipeManager {
         Dinner,
         Invalid,
     };
+    
+    // Which page we are on.
+    private PageType page;
+    private boolean isRecording;
+
+    private MealType selectedMealType;
+    private String selectedIngredients;
+    private Recipe generatedRecipe;
+
+    private VoicePromptInterface voicePrompt;
+    private WhisperInterface whisper;
+    private ChatGPTInterface chatGPT;
 
     public CreateRecipeManager(VoicePromptInterface vi, WhisperInterface wi, ChatGPTInterface ci) {
         voicePrompt = vi;
@@ -27,17 +39,6 @@ public class CreateRecipeManager {
         generatedRecipe = new Recipe();
     }
 
-    // Which page we are on.
-    private PageType page;
-    private boolean isRecording;
-
-    private MealType selectedMealType;
-	private String selectedIngredients;
-    private Recipe generatedRecipe;
-
-    private VoicePromptInterface voicePrompt;
-	private WhisperInterface whisper;
-	private ChatGPTInterface chatGPT;
 
     public boolean getIsRecording() {
         return isRecording;
@@ -89,7 +90,7 @@ public class CreateRecipeManager {
         File recordingFile = voicePrompt.stopRecording();
         try {
             String transcript = whisper.transcribe(recordingFile);
-            processTranscript(transcript);;
+            processTranscript(transcript);
         }
         catch (Exception e) {
             e.printStackTrace();
