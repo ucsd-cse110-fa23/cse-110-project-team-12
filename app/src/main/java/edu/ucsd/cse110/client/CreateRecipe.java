@@ -7,8 +7,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 
-import java.io.File;
-
 import edu.ucsd.cse110.api.*;
 
 import javafx.geometry.Insets;
@@ -23,29 +21,17 @@ public class CreateRecipe extends StackPane {
 	private AppFrame appFrame; // helps call stopCreating when the creation ends
 	private Spacer spacer;
 
-	private int page;
-	private boolean recording;
+	private CreateRecipeManager createRecipeManager;
+
 	private VBox content;
 	private Label backArrow;
     private Button backButton;
 	private Button recordButton;
 	private RecordButtonModule recordButtonModule; // handles record button UI elements
 	
-	private VoicePromptInterface voicePrompt;
-	private WhisperInterface whisper;
-	private ChatGPTInterface chatGPT;
-
-	private boolean selectedMealTypeValid = true;
-	private String selectedMealType;
-	private String selectedIngredients;
-	private Recipe generatedRecipe;
-
-	
-    public CreateRecipe(AppFrame appFrame, VoicePromptInterface voicePrompt, WhisperInterface whisper, ChatGPTInterface chatGPT) {
+    public CreateRecipe(AppFrame appFrame, CreateRecipeManager createRecipeManager) {
 		this.appFrame = appFrame;
-		this.voicePrompt = voicePrompt;
-		this.whisper = whisper;
-		this.chatGPT = chatGPT;
+		this.createRecipeManager = createRecipeManager;
 
 		DropShadow dropShadow = new DropShadow(5, Color.BLACK);
 		this.setEffect(dropShadow);
@@ -75,68 +61,24 @@ public class CreateRecipe extends StackPane {
 	private void addListeners() {
 		backButton.setOnAction(
             e -> {
-				if (!recording) {
-					if (page == 0) {
-						appFrame.stopCreating();
-					} 
-					else {
-						goToPrevPage();
-						updateUI();
-					}
+				if (createRecipeManager.getPage() == CreateRecipeManager.PageType.MealTypeInput) {
+					appFrame.stopCreating();
+				}
+				else {
+					createRecipeManager.goToPreviousPage();
+					updateUI();
 				}
             }
         );
 
 		recordButton.setOnAction(
-            e -> {
-				if (!recording) {
-					recording = true;
-					recordButtonModule.switchColor();
-					voicePrompt.startRecording();
-				}
-				else {
-					recording = false;
-					recordButtonModule.switchColor();
-
-					// page 0 is the meal type selection
-					if (page == 0) {
-						File mealTypeRecording = voicePrompt.stopRecording();
-						try {
-							selectedMealType = whisper.transcribe(mealTypeRecording);
-							selectedMealTypeValid = MealTypeValidator.validateMealType(selectedMealType);
-							if (selectedMealTypeValid) {
-								selectedMealType = MealTypeValidator.parseMealType(selectedMealType);
-								goToNextPage();
-							}
-						}
-						catch (Exception except) {
-							except.printStackTrace();
-						}
-					}
-
-					// page 1 is the ingredient selection
-					else if (page == 1) {
-						File ingredientsRecording = voicePrompt.stopRecording();
-						try {
-							selectedIngredients = whisper.transcribe(ingredientsRecording);
-						}
-						catch (Exception except) {
-							except.printStackTrace();
-						}
-						
-						String[] gptResult = new String[2];
-						try {
-							gptResult = chatGPT.promptGPT(selectedMealType, selectedIngredients);
-						}
-						catch (Exception except) {
-							except.printStackTrace();
-						}
-						generatedRecipe = new Recipe(gptResult[0], gptResult[1]);
-						goToNextPage();
-					}
-        			updateUI();
-				}
-            }
+			e -> {
+				if (createRecipeManager.getIsRecording() == false)
+					createRecipeManager.startRecording();
+				else
+					createRecipeManager.stopRecording();
+				updateUI();	
+			}
         );
 	}
 
@@ -144,7 +86,7 @@ public class CreateRecipe extends StackPane {
         content.getChildren().clear();
 
 		// meal selection page
-        if (this.page == 0) {
+        if (createRecipeManager.getPage() == CreateRecipeManager.PageType.MealTypeInput) {
             Label mealOptionsHeading = new Label("Select Meal Type:");
 			mealOptionsHeading.setFont(new Font("Helvetica Bold", 20));
 			mealOptionsHeading.setId("meal-options-heading");
@@ -153,27 +95,27 @@ public class CreateRecipe extends StackPane {
 			mealOptions.setFont(new Font("Helvetica Bold", 15));
 			mealOptions.setId("meal-options");
 
-			if (!selectedMealTypeValid) {
+			if (createRecipeManager.getMealType() == CreateRecipeManager.MealType.Invalid) {
 				Label invalidMealTypeWarning = new Label("Invalid Meal Type");
 				invalidMealTypeWarning.setFont(new Font("Helvetica Bold", 18));
 				invalidMealTypeWarning.setId("invalid-meal-type-warning");
 				
-				recordButtonModule = new RecordButtonModule(recordButton, 16);
+				recordButtonModule = new RecordButtonModule(recordButton, 16, createRecipeManager.getIsRecording());
             	content.getChildren().addAll(mealOptionsHeading, mealOptions, invalidMealTypeWarning, recordButtonModule);
 			}
 			else {
-				recordButtonModule = new RecordButtonModule(recordButton, 55);
+				recordButtonModule = new RecordButtonModule(recordButton, 55, createRecipeManager.getIsRecording());
 				content.getChildren().addAll(mealOptionsHeading, mealOptions, recordButtonModule);
 			}
         } 
 
 		// ingredient selection page
-		else if (this.page == 1) {
+		else if (createRecipeManager.getPage() == CreateRecipeManager.PageType.IngredientsInput) {
             Label mealTypeHeading = new Label("Meal Type:");
 			mealTypeHeading.setFont(new Font("Helvetica Bold", 20));
 			mealTypeHeading.setId("meal-type-heading");
 
-			Label mealTypeText = new Label(selectedMealType);
+			Label mealTypeText = new Label(createRecipeManager.getMealType().name());
 			mealTypeText.setFont(new Font("Helvetica Bold", 15));
 			mealTypeText.setId("meal-type-text");
 
@@ -181,17 +123,17 @@ public class CreateRecipe extends StackPane {
 			pantryPrompt.setFont(new Font("Helvetica Bold", 20));
 			pantryPrompt.setId("pantry-prompt");
 
-			recordButtonModule.setTopPadding(13);
+			recordButtonModule = new RecordButtonModule(recordButton, 13, createRecipeManager.getIsRecording());
             content.getChildren().addAll(mealTypeHeading, mealTypeText, pantryPrompt, recordButtonModule);
         } 
 
 		// generated recipe view
-		else if (this.page == 2) {
-			Label recipeTitle = new Label(generatedRecipe.getName());
+		else if (createRecipeManager.getPage() == CreateRecipeManager.PageType.DetailedView) {
+			Label recipeTitle = new Label(createRecipeManager.getRecipe().getName());
 			recipeTitle.setFont(new Font("Helvetica Bold", 13));
 			recipeTitle.setId("recipe-title");
 
-			Label information = new Label(generatedRecipe.getInformation());
+			Label information = new Label(createRecipeManager.getRecipe().getInformation());
 			information.setFont(new Font("Helvetica", 11));
 			information.setId("information");
 			
@@ -225,13 +167,5 @@ public class CreateRecipe extends StackPane {
 
 	public Spacer getSpacer() {
 		return spacer;
-	}
-
-	private void goToNextPage() {
-		this.page++;
-	}
-
-	private void goToPrevPage() {
-		this.page--;
 	}
 }

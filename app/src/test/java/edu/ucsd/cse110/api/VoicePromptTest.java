@@ -8,9 +8,19 @@ import java.io.File;
 
 public class VoicePromptTest {
     @Test
+    public void testVoicePromptConstructor(){
+        VoicePromptInterface vp = new VoicePrompt("./voice2.wav");
+        assertNotNull(vp);
+    }
+    @Test
+    public void testVoicePromptMockConstructor(){
+        VoicePromptInterface vp = new VoicePromptMock(VoicePromptMock.PromptType.MealType);
+        assertNotNull(vp);
+    }
+    @Test
     public void testVoicePromptSuccess() {
         try{
-            VoicePrompt vp = new VoicePrompt("./voice2.wav");
+            VoicePromptInterface vp = new VoicePrompt("./voice2.wav");
             vp.startRecording();
             File f = vp.stopRecording();
             assertNotNull(f);
@@ -19,8 +29,8 @@ public class VoicePromptTest {
     }
 
     @Test
-    public void TestMocks() {
-        VoicePromptMock vpm = new VoicePromptMock(VoicePromptMock.PromptType.MealType);
+    public void testVoicePromptMockSuccess() {
+        VoicePromptInterface vpm = new VoicePromptMock(VoicePromptMock.PromptType.MealType);
         vpm.startRecording();
         File f = vpm.stopRecording();
         assertTrue(f.exists());
