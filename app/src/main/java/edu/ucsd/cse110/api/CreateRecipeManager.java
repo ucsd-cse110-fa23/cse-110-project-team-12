@@ -97,7 +97,7 @@ public class CreateRecipeManager {
         }
     }
 
-    private void processTranscript(String transcript) {
+    public void processTranscript(String transcript) {
         if (page == PageType.MealTypeInput) {
             if (MealTypeValidator.validateMealType(transcript)) {
                 selectedMealType = MealTypeValidator.parseMealType(transcript);

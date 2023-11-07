@@ -84,11 +84,12 @@ public class ChatGPTTest {
 
     }
     
-     @Test
-     public void testChatGPT() throws IOException, InterruptedException, URISyntaxException {
-         real = new ChatGPT();
-         String[] results = real.promptGPT("Lunch", "The ingredients I have are chicken, lemon, oil, garlic.");
-         assertNotNull(results[0]);
-         assertNotNull(results[1]);
-     }
+    // Not testing real chat gpt functionality in automated unit tests
+    //  @Test
+    //  public void testChatGPT() throws IOException, InterruptedException, URISyntaxException {
+    //      real = new ChatGPT();
+    //      String[] results = real.promptGPT("Lunch", "The ingredients I have are chicken, lemon, oil, garlic.");
+    //      assertNotNull(results[0]);
+    //      assertNotNull(results[1]);
+    //  }
 }
