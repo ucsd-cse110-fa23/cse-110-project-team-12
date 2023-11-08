@@ -182,7 +182,7 @@ public class CreateRecipe extends StackPane {
 		if (size == 11) { return; }
 
         double width = title.getLayoutBounds().getWidth();
-        if (width > 266){
+        if (width >= 266){
             size -= 0.25;
             setTitleFont(title, size);
         }

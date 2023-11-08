@@ -51,10 +51,6 @@
 	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.1, 0, 0);
 }
 
-#record-midground {
-	-fx-fill: -background;
-}
-
 #create-recipe {
 	-fx-background-color: rgba(91, 91, 91, 0.96);
 	-fx-pref-width: 280;
@@ -86,7 +82,6 @@
 
 #record-button {
 	-fx-shape: "M-31,0a31,31 0 1,0 62,0a31,31 0 1,0 -62,0";
-	-fx-background-color: -secondary;
 	-fx-border-width: 0;
 	-fx-min-width: 31;
 	-fx-min-height: 31;
