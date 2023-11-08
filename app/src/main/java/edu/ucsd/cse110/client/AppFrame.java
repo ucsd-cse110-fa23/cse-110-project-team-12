@@ -13,9 +13,7 @@ import javafx.scene.layout.*;
 
 // AppFrame that holds the RecipeList, createRecipeButton, createRecipe and more!
 public class AppFrame extends BorderPane {
-	private Header header;
 	private StackPane content;
-	private CreateButtonModule createButtonModule;
 	private Button createButton;
 	
 	private WhisperInterface whisper;
@@ -26,21 +24,18 @@ public class AppFrame extends BorderPane {
 	private AppFrameManager appFrameManager;
 
     public AppFrame() {
-		this.header = new Header();
-
 		whisper = new Whisper();
 		chatGPT = new ChatGPT();
 		voicePrompt = new VoicePrompt("./voice.wav");
-
 		appFrameManager = new AppFrameManager();
-
-		this.createButtonModule = new CreateButtonModule();	
+		
+		CreateButtonModule createButtonModule = new CreateButtonModule();	
 		this.createButton = createButtonModule.getCreateButton();
 
 		this.content = new StackPane();
 		this.content.getChildren().addAll(createButtonModule.getComponents());
 
-        this.setTop(header);
+        this.setTop(new Header());
         this.setCenter(content);
 		this.setId("app-frame");
 

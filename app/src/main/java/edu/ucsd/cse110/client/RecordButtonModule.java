@@ -14,6 +14,7 @@ class RecordButtonModule extends StackPane {
 	public RecordButtonModule(Button recordButton, int topPadding, boolean recording) {
 		Circle recordBackground = new Circle(28.5);
 		Circle recordMidground = new Circle(24.5);
+
 		recordBackground.setId("record-background");
 		recordMidground.setId("record-midground");
 
