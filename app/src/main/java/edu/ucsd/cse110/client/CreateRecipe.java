@@ -44,7 +44,7 @@ public class CreateRecipe extends StackPane {
 
 		Image backArrow = null;
 		try {
-			backArrow = new Image(new FileInputStream("./src/main/java/edu/ucsd/cse110/resources/backArrow.png"));
+			backArrow = new Image(new FileInputStream("./src/main/java/edu/ucsd/cse110/client/resources/backArrow.png"));
 		}
 		catch (Exception e) {
 			e.printStackTrace();

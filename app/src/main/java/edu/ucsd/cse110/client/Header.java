@@ -15,7 +15,7 @@ class Header extends HBox {
 		
 		Image PPIcon = null;
 		try {
-			PPIcon = new Image(new FileInputStream("./src/main/java/edu/ucsd/cse110/resources/PPIcon.png"));
+			PPIcon = new Image(new FileInputStream("./src/main/java/edu/ucsd/cse110/client/resources/PPIcon.png"));
 		}
 		catch (Exception e) {
 			e.printStackTrace();

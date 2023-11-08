@@ -96,7 +96,7 @@
 }
 
 #meal-options-module {
-	-fx-padding: 7 0 0 92;
+	-fx-padding: 7 0 0 88;
 	-fx-spacing: 5;
 	-fx-alignment: top-left;
 }
@@ -118,7 +118,7 @@
 }
 
 #meal-type-container {
-	-fx-padding: 7 0 0 92;
+	-fx-padding: 7 0 0 88;
 }
 
 #pantry-prompt {

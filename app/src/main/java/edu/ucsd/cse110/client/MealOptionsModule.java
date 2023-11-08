@@ -26,9 +26,9 @@ public class MealOptionsModule extends VBox {
 		Image cloud = null;
 		Image moon = null;
 		try {
-			sun = new Image(new FileInputStream("./src/main/java/edu/ucsd/cse110/resources/sun.png"));
-			cloud = new Image(new FileInputStream("./src/main/java/edu/ucsd/cse110/resources/cloud.png"));
-			moon = new Image(new FileInputStream("./src/main/java/edu/ucsd/cse110/resources/moon.png"));
+			sun = new Image(new FileInputStream("./src/main/java/edu/ucsd/cse110/client/resources/sun.png"));
+			cloud = new Image(new FileInputStream("./src/main/java/edu/ucsd/cse110/client/resources/cloud.png"));
+			moon = new Image(new FileInputStream("./src/main/java/edu/ucsd/cse110/client/resources/moon.png"));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
