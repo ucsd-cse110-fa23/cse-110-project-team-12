@@ -3,7 +3,7 @@ package edu.ucsd.cse110.client;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 
-public class NoUI implements UIInterface{
+public class NoUI implements UIInterface {
 
     @Override
     public void addNode(Node node) {

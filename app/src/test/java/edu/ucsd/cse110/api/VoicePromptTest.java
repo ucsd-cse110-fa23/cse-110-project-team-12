@@ -23,7 +23,7 @@ public class VoicePromptTest {
     }
     @Test
     public void testVoicePromptSuccess() {
-        try{
+        try {
             VoicePromptInterface vp = new VoicePrompt("./voice2.wav");
             vp.startRecording();
             File f = vp.stopRecording();

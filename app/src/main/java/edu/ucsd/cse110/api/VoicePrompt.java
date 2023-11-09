@@ -47,7 +47,7 @@ public class VoicePrompt implements VoicePromptInterface {
             t = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    try{
+                    try {
                         // the AudioInputStream that will be used to write the audio data to a file
                         AudioInputStream audioInputStream = new AudioInputStream(
                                 targetDataLine);

@@ -21,7 +21,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 // takes the user through the recipe creation process
-public class CreateRecipeView extends StackPane implements UIInterface{
+public class CreateRecipeView extends StackPane implements UIInterface {
 	private Spacer spacer;
 
 	private CreateRecipeManager createRecipeManager;

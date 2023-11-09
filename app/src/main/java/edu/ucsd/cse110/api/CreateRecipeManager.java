@@ -7,7 +7,7 @@ import edu.ucsd.cse110.api.HomeManager.ViewType;
 import edu.ucsd.cse110.client.CreateRecipeView;
 import edu.ucsd.cse110.client.Recipe;
 
-public class CreateRecipeManager extends ManagerInterface{
+public class CreateRecipeManager extends ManagerInterface {
     public enum PageType {
         MealTypeInput,
         IngredientsInput,

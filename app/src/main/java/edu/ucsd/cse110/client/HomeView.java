@@ -9,7 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 
 // AppFrame that holds the RecipeList, createRecipeButton, createRecipe and more!
-public class HomeView extends BorderPane implements UIInterface{
+public class HomeView extends BorderPane implements UIInterface {
 	
 	private StackPane content;
 	private Button createButton;
