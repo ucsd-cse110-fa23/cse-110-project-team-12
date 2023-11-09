@@ -12,6 +12,8 @@ import edu.ucsd.cse110.api.*;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -19,8 +21,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 // takes the user through the recipe creation process
-public class CreateRecipe extends StackPane {
-	private AppFrame appFrame; // helps call stopCreating when the creation ends
+public class CreateRecipeView extends StackPane implements UIInterface{
 	private Spacer spacer;
 
 	private CreateRecipeManager createRecipeManager;
@@ -32,8 +33,7 @@ public class CreateRecipe extends StackPane {
 	private RecordButtonModule recordButtonModule;
 	private MealOptionsModule mealOptionsModule;
 	
-    public CreateRecipe(AppFrame appFrame, CreateRecipeManager createRecipeManager) {
-		this.appFrame = appFrame;
+    public CreateRecipeView(CreateRecipeManager createRecipeManager) {
 		this.createRecipeManager = createRecipeManager;
 		this.setId("create-recipe");
 
@@ -72,7 +72,7 @@ public class CreateRecipe extends StackPane {
 		backButton.setOnAction(
             e -> {
 				if (createRecipeManager.getPage() == CreateRecipeManager.PageType.MealTypeInput) {
-					appFrame.stopCreating();
+					createRecipeManager.closeView();
 				}
 				else {
 					createRecipeManager.goToPreviousPage();
@@ -153,7 +153,7 @@ public class CreateRecipe extends StackPane {
 			cancelButton.setId("cancel-button");
 			cancelButton.setOnAction(
 				e -> {
-					appFrame.stopCreating();
+					createRecipeManager.closeView();
 				}
 			);
 
@@ -161,7 +161,7 @@ public class CreateRecipe extends StackPane {
 			saveButton.setId("save-button");
 			saveButton.setOnAction(
 				e -> {
-					appFrame.stopCreating();
+					createRecipeManager.closeView();
 				}
 			);
 
@@ -173,10 +173,6 @@ public class CreateRecipe extends StackPane {
         }
     }
 
-	public Spacer getSpacer() {
-		return spacer;
-	}
-
 	private void setTitleFont(Text title, double size){
 		title.setFont(new Font("Helvetica Bold", size));
 		if (size == 11) { return; }
@@ -187,4 +183,19 @@ public class CreateRecipe extends StackPane {
             setTitleFont(title, size);
         }
     }
+
+	@Override
+	public void addNode(Node node) {
+		throw new UnsupportedOperationException("Unimplemented method 'addNode'");
+	}
+
+	@Override
+	public void removeNode(Node node) {
+		throw new UnsupportedOperationException("Unimplemented method 'removeNode'");
+	}
+
+	@Override
+	public Parent getUI() {
+		return this.spacer;
+	}
 }

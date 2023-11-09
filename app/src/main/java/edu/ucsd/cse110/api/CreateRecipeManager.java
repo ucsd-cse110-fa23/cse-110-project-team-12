@@ -2,15 +2,17 @@ package edu.ucsd.cse110.api;
 
 import java.io.File;
 
+import edu.ucsd.cse110.api.AppManager.UpdateType;
+import edu.ucsd.cse110.api.AppManager.ViewType;
 import edu.ucsd.cse110.client.Recipe;
 
-public class CreateRecipeManager {
-    public static enum PageType {
+public class CreateRecipeManager extends ManagerInterface{
+    public enum PageType {
         MealTypeInput,
         IngredientsInput,
         DetailedView,
     };
-    public static enum MealType {
+    public enum MealType {
         Breakfast,
         Lunch,
         Dinner,
@@ -29,14 +31,21 @@ public class CreateRecipeManager {
     private WhisperInterface whisper;
     private ChatGPTInterface chatGPT;
 
-    public CreateRecipeManager(VoicePromptInterface vi, WhisperInterface wi, ChatGPTInterface ci) {
-        voicePrompt = vi;
-        whisper = wi;
-        chatGPT = ci;
+    private AppManager appManager;
+
+    public CreateRecipeManager(VoicePromptInterface voicePrompt, WhisperInterface whisper, ChatGPTInterface chatGPT) {
+        super();
+        this.voicePrompt = voicePrompt;
+        this.whisper = whisper;
+        this.chatGPT = chatGPT;
 
         page = PageType.MealTypeInput;
         isRecording = false;
         generatedRecipe = new Recipe();
+    }
+
+    public void addAppManager(AppManager appManager){
+        this.appManager = appManager;
     }
 
 
@@ -140,5 +149,9 @@ public class CreateRecipeManager {
         else if (page == PageType.IngredientsInput)
             page = PageType.DetailedView;
         else if (page == PageType.DetailedView);
+    }
+
+    public void closeView(){
+        appManager.updateView(ViewType.CreateRecipeView, UpdateType.Close);
     }
 }
