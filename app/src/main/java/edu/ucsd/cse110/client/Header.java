@@ -1,23 +1,31 @@
 package edu.ucsd.cse110.client;
 
+import java.io.FileInputStream;
+
 import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 
 // Consistent Header for the PantryPal app
-class Header extends VBox {
-	private Label headerTitle;
-
+class Header extends HBox {
 	Header() {
-		headerTitle = new Label("PantryPal");
-		headerTitle.setFont(new Font("Helvetica Bold", 40));
+		Label headerTitle = new Label("PantryPal");
 		headerTitle.setId("header-title");
+		
+		Image PPIcon = null;
+		try {
+			PPIcon = new Image(new FileInputStream("./src/main/java/edu/ucsd/cse110/client/resources/PPIcon.png"));
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 
-		DropShadow dropShadow = new DropShadow(15, Color.BLACK); 
-        this.setEffect(dropShadow);
-		this.getChildren().add(headerTitle);
+		ImageView PPIconView = new ImageView(PPIcon);
+		PPIconView.setFitWidth(20);
+		PPIconView.setFitHeight(20);
+
+		this.getChildren().addAll(headerTitle, PPIconView);
 		this.setId("header");
 	}
 }
