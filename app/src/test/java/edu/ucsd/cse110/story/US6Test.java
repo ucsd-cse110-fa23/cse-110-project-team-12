@@ -29,7 +29,7 @@ public class US6Test {
         List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
         promptTypes.add(VoicePromptMock.PromptType.MealType);
         voice = new VoicePromptMock(promptTypes);
-        manager = new CreateRecipeManager(voice, whisper, new ChatGPTMock());
+        manager = new CreateRecipeManager(false, voice, whisper, new ChatGPTMock());
 
         assertEquals(CreateRecipeManager.PageType.MealTypeInput, manager.getPage()); // Given I am on input meal type page
         manager.startRecording(); // When I click on the record voice button
@@ -55,7 +55,7 @@ public class US6Test {
         List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
         promptTypes.add(VoicePromptMock.PromptType.InvalidNotMealType);
         voice = new VoicePromptMock(promptTypes);
-        manager = new CreateRecipeManager(voice, whisper, new ChatGPTMock());
+        manager = new CreateRecipeManager(false, voice, whisper, new ChatGPTMock());
 
         assertEquals(CreateRecipeManager.PageType.MealTypeInput, manager.getPage()); // Given I am on input meal type page
         manager.startRecording(); // When I click on the record voice button
@@ -80,7 +80,7 @@ public class US6Test {
         whisper = new WhisperMock();
         List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
         voice = new VoicePromptMock(promptTypes);
-        manager = new CreateRecipeManager(voice, whisper, new ChatGPTMock());
+        manager = new CreateRecipeManager(false, voice, whisper, new ChatGPTMock());
 
         assertEquals(CreateRecipeManager.PageType.MealTypeInput, manager.getPage()); // Given I am on input meal type page
         manager.goToPreviousPage(); // When I click on the back button

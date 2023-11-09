@@ -2,8 +2,9 @@ package edu.ucsd.cse110.api;
 
 import java.io.File;
 
-import edu.ucsd.cse110.api.AppManager.UpdateType;
-import edu.ucsd.cse110.api.AppManager.ViewType;
+import edu.ucsd.cse110.api.HomeManager.UpdateType;
+import edu.ucsd.cse110.api.HomeManager.ViewType;
+import edu.ucsd.cse110.client.CreateRecipeView;
 import edu.ucsd.cse110.client.Recipe;
 
 public class CreateRecipeManager extends ManagerInterface{
@@ -31,9 +32,9 @@ public class CreateRecipeManager extends ManagerInterface{
     private WhisperInterface whisper;
     private ChatGPTInterface chatGPT;
 
-    private AppManager appManager;
+    private HomeManager homeManager;
 
-    public CreateRecipeManager(VoicePromptInterface voicePrompt, WhisperInterface whisper, ChatGPTInterface chatGPT) {
+    public CreateRecipeManager(boolean useUI, VoicePromptInterface voicePrompt, WhisperInterface whisper, ChatGPTInterface chatGPT) {
         super();
         this.voicePrompt = voicePrompt;
         this.whisper = whisper;
@@ -42,12 +43,13 @@ public class CreateRecipeManager extends ManagerInterface{
         page = PageType.MealTypeInput;
         isRecording = false;
         generatedRecipe = new Recipe();
+
+        if(useUI) this.ui = new CreateRecipeView(this);
     }
 
-    public void addAppManager(AppManager appManager){
-        this.appManager = appManager;
+    public void addHomeManager(HomeManager homeManager){
+        this.homeManager = homeManager;
     }
-
 
     public boolean getIsRecording() {
         return isRecording;
@@ -152,6 +154,6 @@ public class CreateRecipeManager extends ManagerInterface{
     }
 
     public void closeView(){
-        appManager.updateView(ViewType.CreateRecipeView, UpdateType.Close);
+        homeManager.updateView(ViewType.CreateRecipeView, UpdateType.Close);
     }
 }

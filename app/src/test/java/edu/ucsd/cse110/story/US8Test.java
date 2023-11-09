@@ -38,7 +38,7 @@ public class US8Test {
         promptTypes.add(VoicePromptMock.PromptType.IngredientsList);
         voice = new VoicePromptMock(promptTypes);
         
-        manager = new CreateRecipeManager(voice, whisper, chatGPT);
+        manager = new CreateRecipeManager(false, voice, whisper, chatGPT);
 
         assertEquals("", manager.getRecipe().getName());
         assertEquals("", manager.getRecipe().getInformation());  

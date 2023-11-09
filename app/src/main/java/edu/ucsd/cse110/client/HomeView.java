@@ -1,21 +1,21 @@
 package edu.ucsd.cse110.client;
 
-import edu.ucsd.cse110.api.AppManager;
-import edu.ucsd.cse110.api.AppManager.UpdateType;
-import edu.ucsd.cse110.api.AppManager.ViewType;
+import edu.ucsd.cse110.api.HomeManager;
+import edu.ucsd.cse110.api.HomeManager.UpdateType;
+import edu.ucsd.cse110.api.HomeManager.ViewType;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 
 // AppFrame that holds the RecipeList, createRecipeButton, createRecipe and more!
-public class AppFrame extends BorderPane implements UIInterface{
+public class HomeView extends BorderPane implements UIInterface{
 	
 	private StackPane content;
 	private Button createButton;
-	private AppManager appManager;
+	private HomeManager appManager;
 
-    public AppFrame(AppManager appManager) {
+    public HomeView(HomeManager appManager) {
 		this.appManager = appManager;
 
 		this.content = new StackPane();

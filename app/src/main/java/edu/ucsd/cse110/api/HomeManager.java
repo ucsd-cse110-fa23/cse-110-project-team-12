@@ -1,7 +1,9 @@
 package edu.ucsd.cse110.api;
 
+import edu.ucsd.cse110.api.CreateRecipeManager;
+import edu.ucsd.cse110.client.HomeView;
 
-public class AppManager extends ManagerInterface {
+public class HomeManager extends ManagerInterface {
     public enum ViewType {
         CreateRecipeView,
         DetailRecipeView,
@@ -13,11 +15,20 @@ public class AppManager extends ManagerInterface {
     
     private boolean creatingRecipe;
 
+    private boolean useUI;
     private CreateRecipeManager createRecipeManager;
+    private VoicePromptInterface voicePrompt;
+    private WhisperInterface whisper;
+    private ChatGPTInterface chatGPT;
 
-    public AppManager(CreateRecipeManager createRecipeManager) {
+    public HomeManager(boolean useUI, VoicePromptInterface voicePrompt, WhisperInterface whisper, ChatGPTInterface chatGPT) {
         super();
-        this.createRecipeManager = createRecipeManager;
+        this.useUI = useUI;
+        this.voicePrompt = voicePrompt;
+        this.whisper = whisper;
+        this.chatGPT = chatGPT;
+
+        if(useUI) this.ui = new HomeView(this);
     }
 
     public void updateView(ViewType vt, UpdateType ut) {
@@ -56,6 +67,8 @@ public class AppManager extends ManagerInterface {
     private void startCreateRecipeView() {
 		if (!creatingRecipe) {
 			creatingRecipe = true;
+            createRecipeManager = new CreateRecipeManager(useUI, voicePrompt, whisper, chatGPT);
+            createRecipeManager.addHomeManager(this);
             ui.addNode(createRecipeManager.getUI());
 		}
 	}

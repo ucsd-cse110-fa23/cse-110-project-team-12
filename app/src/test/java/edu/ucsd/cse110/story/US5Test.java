@@ -7,20 +7,18 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import edu.ucsd.cse110.api.AppManager;
+import edu.ucsd.cse110.api.HomeManager;
 import edu.ucsd.cse110.api.ChatGPTMock;
 import edu.ucsd.cse110.api.CreateRecipeManager;
 import edu.ucsd.cse110.api.VoicePromptMock;
 import edu.ucsd.cse110.api.WhisperMock;
-import edu.ucsd.cse110.api.AppManager.UpdateType;
-import edu.ucsd.cse110.api.AppManager.ViewType;
+import edu.ucsd.cse110.api.HomeManager.UpdateType;
+import edu.ucsd.cse110.api.HomeManager.ViewType;
 
 public class US5Test {
     @Test
     public void TestUS5BDD1() {
-        CreateRecipeManager createRecipeManager = new CreateRecipeManager(new VoicePromptMock(new ArrayList<>()), new WhisperMock(), new ChatGPTMock());
-        AppManager appManager = new AppManager(createRecipeManager);
-        createRecipeManager.addAppManager(appManager);
+        HomeManager appManager = new HomeManager(false, new VoicePromptMock(new ArrayList<>()), new WhisperMock(), new ChatGPTMock());
 
         appManager.updateView(ViewType.CreateRecipeView, UpdateType.Start); // When I click on the add button
 
@@ -30,8 +28,8 @@ public class US5Test {
     @Test
     public void TestUS5BDD2() {
         // Open recipe.
-        CreateRecipeManager createRecipeManager = new CreateRecipeManager(new VoicePromptMock(new ArrayList<>()), new WhisperMock(), new ChatGPTMock());
-        AppManager appManager = new AppManager(createRecipeManager);
+        HomeManager appManager = new HomeManager(false, new VoicePromptMock(new ArrayList<>()), new WhisperMock(), new ChatGPTMock());
+        
         appManager.updateView(ViewType.CreateRecipeView, UpdateType.Start); 
         assertTrue(appManager.getIsCreatingRecipe());
 

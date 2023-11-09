@@ -29,7 +29,7 @@ public class US7Test {
         List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
         promptTypes.add(VoicePromptMock.PromptType.IngredientsList);
         voice = new VoicePromptMock(promptTypes);
-        manager = new CreateRecipeManager(voice, whisper, new ChatGPTMock());
+        manager = new CreateRecipeManager(false, voice, whisper, new ChatGPTMock());
 
         manager.goToNextPage();
         assertEquals(CreateRecipeManager.PageType.IngredientsInput, manager.getPage()); // Given I am in the input recipe ingredients page
@@ -59,7 +59,7 @@ public class US7Test {
         whisper = new WhisperMock();
         List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
         voice = new VoicePromptMock(promptTypes);
-        manager = new CreateRecipeManager(voice, whisper, new ChatGPTMock());
+        manager = new CreateRecipeManager(false, voice, whisper, new ChatGPTMock());
 
         manager.goToNextPage();
         assertEquals(CreateRecipeManager.PageType.IngredientsInput, manager.getPage()); // Given I am in the input recipe ingredients page
