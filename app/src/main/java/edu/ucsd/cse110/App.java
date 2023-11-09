@@ -13,7 +13,7 @@ import edu.ucsd.cse110.api.HomeManager;
 public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        HomeManager appManager = new HomeManager(true ,new VoicePrompt("voice.wav"), new Whisper(), new ChatGPT());
+        HomeManager appManager = new HomeManager(true, new VoicePrompt("voice.wav"), new Whisper(), new ChatGPT());
 
 		Scene scene = new Scene(appManager.getUI(), 325, 450);
         

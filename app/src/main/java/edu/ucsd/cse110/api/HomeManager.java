@@ -1,6 +1,5 @@
 package edu.ucsd.cse110.api;
 
-import edu.ucsd.cse110.api.CreateRecipeManager;
 import edu.ucsd.cse110.client.HomeView;
 
 public class HomeManager extends ManagerInterface {

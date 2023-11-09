@@ -24,7 +24,7 @@ public class US6Test {
      * And my preference will be displayed.
      */
     @Test
-    public void testUS6BDD1(){
+    public void testUS6BDD1() {
         whisper = new WhisperMock();
         List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
         promptTypes.add(VoicePromptMock.PromptType.MealType);
@@ -50,7 +50,7 @@ public class US6Test {
      */
     
     @Test
-    public void testUS6BDD2(){
+    public void testUS6BDD2() {
         whisper = new WhisperMock();
         List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
         promptTypes.add(VoicePromptMock.PromptType.InvalidNotMealType);
@@ -76,7 +76,7 @@ public class US6Test {
      * */
     
      @Test
-    public void testUS6BDD3(){
+    public void testUS6BDD3() {
         whisper = new WhisperMock();
         List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
         voice = new VoicePromptMock(promptTypes);

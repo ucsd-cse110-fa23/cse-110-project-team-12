@@ -173,12 +173,12 @@ public class CreateRecipeView extends StackPane implements UIInterface{
         }
     }
 
-	private void setTitleFont(Text title, double size){
+	private void setTitleFont(Text title, double size) {
 		title.setFont(new Font("Helvetica Bold", size));
 		if (size == 11) { return; }
 
         double width = title.getLayoutBounds().getWidth();
-        if (width >= 266){
+        if (width >= 266) {
             size -= 0.25;
             setTitleFont(title, size);
         }

@@ -47,7 +47,7 @@ public class CreateRecipeManager extends ManagerInterface{
         if(useUI) this.ui = new CreateRecipeView(this);
     }
 
-    public void addHomeManager(HomeManager homeManager){
+    public void addHomeManager(HomeManager homeManager) {
         this.homeManager = homeManager;
     }
 
@@ -85,7 +85,7 @@ public class CreateRecipeManager extends ManagerInterface{
         return selectedMealType;
     }
 
-    public String getSelectedIngredients(){
+    public String getSelectedIngredients() {
         return selectedIngredients;
     }
 
@@ -153,7 +153,7 @@ public class CreateRecipeManager extends ManagerInterface{
         else if (page == PageType.DetailedView);
     }
 
-    public void closeView(){
+    public void closeView() {
         homeManager.updateView(ViewType.CreateRecipeView, UpdateType.Close);
     }
 }

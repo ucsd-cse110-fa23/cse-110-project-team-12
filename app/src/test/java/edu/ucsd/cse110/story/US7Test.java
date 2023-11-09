@@ -24,7 +24,7 @@ public class US7Test {
      * Then the app will transcribe the recording into text.
      */
     @Test
-    public void testUS7BDD1(){
+    public void testUS7BDD1() {
         whisper = new WhisperMock();
         List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
         promptTypes.add(VoicePromptMock.PromptType.IngredientsList);
@@ -55,7 +55,7 @@ public class US7Test {
      * */
     
      @Test
-    public void testUS7BDD2(){
+    public void testUS7BDD2() {
         whisper = new WhisperMock();
         List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
         voice = new VoicePromptMock(promptTypes);

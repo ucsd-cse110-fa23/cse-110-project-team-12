@@ -9,18 +9,18 @@ import java.io.File;
 
 public class WhisperTest {
     @Test
-    public void testWhisperConstructor(){
+    public void testWhisperConstructor() {
         try{
             WhisperInterface w = new Whisper();
             assertNotNull(w);
-        }catch(Exception e){}
+        }catch(Exception e) {}
     }
     @Test
-    public void testWhisperMockConstructor(){
+    public void testWhisperMockConstructor() {
         try{
             WhisperInterface w = new WhisperMock();
             assertNotNull(w);
-        }catch(Exception e){}
+        }catch(Exception e) {}
     }
     @Test
     public void testWhisperNoFileTranscribe() {

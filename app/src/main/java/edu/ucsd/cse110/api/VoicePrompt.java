@@ -58,7 +58,7 @@ public class VoicePrompt implements VoicePromptInterface {
                                     audioInputStream,
                                     AudioFileFormat.Type.WAVE,
                                     audioFile);
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }

@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import edu.ucsd.cse110.api.HomeManager;
 import edu.ucsd.cse110.api.ChatGPTMock;
-import edu.ucsd.cse110.api.CreateRecipeManager;
 import edu.ucsd.cse110.api.VoicePromptMock;
 import edu.ucsd.cse110.api.WhisperMock;
 import edu.ucsd.cse110.api.HomeManager.UpdateType;
@@ -29,7 +28,7 @@ public class US5Test {
     public void TestUS5BDD2() {
         // Open recipe.
         HomeManager appManager = new HomeManager(false, new VoicePromptMock(new ArrayList<>()), new WhisperMock(), new ChatGPTMock());
-        
+
         appManager.updateView(ViewType.CreateRecipeView, UpdateType.Start); 
         assertTrue(appManager.getIsCreatingRecipe());
 

@@ -36,12 +36,12 @@ public class HomeView extends BorderPane implements UIInterface{
     }
 	
 	@Override
-	public void addNode(Node node){
+	public void addNode(Node node) {
 		this.content.getChildren().add(node);
 	}
 
 	@Override
-	public void removeNode(Node node){
+	public void removeNode(Node node) {
 		this.content.getChildren().remove(node);
 	}
 

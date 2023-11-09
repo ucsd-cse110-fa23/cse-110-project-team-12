@@ -9,7 +9,7 @@ public class Whisper implements WhisperInterface {
     private final String TOKEN = "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";
     private final String MODEL = "whisper-1";
 
-    public Whisper(){}
+    public Whisper() {}
     
     private static void writeParameterToOutputStream(
     OutputStream outputStream,
