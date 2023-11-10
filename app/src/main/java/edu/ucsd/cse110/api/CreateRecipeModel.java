@@ -11,6 +11,7 @@ public class CreateRecipeModel implements ModelInterface {
         IngredientsInput
     };
     public enum MealType {
+        None,
         Breakfast,
         Lunch,
         Dinner,
@@ -36,24 +37,29 @@ public class CreateRecipeModel implements ModelInterface {
         this.chatGPT = chatGPT;
 
         currentPage = PageType.MealTypeInput;
+        selectedMealType = MealType.None;
         isRecording = false;
         generatedRecipe = new Recipe();
     }
 
     public void receiveMessage(Message m) {
-        if (m.getMessageType() == Message.Type.CreateRecipeBackButton && !isRecording) {
+        if (m.getMessageType() == Message.CreateRecipeView.CreateRecipeBackButton && !isRecording) {
             if (currentPage == PageType.MealTypeInput) {
-                controller.receiveMessageFromModel(new Message(Message.Type.ButtonCloseCreateRecipe));
+                selectedMealType = MealType.None;
+                selectedIngredients = null;
+                controller.receiveMessageFromUI(new Message(Message.CreateRecipeModel.CloseCreateRecipeView));
             }
             else if (currentPage == PageType.IngredientsInput) {
                 currentPage = PageType.MealTypeInput;
+                selectedMealType = MealType.None;
                 controller.receiveMessageFromModel(
-                    new Message(Message.Type.CreateRecipeGotoPage,
-                    Map.ofEntries(Map.entry(Message.Key.PageType, currentPage)))
+                    new Message(Message.CreateRecipeModel.CreateRecipeGotoPage,
+                    Map.ofEntries(Map.entry("PageType", currentPage),
+                                  Map.entry("MealType", MealType.None)))
                 );
             }
         }
-        else if (m.getMessageType() == Message.Type.ButtonRecord) {
+        else if (m.getMessageType() == Message.CreateRecipeView.RecordButton) {
             handleRecord();
         }
     }
@@ -86,12 +92,12 @@ public class CreateRecipeModel implements ModelInterface {
             catch (Exception e) {
                 e.printStackTrace();
             }
-            controller.receiveMessageFromModel(new Message(Message.Type.StopRecording));
+            controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StopRecording));
             isRecording = false;
         }
         else {
             voicePrompt.startRecording();
-            controller.receiveMessageFromModel(new Message(Message.Type.StartRecording));
+            controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StartRecording));
             isRecording = true;
         }
     }
@@ -102,23 +108,44 @@ public class CreateRecipeModel implements ModelInterface {
                 currentPage = PageType.IngredientsInput;
                 selectedMealType = MealTypeValidator.parseMealType(transcript);
                 controller.receiveMessageFromModel(
-                    new Message(Message.Type.CreateRecipeGotoPage,
-                    Map.ofEntries(Map.entry(Message.Key.PageType, currentPage),
-                                  Map.entry(Message.Key.MealType, selectedMealType)))
+                    new Message(Message.CreateRecipeModel.CreateRecipeGotoPage,
+                    Map.ofEntries(Map.entry("PageType", currentPage),
+                                  Map.entry("MealType", selectedMealType)))
                 );
             }
             else {
-                controller.receiveMessageFromModel(new Message(Message.Type.CreateRecipeInvalidMealType));
+                controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.CreateRecipeInvalidMealType));
             }
         }
         else if (currentPage == PageType.IngredientsInput) {
             selectedIngredients = transcript;
             createNewChatGPTRecipe();
             controller.receiveMessageFromModel(
-                new Message(Message.Type.FinishedCreatingRecipe,
-                Map.ofEntries(Map.entry(Message.Key.RecipeTitle, generatedRecipe.getName()),
-                                Map.entry(Message.Key.RecipeBody, generatedRecipe.getInformation())))
+                new Message(Message.CreateRecipeModel.CloseCreateRecipeView)
+            );
+            controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StartRecipeDetailedView));
+            controller.receiveMessageFromModel(
+                new Message(Message.CreateRecipeModel.SendTitleBody,
+                Map.ofEntries(Map.entry("RecipeTitle", generatedRecipe.getName()),
+                                Map.entry("RecipeBody", generatedRecipe.getInformation())))
             );
         }
+    }
+
+    @Override
+    public Object getState() {
+        return this;
+    }
+    public PageType getCurrentPage() {
+        return currentPage;
+    }
+    public MealType getSelectedMealType() {
+        return selectedMealType;
+    }
+    public String getSelectedIngredients() {
+        return selectedIngredients;
+    }
+    public boolean getIsRecording() {
+        return isRecording;
     }
 }

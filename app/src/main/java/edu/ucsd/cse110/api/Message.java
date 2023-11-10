@@ -2,69 +2,90 @@ package edu.ucsd.cse110.api;
 
 import java.util.*;
 
-import edu.ucsd.cse110.api.CreateRecipeModel.PageType;
-
 public class Message {
-    public enum Type {
-        ButtonRecord,
-        ButtonCreateRecipe,
-        ButtonCloseCreateRecipe,
-        CreateRecipeBackButton,
-        StopRecording,
-        StartRecording,
-        FinishedCreatingRecipe,
-        
-        CreateRecipeGotoPage,
-        CreateRecipeInvalidMealType,
-    }
-    public enum Key {
-        PageType,
-        MealType,
-        RecipeTitle,
-        RecipeBody,
+
+    // Message Type Interface
+    public interface Type {
+        default Set<String> allowedKeys() { return new HashSet<>();}
+        default void checkPayload(Map<String, Object> payload) throws IllegalArgumentException {
+            for(String key : allowedKeys())
+                if(!payload.containsKey(key))
+                    throw new IllegalArgumentException("Key not found: " + key);
+        }
     }
 
+    // Class Type Enum
     
-    private Type messageType;
-    private Map<Key, Object> payload;
-
-    private static Map<Type, List<Key>> allowedKeys = Map.ofEntries(
-        Map.entry(Type.ButtonRecord, Arrays.asList()),
-        Map.entry(Type.ButtonCreateRecipe, Arrays.asList()),
-        Map.entry(Type.ButtonCloseCreateRecipe, Arrays.asList()),
-        Map.entry(Type.CreateRecipeBackButton, Arrays.asList()),
-        Map.entry(Type.CreateRecipeInvalidMealType, Arrays.asList()),
-        Map.entry(Type.CreateRecipeGotoPage, Arrays.asList(Key.PageType, Key.MealType)),
-        Map.entry(Type.FinishedCreatingRecipe, Arrays.asList(Key.RecipeTitle, Key.RecipeBody))
-    );
-
-    public Type getMessageType() {
-        return messageType;
+    public enum HomeView implements Type {
+        CreateRecipeButton, // HomeView.CreateRecipeButton
+        
     }
+    public enum HomeModel implements Type {
+        StartCreateRecipeView,
+        CloseCreateRecipeView,
+        StartRecipeDetailedView,
+        CloseRecipeDetailedView,
+    }
+    public enum CreateRecipeView implements Type {
+        RecordButton,
+        CreateRecipeBackButton;
+    }
+    public enum CreateRecipeModel implements Type {
+        CloseCreateRecipeView,
+        StartRecording,
+        StopRecording,
+        SendTitleBody {
+            Set<String> keys = new HashSet<>(Arrays.asList("RecipeTitle", "RecipeBody"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        },
+        CreateRecipeGotoPage {
+            Set<String> keys = new HashSet<>(Arrays.asList("PageType", "MealType"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        },
+        CreateRecipeInvalidMealType,
+        StartRecipeDetailedView;
+    }
+    public enum RecipeDetailedView implements Type {
+        
+    }
+    public enum RecipeDetailedModel implements Type {
+        SetNameBody {
+            Set<String> keys = new HashSet<>(Arrays.asList("RecipeTitle", "RecipeBody"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        },
+    }
+    
+    private Type type;
+    private Map<String, Object> payload;
 
-    public Message(Type messageType, Map<Key, Object> payload) {
-        this.messageType = messageType;
+    public Message(Type type, Map<String, Object> payload) {
+        this.type = type;
         this.payload = payload;
+        type.checkPayload(payload);
     }
 
-    public Message(Type messageType) {
-        this.messageType = messageType;
+    public Message(Type type) {
+        if(!type.allowedKeys().isEmpty())
+            throw new IllegalArgumentException("Loader not found for " + getClassEnum() + " " +  type);
+        this.type = type;
         this.payload = null;
     } 
 
-    private boolean keyValid(Key key) {
-        return allowedKeys.get(messageType).contains(key);
+    public String getClassEnum() {
+        return type.getClass().getEnclosingClass().getSimpleName();
     }
 
-    public Object getKey(Key key) {
+    public Type getMessageType() {
+        return type;
+    }
+
+    private boolean keyValid(String key) {
+        return type.allowedKeys().contains(key);
+    }
+
+    public Object getKey(String key) {
         if (!keyValid(key))
-            throw new IllegalArgumentException("Can't use key " + key + " for message type " + messageType);
+            throw new IllegalArgumentException("Can't use key " + key + " for message type " + type);
         return payload.get(key);
-    }
-
-    public void setKey(Key key, Object value) {
-        if (!keyValid(key))
-            throw new IllegalArgumentException("Can't use key " + key + " for message type " + messageType);
-        payload.put(key, value);
     }
 }

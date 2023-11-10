@@ -16,7 +16,7 @@ class RecordButtonModule extends StackPane {
 	private Circle recordBackground;
 	private Circle recordMidground;
 
-	public RecordButtonModule(Button recordButton, int topPadding) {
+	public RecordButtonModule(Button recordButton) {
 		this.recordButton = recordButton;
 
 		recordBackground = new Circle(28.5);
@@ -26,9 +26,11 @@ class RecordButtonModule extends StackPane {
 		recordMidground.setId("record-midground");
 
 		setRecording(false);
-
-		this.setPadding(new Insets(topPadding, 0, 0, 0));
 		this.getChildren().addAll(recordBackground, recordMidground, recordButton);
+	}
+
+	public void setTopPadding(int topPadding) {
+		this.setPadding(new Insets(topPadding, 0, 0, 0));
 	}
 
 	public void setRecording(boolean recording) {

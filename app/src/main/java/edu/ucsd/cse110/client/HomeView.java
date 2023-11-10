@@ -6,6 +6,7 @@ import edu.ucsd.cse110.api.UIInterface;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 
 // AppFrame that holds the RecipeList, createRecipeButton, createRecipe and more!
 public class HomeView extends BorderPane implements UIInterface {
@@ -27,20 +28,25 @@ public class HomeView extends BorderPane implements UIInterface {
 		this.content.getChildren().addAll(createButtonModule.getComponents());
 		createButton.setOnAction(
             e -> {
-				controller.receiveMessageFromUI(new Message(Message.Type.ButtonCreateRecipe));
+				controller.receiveMessageFromUI(new Message(Message.HomeView.CreateRecipeButton));
             }
         );
     }
-	
+	@Override
 	public void receiveMessage(Message m) {
 
 	}
-
+	@Override
 	public void addChild(Node ui) {
-		getChildren().add(ui);
+		content.getChildren().add(ui);
+	}
+	@Override
+	public void removeChild(Node ui) {
+		content.getChildren().remove(ui);
 	}
 
-	public void removeChild(Node ui) {
-		getChildren().remove(ui);
+	@Override
+	public Parent getUI() {
+		return this;
 	}
 }

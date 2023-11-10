@@ -9,22 +9,22 @@ import java.io.File;
 
 public class WhisperTest {
     @Test
-    public void testWhisperConstructor(){
-        try{
+    public void testWhisperConstructor() {
+        try {
             WhisperInterface w = new Whisper();
             assertNotNull(w);
-        }catch(Exception e){}
+        } catch(Exception e) {}
     }
     @Test
-    public void testWhisperMockConstructor(){
-        try{
+    public void testWhisperMockConstructor() {
+        try {
             WhisperInterface w = new WhisperMock();
             assertNotNull(w);
-        }catch(Exception e){}
+        } catch(Exception e) {}
     }
     @Test
     public void testWhisperNoFileTranscribe() {
-        try{
+        try {
             WhisperInterface w = new Whisper();
             File f = new File("src/main/java/edu/ucsd/cse110/api/assets/null.wav");
             String response = w.transcribe(f);
@@ -35,7 +35,7 @@ public class WhisperTest {
 
     @Test
     public void testWhisperMockNoFileTranscribe() {
-        try{
+        try {
             WhisperInterface w = new WhisperMock();
             File f = new File("src/main/java/edu/ucsd/cse110/api/assets/null.wav");
             String response = w.transcribe(f);
@@ -46,7 +46,7 @@ public class WhisperTest {
 
     @Test
     public void testWhisperMockMealTypeTranscribe() {
-        try{
+        try {
             WhisperInterface w = new WhisperMock();
             File f = new File("./src/main/java/edu/ucsd/cse110/api/assets/iwantlunch.wav");
             String response = w.transcribe(f).toLowerCase();
@@ -57,7 +57,7 @@ public class WhisperTest {
 
     @Test
     public void testWhisperMockIngredientListTrascribe() {
-        try{
+        try {
             WhisperInterface w = new WhisperMock();
             File f = new File("./src/main/java/edu/ucsd/cse110/api/assets/ingredients.wav");
             String response = w.transcribe(f).toLowerCase();

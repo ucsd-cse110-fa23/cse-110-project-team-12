@@ -10,12 +10,12 @@ import java.util.ArrayList;
 
 public class VoicePromptTest {
     @Test
-    public void testVoicePromptConstructor(){
+    public void testVoicePromptConstructor() {
         VoicePromptInterface vp = new VoicePrompt("./voice2.wav");
         assertNotNull(vp);
     }
     @Test
-    public void testVoicePromptMockConstructor(){
+    public void testVoicePromptMockConstructor() {
         List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
         promptTypes.add(VoicePromptMock.PromptType.MealType);
         VoicePromptInterface vp = new VoicePromptMock(promptTypes);
@@ -23,7 +23,7 @@ public class VoicePromptTest {
     }
     @Test
     public void testVoicePromptSuccess() {
-        try{
+        try {
             VoicePromptInterface vp = new VoicePrompt("./voice2.wav");
             vp.startRecording();
             File f = vp.stopRecording();

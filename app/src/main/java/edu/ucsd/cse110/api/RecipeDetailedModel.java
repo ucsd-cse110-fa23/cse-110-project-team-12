@@ -1,23 +1,28 @@
 package edu.ucsd.cse110.api;
 
-import javafx.scene.Node;
-import javafx.scene.layout.StackPane;
-import javafx.scene.control.Label;
 
-
-public class RecipeDetailedModel extends StackPane implements UIInterface {
-    public RecipeDetailedModel(String recipeName, String recipeBody) {
-        Label name = new Label(recipeName);
-        Label body = new Label(recipeBody);
-        getChildren().addAll(name, body);
+public class RecipeDetailedModel implements ModelInterface {
+    Controller controller;
+    private String recipeName;
+    private String recipeBody;
+    public RecipeDetailedModel(Controller c) {
+        controller = c;
     }
+    @Override
     public void receiveMessage(Message m) {
-
+        if (m.getMessageType() == Message.CreateRecipeModel.SendTitleBody) {
+            this.recipeName = (String) m.getKey("RecipeTitle");
+            this.recipeBody = (String) m.getKey("RecipeBody");
+        }
     }
-    public void addChild(Node ui) {
-
+    @Override
+    public Object getState() {
+        return this;
     }
-    public void removeChild(Node ui) {
-
+    public String getRecipeName() {
+        return recipeName;
+    }
+    public String getRecipeBody() {
+        return recipeBody;
     }
 }

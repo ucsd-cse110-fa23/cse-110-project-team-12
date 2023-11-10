@@ -7,8 +7,10 @@ import javafx.scene.layout.VBox;
 import java.io.FileInputStream;
 
 import edu.ucsd.cse110.api.*;
-
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -18,6 +20,7 @@ import javafx.scene.image.ImageView;
 public class CreateRecipeView extends StackPane implements UIInterface {
 	private Controller controller;
 
+	private Spacer spacer;
 	private VBox content;
 	private HBox backArrowBox;
     private Button backButton;
@@ -34,6 +37,8 @@ public class CreateRecipeView extends StackPane implements UIInterface {
 		controller = c;
 
 		this.setId("create-recipe");
+
+		spacer = new Spacer(this, new Insets(35, 0, 0, 0), Pos.TOP_CENTER);
 
 		content = new VBox();
 		content.setId("content");
@@ -59,56 +64,54 @@ public class CreateRecipeView extends StackPane implements UIInterface {
 		
 		recordButton = new Button();
 		recordButton.setId("record-button");
-		
+
 		mealOptionsHeading = new Label();
 		mealTypeHeading = new Label();
 		mealOptionsModule = new MealOptionsModule();
-		recordButtonModule = new RecordButtonModule(recordButton, 0);
 		mealTypeContainer = new HBox();
 		pantryPrompt = new Label();
+		recordButtonModule = new RecordButtonModule(recordButton);
 
-		addChild(content);
-		addChild(backArrowBox);
-		addChild(backButton);
+		this.getChildren().addAll(content, backArrowBox, backButton);
 		addListeners();
 		setInputView(CreateRecipeModel.PageType.MealTypeInput, null);
     }
-
+	@Override
 	public void receiveMessage(Message m) {
-		if (m.getMessageType() == Message.Type.CreateRecipeGotoPage) {
-			CreateRecipeModel.PageType pageType = (CreateRecipeModel.PageType) m.getKey(Message.Key.PageType);
-			CreateRecipeModel.MealType mealType = (CreateRecipeModel.MealType) m.getKey(Message.Key.MealType);
+		if (m.getMessageType() == Message.CreateRecipeModel.CreateRecipeGotoPage) {
+			CreateRecipeModel.PageType pageType = (CreateRecipeModel.PageType) m.getKey("PageType");
+			CreateRecipeModel.MealType mealType = (CreateRecipeModel.MealType) m.getKey("MealType");
 			setInputView(pageType, mealType);
 		}
-		else if (m.getMessageType() == Message.Type.CreateRecipeInvalidMealType) {
+		else if (m.getMessageType() == Message.CreateRecipeModel.CreateRecipeInvalidMealType) {
 			setInvalidMealType();
 		}
-		else if (m.getMessageType() == Message.Type.StartRecording) {
+		else if (m.getMessageType() == Message.CreateRecipeModel.StartRecording) {
 			recordButtonModule.setRecording(true);
 		}
-		else if (m.getMessageType() == Message.Type.StopRecording) {
+		else if (m.getMessageType() == Message.CreateRecipeModel.StopRecording) {
 			recordButtonModule.setRecording(false);
 		}
 	}
-
+	@Override
 	public void addChild(Node ui) {
-		getChildren().add(ui);
+		content.getChildren().add(ui);
 	}
-
+	@Override
 	public void removeChild(Node ui) {
-		getChildren().remove(ui);
+		content.getChildren().remove(ui);
 	}
 
 	private void addListeners() {
 		backButton.setOnAction(
             e -> {
-				controller.receiveMessageFromUI(new Message(Message.Type.CreateRecipeBackButton));
+				controller.receiveMessageFromUI(new Message(Message.CreateRecipeView.CreateRecipeBackButton));
             }
         );
 
 		recordButton.setOnAction(
 			e -> {
-				controller.receiveMessageFromUI(new Message(Message.Type.ButtonRecord));
+				controller.receiveMessageFromUI(new Message(Message.CreateRecipeView.RecordButton));
 			}
         );
 	}
@@ -121,6 +124,7 @@ public class CreateRecipeView extends StackPane implements UIInterface {
 		
 		// Need to create a new one or else when delete mealTypeBox, it will be deleted from module as well.
 		mealOptionsModule = new MealOptionsModule();
+		recordButtonModule.setTopPadding(45);
 		content.getChildren().addAll(mealOptionsHeading, mealOptionsModule, invalidMealTypeWarning, recordButtonModule);
 	}
 
@@ -130,6 +134,7 @@ public class CreateRecipeView extends StackPane implements UIInterface {
 		if (pagetype == CreateRecipeModel.PageType.MealTypeInput) {
 			mealOptionsHeading.setText("Select Meal Type:");
 			mealOptionsHeading.setId("meal-options-heading");
+			recordButtonModule.setTopPadding(32);
 			content.getChildren().addAll(mealOptionsHeading, mealOptionsModule, recordButtonModule);
 		}
 		else if (pagetype == CreateRecipeModel.PageType.IngredientsInput) {
@@ -142,7 +147,14 @@ public class CreateRecipeView extends StackPane implements UIInterface {
 
 			pantryPrompt.setText("What's in your pantry?");
 			pantryPrompt.setId("pantry-prompt");
+
+			recordButtonModule.setTopPadding(11);
 			content.getChildren().addAll(mealTypeHeading, mealTypeContainer, pantryPrompt, recordButtonModule);
 		}
+	}
+
+	@Override
+	public Parent getUI() {
+		return spacer;
 	} 
 }
