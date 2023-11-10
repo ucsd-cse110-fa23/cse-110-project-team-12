@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class US6Test {
     
-    private CreateRecipeManager manager;
+    private CreateRecipeModel manager;
     private WhisperInterface whisper;
     private VoicePromptInterface voice;
 
@@ -29,16 +29,16 @@ public class US6Test {
         List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
         promptTypes.add(VoicePromptMock.PromptType.MealType);
         voice = new VoicePromptMock(promptTypes);
-        manager = new CreateRecipeManager(false, voice, whisper, new ChatGPTMock());
+        manager = new CreateRecipeModel(false, voice, whisper, new ChatGPTMock());
 
-        assertEquals(CreateRecipeManager.PageType.MealTypeInput, manager.getPage()); // Given I am on input meal type page
+        assertEquals(CreateRecipeModel.PageType.MealTypeInput, manager.getPage()); // Given I am on input meal type page
         manager.startRecording(); // When I click on the record voice button
         assertEquals(true, manager.getIsRecording());
         manager.stopRecording(); // And say out loud a valid recipe type And click on the stop record voice button
         assertEquals(false, manager.getIsRecording());
         
-        assertEquals(CreateRecipeManager.PageType.IngredientsInput, manager.getPage()); // Then I will be taken to the input recipe ingredients page in the pop-up window
-        assertEquals(CreateRecipeManager.MealType.Lunch, manager.getMealType()); // And my preference will be displayed.
+        assertEquals(CreateRecipeModel.PageType.IngredientsInput, manager.getPage()); // Then I will be taken to the input recipe ingredients page in the pop-up window
+        assertEquals(CreateRecipeModel.MealType.Lunch, manager.getMealType()); // And my preference will be displayed.
     }
     /* 
      * Given I am on the input meal type page
@@ -55,16 +55,16 @@ public class US6Test {
         List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
         promptTypes.add(VoicePromptMock.PromptType.InvalidNotMealType);
         voice = new VoicePromptMock(promptTypes);
-        manager = new CreateRecipeManager(false, voice, whisper, new ChatGPTMock());
+        manager = new CreateRecipeModel(false, voice, whisper, new ChatGPTMock());
 
-        assertEquals(CreateRecipeManager.PageType.MealTypeInput, manager.getPage()); // Given I am on input meal type page
+        assertEquals(CreateRecipeModel.PageType.MealTypeInput, manager.getPage()); // Given I am on input meal type page
         manager.startRecording(); // When I click on the record voice button
         assertEquals(true, manager.getIsRecording());
         manager.stopRecording(); // And say an invalid recipe type And click on the stop record voice button
         assertEquals(false, manager.getIsRecording());
         
-        assertEquals(CreateRecipeManager.MealType.Invalid, manager.getMealType()); // Then I will be shown an error message
-        assertEquals(CreateRecipeManager.PageType.MealTypeInput, manager.getPage()); // And I can try to input the meal type again.
+        assertEquals(CreateRecipeModel.MealType.Invalid, manager.getMealType()); // Then I will be shown an error message
+        assertEquals(CreateRecipeModel.PageType.MealTypeInput, manager.getPage()); // And I can try to input the meal type again.
     }
 
     /*
@@ -80,12 +80,12 @@ public class US6Test {
         whisper = new WhisperMock();
         List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
         voice = new VoicePromptMock(promptTypes);
-        manager = new CreateRecipeManager(false, voice, whisper, new ChatGPTMock());
+        manager = new CreateRecipeModel(false, voice, whisper, new ChatGPTMock());
 
-        assertEquals(CreateRecipeManager.PageType.MealTypeInput, manager.getPage()); // Given I am on input meal type page
+        assertEquals(CreateRecipeModel.PageType.MealTypeInput, manager.getPage()); // Given I am on input meal type page
         manager.goToPreviousPage(); // When I click on the back button
         // Then my preferences made so far are discarded (By design, next time will override it).
-         assertEquals(CreateRecipeManager.PageType.MealTypeInput, manager.getPage()); // And the popup window closes (By design, popup window closes, appframe stop casting but manager is still in mealtypeinput)
+         assertEquals(CreateRecipeModel.PageType.MealTypeInput, manager.getPage()); // And the popup window closes (By design, popup window closes, appframe stop casting but manager is still in mealtypeinput)
         // And I am back in the existing recipe list. (By design in CreateRecipe.java, popup window closes, appframe stop casting)
     }
 }

@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import edu.ucsd.cse110.api.ChatGPTInterface;
 import edu.ucsd.cse110.api.ChatGPTMock;
-import edu.ucsd.cse110.api.CreateRecipeManager;
+import edu.ucsd.cse110.api.CreateRecipeModel;
 import edu.ucsd.cse110.api.VoicePromptInterface;
 import edu.ucsd.cse110.api.VoicePromptMock;
 import edu.ucsd.cse110.api.WhisperInterface;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class US8Test {
-    private CreateRecipeManager manager;
+    private CreateRecipeModel manager;
     private ChatGPTInterface chatGPT;
     private WhisperInterface whisper;
     private VoicePromptInterface voice;
@@ -38,15 +38,15 @@ public class US8Test {
         promptTypes.add(VoicePromptMock.PromptType.IngredientsList);
         voice = new VoicePromptMock(promptTypes);
         
-        manager = new CreateRecipeManager(false, voice, whisper, chatGPT);
+        manager = new CreateRecipeModel(false, voice, whisper, chatGPT);
 
         assertEquals("", manager.getRecipe().getName());
         assertEquals("", manager.getRecipe().getInformation());  
 
         // Part of set up, get to ingredients input page
-        assertEquals(CreateRecipeManager.PageType.MealTypeInput, manager.getPage());
+        assertEquals(CreateRecipeModel.PageType.MealTypeInput, manager.getPage());
         manager.goToNextPage();
-        assertEquals(CreateRecipeManager.PageType.IngredientsInput, manager.getPage());
+        assertEquals(CreateRecipeModel.PageType.IngredientsInput, manager.getPage());
 
 
         // Given I am waiting for the recipe to be created -> When the Recipe is created
@@ -54,7 +54,7 @@ public class US8Test {
 
 
         // Then I am taken to the detailed view for the recipe
-        assertEquals(CreateRecipeManager.PageType.DetailedView, manager.getPage());
+        assertEquals(CreateRecipeModel.PageType.DetailedView, manager.getPage());
 
         assertNotEquals("", manager.getRecipe().getName());
         assertNotEquals("", manager.getRecipe().getInformation());   

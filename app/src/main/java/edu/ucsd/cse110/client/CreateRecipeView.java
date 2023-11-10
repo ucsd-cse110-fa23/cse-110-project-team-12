@@ -3,28 +3,20 @@ package edu.ucsd.cse110.client;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 
 import java.io.FileInputStream;
 
 import edu.ucsd.cse110.api.*;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 // takes the user through the recipe creation process
-public class CreateRecipeView extends StackPane implements UIInterface{
-	private Spacer spacer;
-
-	private CreateRecipeManager createRecipeManager;
+public class CreateRecipeView extends StackPane implements UIInterface {
+	private Controller controller;
 
 	private VBox content;
 	private HBox backArrowBox;
@@ -32,12 +24,16 @@ public class CreateRecipeView extends StackPane implements UIInterface{
 	private Button recordButton;
 	private RecordButtonModule recordButtonModule;
 	private MealOptionsModule mealOptionsModule;
-	
-    public CreateRecipeView(CreateRecipeManager createRecipeManager) {
-		this.createRecipeManager = createRecipeManager;
-		this.setId("create-recipe");
+	private Label mealOptionsHeading;
 
-		spacer = new Spacer(this, new Insets(35, 0, 0, 0), Pos.TOP_CENTER);
+	private Label mealTypeHeading;
+	private HBox mealTypeContainer;
+	private Label pantryPrompt;
+	
+    public CreateRecipeView(Controller c) {
+		controller = c;
+
+		this.setId("create-recipe");
 
 		content = new VBox();
 		content.setId("content");
@@ -49,6 +45,7 @@ public class CreateRecipeView extends StackPane implements UIInterface{
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		
 		ImageView backArrowView = new ImageView(backArrow);
 		backArrowView.setFitWidth(20);
@@ -56,146 +53,96 @@ public class CreateRecipeView extends StackPane implements UIInterface{
 		
 		backArrowBox = new HBox(backArrowView);
 		backArrowBox.setId("back-arrow-box");
-	
+		
 		backButton = new Button();
 		backButton.setId("back-button");
 		
 		recordButton = new Button();
 		recordButton.setId("record-button");
+		
+		mealOptionsHeading = new Label();
+		mealTypeHeading = new Label();
+		mealOptionsModule = new MealOptionsModule();
+		recordButtonModule = new RecordButtonModule(recordButton, 0);
+		mealTypeContainer = new HBox();
+		pantryPrompt = new Label();
 
-		this.getChildren().addAll(content, backArrowBox, backButton);
+		addChild(content);
+		addChild(backArrowBox);
+		addChild(backButton);
 		addListeners();
-		updateUI();
+		setInputView(CreateRecipeModel.PageType.MealTypeInput, null);
     }
+
+	public void receiveMessage(Message m) {
+		if (m.getMessageType() == Message.Type.CreateRecipeGotoPage) {
+			CreateRecipeModel.PageType pageType = (CreateRecipeModel.PageType) m.getKey(Message.Key.PageType);
+			CreateRecipeModel.MealType mealType = (CreateRecipeModel.MealType) m.getKey(Message.Key.MealType);
+			setInputView(pageType, mealType);
+		}
+		else if (m.getMessageType() == Message.Type.CreateRecipeInvalidMealType) {
+			setInvalidMealType();
+		}
+		else if (m.getMessageType() == Message.Type.StartRecording) {
+			recordButtonModule.setRecording(true);
+		}
+		else if (m.getMessageType() == Message.Type.StopRecording) {
+			recordButtonModule.setRecording(false);
+		}
+	}
+
+	public void addChild(Node ui) {
+		getChildren().add(ui);
+	}
+
+	public void removeChild(Node ui) {
+		getChildren().remove(ui);
+	}
 
 	private void addListeners() {
 		backButton.setOnAction(
             e -> {
-				if (createRecipeManager.getPage() == CreateRecipeManager.PageType.MealTypeInput) {
-					createRecipeManager.closeView();
-				}
-				else {
-					createRecipeManager.goToPreviousPage();
-					updateUI();
-				}
+				controller.receiveMessageFromUI(new Message(Message.Type.CreateRecipeBackButton));
             }
         );
 
 		recordButton.setOnAction(
 			e -> {
-				if (createRecipeManager.getIsRecording() == false)
-					createRecipeManager.startRecording();
-				else
-					createRecipeManager.stopRecording();
-				updateUI();	
+				controller.receiveMessageFromUI(new Message(Message.Type.ButtonRecord));
 			}
         );
 	}
 
-    private void updateUI() {
-        content.getChildren().clear();
+	private void setInvalidMealType() {
+		content.getChildren().clear();
+		
+		Label invalidMealTypeWarning = new Label("Invalid Meal Type");
+		invalidMealTypeWarning.setId("invalid-meal-type-warning");
+		
+		// Need to create a new one or else when delete mealTypeBox, it will be deleted from module as well.
+		mealOptionsModule = new MealOptionsModule();
+		content.getChildren().addAll(mealOptionsHeading, mealOptionsModule, invalidMealTypeWarning, recordButtonModule);
+	}
 
-		// meal selection page
-        if (createRecipeManager.getPage() == CreateRecipeManager.PageType.MealTypeInput) {
-			Label mealOptionsHeading = new Label("Select Meal Type:");
+	private void setInputView(CreateRecipeModel.PageType pagetype, CreateRecipeModel.MealType mealType) {
+		content.getChildren().clear();
+		mealOptionsModule = new MealOptionsModule();
+		if (pagetype == CreateRecipeModel.PageType.MealTypeInput) {
+			mealOptionsHeading.setText("Select Meal Type:");
 			mealOptionsHeading.setId("meal-options-heading");
-			
-			mealOptionsModule = new MealOptionsModule();
-            
-			if (createRecipeManager.getMealType() == CreateRecipeManager.MealType.Invalid) {
-				Label invalidMealTypeWarning = new Label("Invalid Meal Type");
-				invalidMealTypeWarning.setId("invalid-meal-type-warning");
-			
-				recordButtonModule = new RecordButtonModule(recordButton, 8, createRecipeManager.getIsRecording());
-				content.getChildren().addAll(mealOptionsHeading, mealOptionsModule, invalidMealTypeWarning, recordButtonModule);
-			}
-			else {
-				recordButtonModule = new RecordButtonModule(recordButton, 51, createRecipeManager.getIsRecording());
-				content.getChildren().addAll(mealOptionsHeading, mealOptionsModule, recordButtonModule);
-			}
-		} 
-
-		// ingredient selection page
-		else if (createRecipeManager.getPage() == CreateRecipeManager.PageType.IngredientsInput) {
-            Label mealTypeHeading = new Label("Meal Type:");
+			content.getChildren().addAll(mealOptionsHeading, mealOptionsModule, recordButtonModule);
+		}
+		else if (pagetype == CreateRecipeModel.PageType.IngredientsInput) {
+            mealTypeHeading.setText("Meal Type:");
 			mealTypeHeading.setId("meal-type-heading");
-
-			HBox mealTypeContainer = new HBox(mealOptionsModule.getMealTypeBox(createRecipeManager.getMealType().name()));
+			
+			mealTypeContainer.getChildren().clear();
+			mealTypeContainer.getChildren().add(mealOptionsModule.getMealTypeBox(mealType.name()));
 			mealTypeContainer.setId("meal-type-container");
 
-			Label pantryPrompt = new Label("What's in your pantry?");
+			pantryPrompt.setText("What's in your pantry?");
 			pantryPrompt.setId("pantry-prompt");
-
-			recordButtonModule = new RecordButtonModule(recordButton, 11, createRecipeManager.getIsRecording());
-            content.getChildren().addAll(mealTypeHeading, mealTypeContainer, pantryPrompt, recordButtonModule);
-        } 
-
-		// // generated recipe loading screen
-		// else if (this.page == -1) {
-		// 	Label generatingRecipeText = new Label("Generating Recipe...");
-		// 	generatingRecipeText.setId("generating-recipe-text");
-		// 	content.getChildren().add(generatingRecipeText);
-		// 	this.getChildren().removeAll(backArrowBox, backButton);
-		// }
-
-		// generated recipe view
-		else if (createRecipeManager.getPage() == CreateRecipeManager.PageType.DetailedView) {
-			Text recipeTitle = new Text(createRecipeManager.getRecipe().getName());
-			setTitleFont(recipeTitle, 19);
-			recipeTitle.setId("recipe-title");
-
-			Label information = new Label(createRecipeManager.getRecipe().getInformation());
-			information.setId("information");
-			
-			ScrollPane scrollPane = new ScrollPane(information);
-
-			Button cancelButton = new Button("Cancel");	
-			cancelButton.setId("cancel-button");
-			cancelButton.setOnAction(
-				e -> {
-					createRecipeManager.closeView();
-				}
-			);
-
-			Button saveButton = new Button("Save");
-			saveButton.setId("save-button");
-			saveButton.setOnAction(
-				e -> {
-					createRecipeManager.closeView();
-				}
-			);
-
-			HBox buttonBox = new HBox(cancelButton, saveButton);
-			buttonBox.setId("button-box");
-
-			content.getChildren().addAll(recipeTitle, scrollPane, buttonBox);
-			this.getChildren().removeAll(backArrowBox, backButton);
-        }
-    }
-
-	private void setTitleFont(Text title, double size){
-		title.setFont(new Font("Helvetica Bold", size));
-		if (size == 11) { return; }
-
-        double width = title.getLayoutBounds().getWidth();
-        if (width >= 266){
-            size -= 0.25;
-            setTitleFont(title, size);
-        }
-    }
-
-	@Override
-	public void addNode(Node node) {
-		throw new UnsupportedOperationException("Unimplemented method 'addNode'");
-	}
-
-	@Override
-	public void removeNode(Node node) {
-		throw new UnsupportedOperationException("Unimplemented method 'removeNode'");
-	}
-
-	@Override
-	public Parent getUI() {
-		return this.spacer;
-	}
+			content.getChildren().addAll(mealTypeHeading, mealTypeContainer, pantryPrompt, recordButtonModule);
+		}
+	} 
 }

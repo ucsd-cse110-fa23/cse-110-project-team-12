@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import edu.ucsd.cse110.api.HomeManager;
 import edu.ucsd.cse110.api.ChatGPTMock;
-import edu.ucsd.cse110.api.CreateRecipeManager;
+import edu.ucsd.cse110.api.CreateRecipeModel;
 import edu.ucsd.cse110.api.VoicePromptMock;
 import edu.ucsd.cse110.api.WhisperMock;
 import edu.ucsd.cse110.api.HomeManager.UpdateType;

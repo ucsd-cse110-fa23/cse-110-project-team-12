@@ -1,23 +1,20 @@
 package edu.ucsd.cse110.client;
 
-import edu.ucsd.cse110.api.HomeManager;
-import edu.ucsd.cse110.api.HomeManager.UpdateType;
-import edu.ucsd.cse110.api.HomeManager.ViewType;
+import edu.ucsd.cse110.api.Controller;
+import edu.ucsd.cse110.api.Message;
+import edu.ucsd.cse110.api.UIInterface;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 
 // AppFrame that holds the RecipeList, createRecipeButton, createRecipe and more!
-public class HomeView extends BorderPane implements UIInterface{
-	
+public class HomeView extends BorderPane implements UIInterface {
+	private Controller controller;
 	private StackPane content;
 	private Button createButton;
-	private HomeManager appManager;
 
-    public HomeView(HomeManager appManager) {
-		this.appManager = appManager;
-
+    public HomeView(Controller c) {
+		this.controller = c;
 		this.content = new StackPane();
 
         this.setTop(new Header());
@@ -30,23 +27,20 @@ public class HomeView extends BorderPane implements UIInterface{
 		this.content.getChildren().addAll(createButtonModule.getComponents());
 		createButton.setOnAction(
             e -> {
-				this.appManager.updateView(ViewType.CreateRecipeView, UpdateType.Start);
+				controller.receiveMessageFromUI(new Message(Message.Type.ButtonCreateRecipe));
             }
         );
     }
 	
-	@Override
-	public void addNode(Node node){
-		this.content.getChildren().add(node);
+	public void receiveMessage(Message m) {
+
 	}
 
-	@Override
-	public void removeNode(Node node){
-		this.content.getChildren().remove(node);
+	public void addChild(Node ui) {
+		getChildren().add(ui);
 	}
 
-	@Override
-	public Parent getUI() {
-		return this;
+	public void removeChild(Node ui) {
+		getChildren().remove(ui);
 	}
 }

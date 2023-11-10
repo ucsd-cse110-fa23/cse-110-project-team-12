@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class US7Test {
     
-    private CreateRecipeManager manager;
+    private CreateRecipeModel manager;
     private WhisperInterface whisper;
     private VoicePromptInterface voice;
 
@@ -29,10 +29,10 @@ public class US7Test {
         List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
         promptTypes.add(VoicePromptMock.PromptType.IngredientsList);
         voice = new VoicePromptMock(promptTypes);
-        manager = new CreateRecipeManager(false, voice, whisper, new ChatGPTMock());
+        manager = new CreateRecipeModel(false, voice, whisper, new ChatGPTMock());
 
         manager.goToNextPage();
-        assertEquals(CreateRecipeManager.PageType.IngredientsInput, manager.getPage()); // Given I am in the input recipe ingredients page
+        assertEquals(CreateRecipeModel.PageType.IngredientsInput, manager.getPage()); // Given I am in the input recipe ingredients page
         manager.startRecording(); // When I click on the record voice button
         assertEquals(true, manager.getIsRecording());
         manager.stopRecording(); // And say out loud a list of ingredients And click on the stop record voice button
@@ -59,12 +59,12 @@ public class US7Test {
         whisper = new WhisperMock();
         List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
         voice = new VoicePromptMock(promptTypes);
-        manager = new CreateRecipeManager(false, voice, whisper, new ChatGPTMock());
+        manager = new CreateRecipeModel(false, voice, whisper, new ChatGPTMock());
 
         manager.goToNextPage();
-        assertEquals(CreateRecipeManager.PageType.IngredientsInput, manager.getPage()); // Given I am in the input recipe ingredients page
+        assertEquals(CreateRecipeModel.PageType.IngredientsInput, manager.getPage()); // Given I am in the input recipe ingredients page
         manager.goToPreviousPage(); // When I click on the back button
         // Then my preferences on meal type are discarded (By design, reinputting will override the old preference).
-         assertEquals(CreateRecipeManager.PageType.MealTypeInput, manager.getPage()); // And I go back to the input meal type page.
+         assertEquals(CreateRecipeModel.PageType.MealTypeInput, manager.getPage()); // And I go back to the input meal type page.
     }
 }
