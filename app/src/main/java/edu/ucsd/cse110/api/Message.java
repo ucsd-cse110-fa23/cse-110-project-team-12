@@ -28,7 +28,7 @@ public class Message {
     }
     public enum CreateRecipeView implements Type {
         RecordButton,
-        CreateRecipeBackButton;
+        BackButton;
     }
     public enum CreateRecipeModel implements Type {
         CloseCreateRecipeView,
@@ -46,13 +46,21 @@ public class Message {
         StartRecipeDetailedView;
     }
     public enum RecipeDetailedView implements Type {
-        
+        CancelButton, 
+        SaveButton,
+        BackButton,
+        DeleteButton,
+        EditButton;
     }
     public enum RecipeDetailedModel implements Type {
-        SetNameBody {
+        CloseRecipeDetailedView,
+        SetTitleBody {
             Set<String> keys = new HashSet<>(Arrays.asList("RecipeTitle", "RecipeBody"));
             @Override public Set<String> allowedKeys() {return keys;}
         },
+        UseUnsavedLayout,
+        UseSavedLayout, 
+        RemoveUnsavedLayout;
     }
     
     private Type type;

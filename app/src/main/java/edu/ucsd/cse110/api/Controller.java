@@ -72,10 +72,10 @@ public class Controller {
         // Controller intercepts all message that update UI Types
         if (m.getMessageType() == Message.HomeModel.StartCreateRecipeView) {
             CreateRecipeModel createRecipeModel = new CreateRecipeModel(this, voicePrompt, whisper, chatGPT);
-            models.put(ModelType.CreateRecipe, createRecipeModel);
+            addModel(ModelType.CreateRecipe, createRecipeModel);
             
             UIInterface createRecipeView = make(UIType.CreateRecipe);
-            uis.put(UIType.CreateRecipe, createRecipeView);
+            addUI(UIType.CreateRecipe, createRecipeView);
             
             uis.get(UIType.HomePage).addChild(createRecipeView.getUI());
         } else if (m.getMessageType() == Message.HomeModel.CloseCreateRecipeView) {
@@ -83,10 +83,10 @@ public class Controller {
         }
         else if (m.getMessageType() == Message.HomeModel.StartRecipeDetailedView) {
             RecipeDetailedModel detailedModel = new RecipeDetailedModel(this);
-            models.put(ModelType.DetailedView, detailedModel);
+            addModel(ModelType.DetailedView, detailedModel);
             
             UIInterface detailedView = make(UIType.DetailedView);
-            uis.put(UIType.DetailedView, detailedView);
+            addUI(UIType.DetailedView, detailedView);
 
             uis.get(UIType.HomePage).addChild(detailedView.getUI());
         } else if (m.getMessageType() == Message.HomeModel.CloseRecipeDetailedView) {

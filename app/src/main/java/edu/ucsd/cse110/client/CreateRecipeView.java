@@ -30,8 +30,9 @@ public class CreateRecipeView extends StackPane implements UIInterface {
 	private Label mealOptionsHeading;
 
 	private Label mealTypeHeading;
-	private HBox mealTypeContainer;
 	private Label pantryPrompt;
+
+	private Spacer waitingPage;
 	
     public CreateRecipeView(Controller c) {
 		controller = c;
@@ -65,23 +66,30 @@ public class CreateRecipeView extends StackPane implements UIInterface {
 		recordButton = new Button();
 		recordButton.setId("record-button");
 
-		mealOptionsHeading = new Label();
-		mealTypeHeading = new Label();
+		mealOptionsHeading = new Label("Select Meal Type:");
+		mealOptionsHeading.setId("meal-options-heading");
+
+		mealTypeHeading = new Label("Meal Type:");
+		mealTypeHeading.setId("meal-type-heading");
+
 		mealOptionsModule = new MealOptionsModule();
-		mealTypeContainer = new HBox();
-		pantryPrompt = new Label();
+
+		pantryPrompt = new Label("What's in your pantry?");
+		pantryPrompt.setId("pantry-prompt");
 		recordButtonModule = new RecordButtonModule(recordButton);
+
+		Label waitingPrompt = new Label("Generating Recipe...");
+		waitingPrompt.setId("waiting-prompt");
+		waitingPage = new Spacer(waitingPrompt, new Insets(60, 0, 0, 0), Pos.TOP_CENTER);
 
 		this.getChildren().addAll(content, backArrowBox, backButton);
 		addListeners();
-		setInputView(CreateRecipeModel.PageType.MealTypeInput, null);
+		setInputView("MealTypeInput", null);
     }
 	@Override
 	public void receiveMessage(Message m) {
 		if (m.getMessageType() == Message.CreateRecipeModel.CreateRecipeGotoPage) {
-			CreateRecipeModel.PageType pageType = (CreateRecipeModel.PageType) m.getKey("PageType");
-			CreateRecipeModel.MealType mealType = (CreateRecipeModel.MealType) m.getKey("MealType");
-			setInputView(pageType, mealType);
+			setInputView((String) m.getKey("PageType"), (String) m.getKey("MealType"));
 		}
 		else if (m.getMessageType() == Message.CreateRecipeModel.CreateRecipeInvalidMealType) {
 			setInvalidMealType();
@@ -105,7 +113,7 @@ public class CreateRecipeView extends StackPane implements UIInterface {
 	private void addListeners() {
 		backButton.setOnAction(
             e -> {
-				controller.receiveMessageFromUI(new Message(Message.CreateRecipeView.CreateRecipeBackButton));
+				controller.receiveMessageFromUI(new Message(Message.CreateRecipeView.BackButton));
             }
         );
 
@@ -123,33 +131,26 @@ public class CreateRecipeView extends StackPane implements UIInterface {
 		invalidMealTypeWarning.setId("invalid-meal-type-warning");
 		
 		// Need to create a new one or else when delete mealTypeBox, it will be deleted from module as well.
-		mealOptionsModule = new MealOptionsModule();
-		recordButtonModule.setTopPadding(45);
+		recordButtonModule.setTopPadding(10);
 		content.getChildren().addAll(mealOptionsHeading, mealOptionsModule, invalidMealTypeWarning, recordButtonModule);
 	}
 
-	private void setInputView(CreateRecipeModel.PageType pagetype, CreateRecipeModel.MealType mealType) {
+	private void setInputView(String pagetype, String mealType) {
 		content.getChildren().clear();
-		mealOptionsModule = new MealOptionsModule();
-		if (pagetype == CreateRecipeModel.PageType.MealTypeInput) {
-			mealOptionsHeading.setText("Select Meal Type:");
-			mealOptionsHeading.setId("meal-options-heading");
-			recordButtonModule.setTopPadding(32);
+		if (pagetype == "MealTypeInput") {
+			recordButtonModule.setTopPadding(53);
 			content.getChildren().addAll(mealOptionsHeading, mealOptionsModule, recordButtonModule);
 		}
-		else if (pagetype == CreateRecipeModel.PageType.IngredientsInput) {
-            mealTypeHeading.setText("Meal Type:");
-			mealTypeHeading.setId("meal-type-heading");
-			
-			mealTypeContainer.getChildren().clear();
-			mealTypeContainer.getChildren().add(mealOptionsModule.getMealTypeBox(mealType.name()));
+		else if (pagetype == "IngredientsInput") {
+			HBox mealTypeContainer = new HBox();
+			mealTypeContainer.getChildren().add(mealOptionsModule.createMealTypeBox(mealType));
 			mealTypeContainer.setId("meal-type-container");
 
-			pantryPrompt.setText("What's in your pantry?");
-			pantryPrompt.setId("pantry-prompt");
-
-			recordButtonModule.setTopPadding(11);
+			recordButtonModule.setTopPadding(13);
 			content.getChildren().addAll(mealTypeHeading, mealTypeContainer, pantryPrompt, recordButtonModule);
+		}else if (pagetype == "Waiting"){
+			this.getChildren().removeAll(backArrowBox, backButton);
+			addChild(waitingPage);
 		}
 	}
 

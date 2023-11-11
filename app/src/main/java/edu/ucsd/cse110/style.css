@@ -1,6 +1,7 @@
 * {
 	-primary: #93d786;
 	-secondary: #BC8B8B;
+	-ternary: #92C2C7;
 	-background: #5B5B5B;
 }
 
@@ -52,6 +53,15 @@
 }
 
 #create-recipe {
+	-fx-background-color: rgba(91, 91, 91, 0.96);
+	-fx-pref-width: 280;
+	-fx-pref-height: 290;
+	-fx-max-height: 290;
+	-fx-alignment: top-left;
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
+}
+
+#recipe-detailed {
 	-fx-background-color: rgba(91, 91, 91, 0.96);
 	-fx-pref-width: 280;
 	-fx-pref-height: 290;
@@ -129,6 +139,14 @@
 	-fx-font-size: 20;
 }
 
+#waiting-prompt {
+	-fx-text-fill: white;
+	-fx-padding: 65 0 0 0;
+	-fx-font-family: 'Arial';
+	-fx-font-weight: bold;
+	-fx-font-size: 20;
+}
+
 #generating-recipe-text {
 	-fx-text-fill: white;
 	-fx-padding: 122 0 0 0;
@@ -172,7 +190,36 @@
 	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
 }
 
-#button-box {
+#unsaved-button-box {
+	-fx-padding: 0 7 7 7;
+	-fx-spacing: 183;
+}
+
+#delete-button {
+	-fx-background-color: -secondary;
+	-fx-background-radius: 4px;
+	-fx-text-fill: white;
+	-fx-padding: 2 5 2 5;
+	-fx-min-width: 40;
+	-fx-font-family: 'Arial';
+	-fx-font-weight: bold;
+	-fx-font-size: 10;
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
+}
+
+#edit-button {
+	-fx-background-color: -ternary;
+	-fx-background-radius: 4px;
+	-fx-text-fill: white;
+	-fx-padding: 2 5 2 5;
+	-fx-min-width: 40;
+	-fx-font-family: 'Arial';
+	-fx-font-weight: bold;
+	-fx-font-size: 10;
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
+}
+
+#saved-button-box {
 	-fx-padding: 0 7 7 7;
 	-fx-spacing: 183;
 }

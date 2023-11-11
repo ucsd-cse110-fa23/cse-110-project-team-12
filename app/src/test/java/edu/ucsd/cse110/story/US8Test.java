@@ -51,7 +51,7 @@ public class US8Test {
         // Then I am taken to the detailed view for the recipe
         assertEquals(Controller.UIType.DetailedView, ((HomeModel)controller.getState(Controller.ModelType.HomePage)).getCurrentView());
 
-        assertNotEquals("", ((RecipeDetailedModel)controller.getState(Controller.ModelType.DetailedView)).getRecipeName());
+        assertNotEquals("", ((RecipeDetailedModel)controller.getState(Controller.ModelType.DetailedView)).getRecipeTitle());
         assertNotEquals("", ((RecipeDetailedModel)controller.getState(Controller.ModelType.DetailedView)).getRecipeBody());
     }
 

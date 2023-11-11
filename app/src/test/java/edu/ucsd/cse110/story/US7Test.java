@@ -70,7 +70,7 @@ public class US7Test {
         controller.receiveMessageFromUI(new Message(Message.CreateRecipeView.RecordButton));
 
         assertEquals(CreateRecipeModel.PageType.IngredientsInput, ((CreateRecipeModel) controller.getState(Controller.ModelType.CreateRecipe)).getCurrentPage()); // Given I am in the input recipe ingredients page
-        controller.receiveMessageFromUI(new Message(Message.CreateRecipeView.CreateRecipeBackButton)); // When I click on the back button
+        controller.receiveMessageFromUI(new Message(Message.CreateRecipeView.BackButton)); // When I click on the back button
         assertEquals(CreateRecipeModel.MealType.None, ((CreateRecipeModel) controller.getState(Controller.ModelType.CreateRecipe)).getSelectedMealType()); // Then my preferences on meal type are discarded (By design, reinputting will override the old preference).
         assertEquals(CreateRecipeModel.PageType.MealTypeInput, ((CreateRecipeModel) controller.getState(Controller.ModelType.CreateRecipe)).getCurrentPage()); // And I go back to the input meal type page.
     }

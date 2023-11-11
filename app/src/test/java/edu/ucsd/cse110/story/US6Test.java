@@ -88,7 +88,7 @@ public class US6Test {
         controller.receiveMessageFromUI(new Message(Message.HomeView.CreateRecipeButton));
 
         assertEquals(CreateRecipeModel.PageType.MealTypeInput, ((CreateRecipeModel) controller.getState(Controller.ModelType.CreateRecipe)).getCurrentPage()); // Given I am on input meal type page
-        controller.receiveMessageFromUI(new Message(Message.CreateRecipeView.CreateRecipeBackButton)); // When I click on the back button
+        controller.receiveMessageFromUI(new Message(Message.CreateRecipeView.BackButton)); // When I click on the back button
         assertEquals(CreateRecipeModel.MealType.None, ((CreateRecipeModel) controller.getState(Controller.ModelType.CreateRecipe)).getSelectedMealType()); // Then my preferences made so far are discarded
         assertNull(((CreateRecipeModel) controller.getState(Controller.ModelType.CreateRecipe)).getSelectedIngredients());
         assertEquals(Controller.UIType.HomePage, ((HomeModel) controller.getState(Controller.ModelType.HomePage)).getCurrentView()); // And the popup window closes And I am back in the existing recipe list.

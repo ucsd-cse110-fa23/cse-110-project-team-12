@@ -30,6 +30,10 @@ public class HomeModel implements ModelInterface {
             currentView = UIType.DetailedView;
             controller.receiveMessageFromModel(new Message(Message.HomeModel.StartRecipeDetailedView));
         }
+        if(m.getMessageType() == Message.RecipeDetailedModel.CloseRecipeDetailedView) {
+            currentView = UIType.HomePage;
+            controller.receiveMessageFromModel(new Message(Message.HomeModel.CloseRecipeDetailedView));
+        }
     }
 
     public UIType getCurrentView() {
