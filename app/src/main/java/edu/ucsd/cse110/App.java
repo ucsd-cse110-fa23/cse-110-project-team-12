@@ -4,14 +4,19 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import edu.ucsd.cse110.client.AppFrame;
+import edu.ucsd.cse110.api.ChatGPT;
+import edu.ucsd.cse110.api.Controller;
+import edu.ucsd.cse110.api.VoicePrompt;
+import edu.ucsd.cse110.api.Whisper;
 
 // Main class that starts the application
 public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        AppFrame root = new AppFrame();
-		Scene scene = new Scene(root, 325, 450);
+        Controller controller = new Controller(true, new VoicePrompt("voice.wav"), new Whisper(), new ChatGPT());
+
+        Scene scene = new Scene(controller.getUIRoot(), 325, 450);
+        
 		scene.getStylesheets().add(this.getClass().getResource("style.css").toExternalForm());
 
         primaryStage.setScene(scene);

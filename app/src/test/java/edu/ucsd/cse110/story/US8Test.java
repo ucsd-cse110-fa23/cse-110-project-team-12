@@ -2,12 +2,17 @@ package edu.ucsd.cse110.story;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
+import edu.ucsd.cse110.api.HomeModel;
 import edu.ucsd.cse110.api.ChatGPTInterface;
 import edu.ucsd.cse110.api.ChatGPTMock;
-import edu.ucsd.cse110.api.CreateRecipeManager;
+import edu.ucsd.cse110.api.Controller;
+import edu.ucsd.cse110.api.CreateRecipeModel;
+import edu.ucsd.cse110.api.Message;
+import edu.ucsd.cse110.api.RecipeDetailedModel;
 import edu.ucsd.cse110.api.VoicePromptInterface;
 import edu.ucsd.cse110.api.VoicePromptMock;
 import edu.ucsd.cse110.api.WhisperInterface;
@@ -17,9 +22,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class US8Test {
-    private CreateRecipeManager manager;
-    private ChatGPTInterface chatGPT;
-    private WhisperInterface whisper;
+    private Controller controller;
     private VoicePromptInterface voice;
 
     // Tests the BDD Scenario listed for US8
@@ -32,32 +35,24 @@ public class US8Test {
     public void testUS8BDD1() {
 
         // Set up manager
-        chatGPT = new ChatGPTMock();
-        whisper = new WhisperMock();
         List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>(); 
+        promptTypes.add(VoicePromptMock.PromptType.MealType);
         promptTypes.add(VoicePromptMock.PromptType.IngredientsList);
         voice = new VoicePromptMock(promptTypes);
-        
-        manager = new CreateRecipeManager(voice, whisper, chatGPT);
+        controller = new Controller(false, voice, new WhisperMock(), new ChatGPTMock());
+        controller.receiveMessageFromUI(new Message(Message.HomeView.CreateRecipeButton));
+        controller.receiveMessageFromUI(new Message(Message.CreateRecipeView.RecordButton));
+        controller.receiveMessageFromUI(new Message(Message.CreateRecipeView.RecordButton));
 
-        assertEquals("", manager.getRecipe().getName());
-        assertEquals("", manager.getRecipe().getInformation());  
-
-        // Part of set up, get to ingredients input page
-        assertEquals(CreateRecipeManager.PageType.MealTypeInput, manager.getPage());
-        manager.goToNextPage();
-        assertEquals(CreateRecipeManager.PageType.IngredientsInput, manager.getPage());
-
-
-        // Given I am waiting for the recipe to be created -> When the Recipe is created
-        manager.processTranscript("Chicken, rice, broccoli");
-
+        assertEquals(CreateRecipeModel.PageType.IngredientsInput, ((CreateRecipeModel) controller.getState(Controller.ModelType.CreateRecipe)).getCurrentPage());
+        controller.receiveMessageFromUI(new Message(Message.CreateRecipeView.RecordButton));
+        controller.receiveMessageFromUI(new Message(Message.CreateRecipeView.RecordButton)); // Given I am waiting for the recipe to be created -> When the Recipe is created
 
         // Then I am taken to the detailed view for the recipe
-        assertEquals(CreateRecipeManager.PageType.DetailedView, manager.getPage());
+        assertEquals(Controller.UIType.DetailedView, ((HomeModel)controller.getState(Controller.ModelType.HomePage)).getCurrentView());
 
-        assertNotEquals("", manager.getRecipe().getName());
-        assertNotEquals("", manager.getRecipe().getInformation());   
+        assertNotEquals("", ((RecipeDetailedModel)controller.getState(Controller.ModelType.DetailedView)).getRecipeTitle());
+        assertNotEquals("", ((RecipeDetailedModel)controller.getState(Controller.ModelType.DetailedView)).getRecipeBody());
     }
 
     

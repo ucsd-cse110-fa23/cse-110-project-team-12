@@ -31,10 +31,10 @@ public class MealTypeValidatorTest {
     public void testMealTypeParse() {
         // Contains good string.
         String mealText = "I would like to have Breakfast.";
-        assertEquals(CreateRecipeManager.MealType.Breakfast, MealTypeValidator.parseMealType(mealText));
+        assertEquals(CreateRecipeModel.MealType.Breakfast, MealTypeValidator.parseMealType(mealText));
 
         // Contains good string.
         mealText = "please give me uhhhh dinnER, and uhhhh nevermind :)";
-        assertEquals(CreateRecipeManager.MealType.Dinner, MealTypeValidator.parseMealType(mealText));
+        assertEquals(CreateRecipeModel.MealType.Dinner, MealTypeValidator.parseMealType(mealText));
     }
 }

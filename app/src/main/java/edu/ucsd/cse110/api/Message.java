@@ -1,0 +1,99 @@
+package edu.ucsd.cse110.api;
+
+import java.util.*;
+
+public class Message {
+
+    // Message Type Interface
+    public interface Type {
+        default Set<String> allowedKeys() { return new HashSet<>();}
+        default void checkPayload(Map<String, Object> payload) throws IllegalArgumentException {
+            for(String key : allowedKeys())
+                if(!payload.containsKey(key))
+                    throw new IllegalArgumentException("Key not found: " + key);
+        }
+    }
+
+    // Class Type Enum
+    
+    public enum HomeView implements Type {
+        CreateRecipeButton, // HomeView.CreateRecipeButton
+        
+    }
+    public enum HomeModel implements Type {
+        StartCreateRecipeView,
+        CloseCreateRecipeView,
+        StartRecipeDetailedView,
+        CloseRecipeDetailedView,
+    }
+    public enum CreateRecipeView implements Type {
+        RecordButton,
+        BackButton;
+    }
+    public enum CreateRecipeModel implements Type {
+        CloseCreateRecipeView,
+        StartRecording,
+        StopRecording,
+        SendTitleBody {
+            Set<String> keys = new HashSet<>(Arrays.asList("RecipeTitle", "RecipeBody"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        },
+        CreateRecipeGotoPage {
+            Set<String> keys = new HashSet<>(Arrays.asList("PageType", "MealType"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        },
+        CreateRecipeInvalidMealType,
+        StartRecipeDetailedView;
+    }
+    public enum RecipeDetailedView implements Type {
+        CancelButton, 
+        SaveButton,
+        BackButton,
+        DeleteButton,
+        EditButton;
+    }
+    public enum RecipeDetailedModel implements Type {
+        CloseRecipeDetailedView,
+        SetTitleBody {
+            Set<String> keys = new HashSet<>(Arrays.asList("RecipeTitle", "RecipeBody"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        },
+        UseUnsavedLayout,
+        UseSavedLayout, 
+        RemoveUnsavedLayout;
+    }
+    
+    private Type type;
+    private Map<String, Object> payload;
+
+    public Message(Type type, Map<String, Object> payload) {
+        this.type = type;
+        this.payload = payload;
+        type.checkPayload(payload);
+    }
+
+    public Message(Type type) {
+        if(!type.allowedKeys().isEmpty())
+            throw new IllegalArgumentException("Loader not found for " + getClassEnum() + " " +  type);
+        this.type = type;
+        this.payload = null;
+    } 
+
+    public String getClassEnum() {
+        return type.getClass().getEnclosingClass().getSimpleName();
+    }
+
+    public Type getMessageType() {
+        return type;
+    }
+
+    private boolean keyValid(String key) {
+        return type.allowedKeys().contains(key);
+    }
+
+    public Object getKey(String key) {
+        if (!keyValid(key))
+            throw new IllegalArgumentException("Can't use key " + key + " for message type " + type);
+        return payload.get(key);
+    }
+}
