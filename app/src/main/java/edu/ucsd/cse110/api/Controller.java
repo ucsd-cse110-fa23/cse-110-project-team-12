@@ -36,7 +36,7 @@ public class Controller {
     private Map<ModelType, ModelInterface> models;
     private Map<UIType, UIInterface> uis;
 
-    private boolean useUI;
+    public boolean useUI;
     private VoicePromptInterface voicePrompt;
     private WhisperInterface whisper;
     private ChatGPTInterface chatGPT;

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Map;
 
 import edu.ucsd.cse110.client.Recipe;
+import javafx.application.Platform;
 
 public class CreateRecipeModel implements ModelInterface {
     public enum PageType {
@@ -87,14 +88,30 @@ public class CreateRecipeModel implements ModelInterface {
         if (isRecording) {
             controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StopRecording));
             File recordingFile = voicePrompt.stopRecording();
-            try {
-                String transcript = whisper.transcribe(recordingFile);
-                processTranscript(transcript);
+            if(controller.useUI){
+                new Thread(() -> {
+                    try {
+                        String transcript = whisper.transcribe(recordingFile);
+                        Platform.runLater(() -> {
+                            processTranscript(transcript);
+                        });
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    
+                }).start();
+                isRecording = false;
+            }else{
+                try {
+                    String transcript = whisper.transcribe(recordingFile);
+                    processTranscript(transcript);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+                isRecording = false;
             }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            isRecording = false;
         }
         else {
             controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StartRecording));
@@ -123,17 +140,35 @@ public class CreateRecipeModel implements ModelInterface {
             controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.CreateRecipeGotoPage,
                     Map.ofEntries(Map.entry("PageType", currentPage.name()),
                                   Map.entry("MealType", selectedMealType.name()))));
-            selectedIngredients = transcript;
-            createNewChatGPTRecipe();
-            controller.receiveMessageFromModel(
-                new Message(Message.CreateRecipeModel.CloseCreateRecipeView)
-            );
-            controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StartRecipeDetailedView));
-            controller.receiveMessageFromModel(
-                new Message(Message.CreateRecipeModel.SendTitleBody,
-                Map.ofEntries(Map.entry("RecipeTitle", generatedRecipe.getName()),
-                                Map.entry("RecipeBody", generatedRecipe.getInformation())))
-            );
+            if(controller.useUI){
+                selectedIngredients = transcript;
+                new Thread(() -> {
+                    createNewChatGPTRecipe();
+                    Platform.runLater(() -> {
+                        controller.receiveMessageFromModel(
+                            new Message(Message.CreateRecipeModel.CloseCreateRecipeView)
+                        );
+                        controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StartRecipeDetailedView));
+                        controller.receiveMessageFromModel(
+                            new Message(Message.CreateRecipeModel.SendTitleBody,
+                            Map.ofEntries(Map.entry("RecipeTitle", generatedRecipe.getName()),
+                                            Map.entry("RecipeBody", generatedRecipe.getInformation())))
+                        );
+                    });
+                }).start();
+            }else{
+                selectedIngredients = transcript;
+                createNewChatGPTRecipe();
+                controller.receiveMessageFromModel(
+                    new Message(Message.CreateRecipeModel.CloseCreateRecipeView)
+                );
+                controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StartRecipeDetailedView));
+                controller.receiveMessageFromModel(
+                    new Message(Message.CreateRecipeModel.SendTitleBody,
+                    Map.ofEntries(Map.entry("RecipeTitle", generatedRecipe.getName()),
+                                    Map.entry("RecipeBody", generatedRecipe.getInformation())))
+                );
+            }
         }
     }
 
