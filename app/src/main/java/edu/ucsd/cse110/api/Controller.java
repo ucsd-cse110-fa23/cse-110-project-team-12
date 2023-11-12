@@ -14,7 +14,7 @@ public class Controller {
         HomePage,
         DetailedView,
     }
-    
+
     public enum UIType {
         CreateRecipe,
         HomePage,
@@ -22,26 +22,30 @@ public class Controller {
     }
 
     private UIInterface make(UIType type) {
-        if(useUI) {
-            if(type == UIType.CreateRecipe)
+        if (useUI) {
+            if (type == UIType.CreateRecipe)
                 return new CreateRecipeView(this);
-            else if(type == UIType.HomePage)
+            else if (type == UIType.HomePage)
                 return new HomeView(this);
-            else if(type == UIType.DetailedView)
+            else if (type == UIType.DetailedView)
                 return new RecipeDetailedView(this);
-            else return new NoUI();
-        } else return new NoUI();
+            else
+                return new NoUI();
+        } else
+            return new NoUI();
     }
 
     private Map<ModelType, ModelInterface> models;
     private Map<UIType, UIInterface> uis;
 
     public boolean useUI;
+    public static final String storagePath = "./src/main/java/edu/ucsd/cse110/api/assets/savedRecipes.csv";
     private VoicePromptInterface voicePrompt;
     private WhisperInterface whisper;
     private ChatGPTInterface chatGPT;
 
-    public Controller(boolean useUI, VoicePromptInterface voicePrompt, WhisperInterface whisper, ChatGPTInterface chatGPT) {
+    public Controller(boolean useUI, VoicePromptInterface voicePrompt, WhisperInterface whisper,
+            ChatGPTInterface chatGPT) {
         this.useUI = useUI;
         this.voicePrompt = voicePrompt;
         this.whisper = whisper;
@@ -73,18 +77,17 @@ public class Controller {
         if (m.getMessageType() == Message.HomeModel.StartCreateRecipeView) {
             CreateRecipeModel createRecipeModel = new CreateRecipeModel(this, voicePrompt, whisper, chatGPT);
             addModel(ModelType.CreateRecipe, createRecipeModel);
-            
+
             UIInterface createRecipeView = make(UIType.CreateRecipe);
             addUI(UIType.CreateRecipe, createRecipeView);
-            
+
             uis.get(UIType.HomePage).addChild(createRecipeView.getUI());
         } else if (m.getMessageType() == Message.HomeModel.CloseCreateRecipeView) {
             uis.get(UIType.HomePage).removeChild(uis.get(UIType.CreateRecipe).getUI());
-        }
-        else if (m.getMessageType() == Message.HomeModel.StartRecipeDetailedView) {
+        } else if (m.getMessageType() == Message.HomeModel.StartRecipeDetailedView) {
             RecipeDetailedModel detailedModel = new RecipeDetailedModel(this);
             addModel(ModelType.DetailedView, detailedModel);
-            
+
             UIInterface detailedView = make(UIType.DetailedView);
             addUI(UIType.DetailedView, detailedView);
 
