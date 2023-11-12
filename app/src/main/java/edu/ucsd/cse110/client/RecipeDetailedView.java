@@ -149,8 +149,8 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
     @Override
     public void receiveMessage(Message m) {
         if (m.getMessageType() == Message.RecipeDetailedModel.SetTitleBody) {
-            recipeTitle.setText((String) m.getKey("RecipeTitle"));
-            information.setText((String) m.getKey("RecipeBody"));
+            recipeTitle.setText("       " + (String) m.getKey("RecipeTitle"));
+            information.setText("\n" + (String) m.getKey("RecipeBody"));
 
             double titleWidthLimit = 266;
             setTitleFont(recipeTitle, 19, titleWidthLimit);
