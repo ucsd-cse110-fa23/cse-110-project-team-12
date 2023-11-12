@@ -28,6 +28,9 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
 	private VBox content;
 
     private Text recipeTitle;
+    private double titleDefaultSize;
+    private double titleWidthLimit;
+    private HBox recipeTitleSpacer;
     private Label information;
     private ScrollPane scrollPane;
 
@@ -46,8 +49,8 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         controller = c;
 
         this.setId("recipe-detailed");
-        this.setMaxWidth(270);
-        this.setPrefWidth(270);
+        //this.setMaxWidth(264);
+        //this.setPrefWidth(264);
 
 		spacer = new Spacer(this, new Insets(35, 0, 0, 0), Pos.TOP_CENTER);
 
@@ -55,10 +58,12 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
 		content.setId("content");
 
         //recipe contents
-
         recipeTitle = new Text();
         recipeTitle.setId("recipe-title");
-        setTitleFont(recipeTitle, 19, 266);
+        titleDefaultSize = 19;
+        titleWidthLimit = 240;
+        setTitleFont(recipeTitle, titleDefaultSize, titleWidthLimit);
+        recipeTitleSpacer = new Spacer(recipeTitle, new Insets(0, 11, 0, 11), Pos.TOP_CENTER);
 
         information = new Label();
         information.setId("information");
@@ -149,13 +154,12 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
     @Override
     public void receiveMessage(Message m) {
         if (m.getMessageType() == Message.RecipeDetailedModel.SetTitleBody) {
-            recipeTitle.setText("       " + (String) m.getKey("RecipeTitle"));
+            recipeTitle.setText((String) m.getKey("RecipeTitle"));
             information.setText("\n" + (String) m.getKey("RecipeBody"));
 
-            double titleWidthLimit = 266;
-            setTitleFont(recipeTitle, 19, titleWidthLimit);
+            setTitleFont(recipeTitle, titleDefaultSize, titleWidthLimit);
             
-            addChild(recipeTitle);
+            addChild(recipeTitleSpacer);
             addChild(scrollPane);
         }
         if (m.getMessageType() == Message.RecipeDetailedModel.UseUnsavedLayout) {

@@ -63,10 +63,9 @@
 
 #recipe-detailed {
   -fx-background-color: rgba(91, 91, 91, 0.96);
-  -fx-pref-width: 270;
+  -fx-max-width: 280;
+  -fx-pref-width: 280;
   -fx-pref-height: 290;
-  -fx-max-width: 270;
-  max-width: 270;
   -fx-max-height: 290;
   -fx-alignment: top-left;
   -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
