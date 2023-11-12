@@ -19,6 +19,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 
 public class RecipeDetailedView extends StackPane implements UIInterface {
@@ -158,20 +160,32 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
             information.setText("\n" + (String) m.getKey("RecipeBody"));
 
             setTitleFont(recipeTitle, titleDefaultSize, titleWidthLimit);
-            
+
             addChild(recipeTitleSpacer);
             addChild(scrollPane);
         }
         if (m.getMessageType() == Message.RecipeDetailedModel.UseUnsavedLayout) {
-            addChild(unsavedButtonBox); 
+            addChild(unsavedButtonBox);
         }
-        if (m.getMessageType() == Message.RecipeDetailedModel.RemoveUnsavedLayout){
+        if (m.getMessageType() == Message.RecipeDetailedModel.SaveConfirmation) {
+            displaySaveConfirmation();
+        }
+        if (m.getMessageType() == Message.RecipeDetailedModel.RemoveUnsavedLayout) {
             removeChild(unsavedButtonBox);
         }
         if (m.getMessageType() == Message.RecipeDetailedModel.UseSavedLayout) {
-            addChild(savedButtonBox); 
+            addChild(savedButtonBox);
             this.getChildren().addAll(backArrowBox, backButton);
         }
+    }
+    
+    private void displaySaveConfirmation() {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Recipe Saved");
+        alert.setHeaderText(null);
+        alert.setContentText("Recipe saved!");
+
+        alert.showAndWait();
     }
     @Override
     public void addChild(Node ui) {
