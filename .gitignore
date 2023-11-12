@@ -12,4 +12,6 @@ app/bin
 
 *.wav
 
+*.csv
+
 !app/src/main/java/edu/ucsd/cse110/api/assets/*.wav

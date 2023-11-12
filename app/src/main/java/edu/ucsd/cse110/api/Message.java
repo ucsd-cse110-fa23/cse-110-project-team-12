@@ -59,7 +59,8 @@ public class Message {
             @Override public Set<String> allowedKeys() {return keys;}
         },
         UseUnsavedLayout,
-        UseSavedLayout, 
+        UseSavedLayout,
+        SaveConfirmation,
         RemoveUnsavedLayout;
     }
     
