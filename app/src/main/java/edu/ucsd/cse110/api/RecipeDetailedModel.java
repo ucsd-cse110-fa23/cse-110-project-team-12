@@ -1,6 +1,12 @@
 package edu.ucsd.cse110.api;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -39,6 +45,7 @@ public class RecipeDetailedModel implements ModelInterface {
         }
         if (m.getMessageType() == Message.RecipeDetailedView.DeleteButton) {
             // TODO: further actions to add delete confirmation page
+            this.deleteFromCSV(recipeTitle, recipeBody);
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.CloseRecipeDetailedView));
         }
         if (m.getMessageType() == Message.RecipeDetailedView.EditButton) {
@@ -57,6 +64,23 @@ public class RecipeDetailedModel implements ModelInterface {
             try (Writer writer = new FileWriter(path.toFile(), true)) {
                 writer.write(escapeField(recipeTitle) + "," + escapeField(recipeBody) + "\n");
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteFromCSV(String recipeTitle, String recipeBody) {
+        try {
+            Path path = Paths.get(Controller.storagePath + "csv");
+            List<String> allLines = Files.readAllLines(path);
+            List<String> updatedLines = new ArrayList<>();
+
+            for (String line : allLines) {
+                if (!(escapeField(recipeTitle) + "," + escapeField(recipeBody)).equals(line)) {
+                    updatedLines.add(line);
+                }
+            }
+            Files.write(path, updatedLines);
         } catch (IOException e) {
             e.printStackTrace();
         }
