@@ -1,282 +1,294 @@
 * {
-	-primary: #93d786;
-	-secondary: #BC8B8B;
-	-ternary: #92C2C7;
-	-background: #5B5B5B;
+  -primary: #93d786;
+  -secondary: #bc8b8b;
+  -ternary: #92c2c7;
+  -background: #5b5b5b;
 }
 
 #app-frame {
-	-fx-background-color: white;
+  -fx-background-color: white;
 }
 
 #header {
-	-fx-background-color: -primary;
-	-fx-alignment: center;
-	-fx-pref-width: 325;
-	-fx-pref-height: 68;
-	-fx-letter-spacing: 10;
-	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 20, 0.2, 0, 0);
-	-fx-spacing: 5;
+  -fx-background-color: -primary;
+  -fx-alignment: center;
+  -fx-pref-width: 325;
+  -fx-pref-height: 68;
+  -fx-letter-spacing: 10;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 20, 0.2, 0, 0);
+  -fx-spacing: 5;
 }
 
 #header-title {
-	-fx-text-fill: white;
-	-fx-font-family: 'Arial';
-	-fx-font-weight: bold;
-	-fx-font-size: 41;
+  -fx-text-fill: white;
+  -fx-font-family: 'Arial';
+  -fx-font-weight: bold;
+  -fx-font-size: 41;
 }
 
 #create-button {
-	-fx-shape: "M-37,0a37,37 0 1,0 74,0a37,37 0 1,0 -74,0";
-	-fx-background-color: transparent;
-	-fx-border-width: 0;
-	-fx-min-width: 37;
-	-fx-min-height: 37;
+  -fx-shape: 'M-37,0a37,37 0 1,0 74,0a37,37 0 1,0 -74,0';
+  -fx-background-color: transparent;
+  -fx-border-width: 0;
+  -fx-min-width: 37;
+  -fx-min-height: 37;
 }
 
 #create-circle {
-	-fx-fill: -primary;
-	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.1, 0, 0);
+  -fx-fill: -primary;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.1, 0, 0);
 }
 
 #create-plus {
-	-fx-text-fill: white;
-	-fx-font-family: 'Helvetica';
-	-fx-font-weight: bold;
-	-fx-font-size: 36;
-	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 2, 4);
+  -fx-text-fill: white;
+  -fx-font-family: 'Helvetica';
+  -fx-font-weight: bold;
+  -fx-font-size: 36;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 2, 4);
 }
 
 #record-background {
-	-fx-fill: -secondary;
-	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.1, 0, 0);
+  -fx-fill: -secondary;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.1, 0, 0);
 }
 
 #create-recipe {
-	-fx-background-color: rgba(91, 91, 91, 0.96);
-	-fx-pref-width: 280;
-	-fx-pref-height: 290;
-	-fx-max-height: 290;
-	-fx-alignment: top-left;
-	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
+  -fx-background-color: rgba(91, 91, 91, 0.96);
+  -fx-pref-width: 280;
+  -fx-pref-height: 290;
+  -fx-max-height: 290;
+  -fx-alignment: top-left;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
 }
 
 #recipe-detailed {
-	-fx-background-color: rgba(91, 91, 91, 0.96);
-	-fx-pref-width: 280;
-	-fx-pref-height: 290;
-	-fx-max-height: 290;
-	-fx-alignment: top-left;
-	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
+  -fx-background-color: rgba(91, 91, 91, 0.96);
+  -fx-pref-width: 270;
+  -fx-pref-height: 290;
+  -fx-max-width: 270;
+  max-width: 270;
+  -fx-max-height: 290;
+  -fx-alignment: top-left;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
 }
 
 #content {
-	-fx-background-color: transparent;
-	-fx-pref-width: 280;
-	-fx-pref-height: 290;
-	-fx-alignment: top-center;
-	-fx-padding: 10 0 0 0;
+  -fx-background-color: transparent;
+  -fx-pref-width: 280;
+  -fx-pref-height: 290;
+  -fx-alignment: top-center;
+  -fx-padding: 10 0 0 0;
 }
 
 #back-arrow-box {
-	-fx-padding: 11 0 0 5;
-	-fx-max-width: 36;
-	-fx-max-height: 40;
+  -fx-padding: 11 0 0 5;
+  -fx-max-width: 36;
+  -fx-max-height: 40;
 }
 
 #back-button {
-	-fx-background-color: transparent;
-	-fx-pref-width: 25;
-	-fx-pref-height: 35;
+  -fx-background-color: transparent;
+  -fx-pref-width: 25;
+  -fx-pref-height: 35;
 }
 
 #record-button {
-	-fx-shape: "M-31,0a31,31 0 1,0 62,0a31,31 0 1,0 -62,0";
-	-fx-border-width: 0;
-	-fx-min-width: 31;
-	-fx-min-height: 31;
+  -fx-shape: 'M-31,0a31,31 0 1,0 62,0a31,31 0 1,0 -62,0';
+  -fx-border-width: 0;
+  -fx-min-width: 31;
+  -fx-min-height: 31;
 }
 
-#meal-options-heading, #meal-type-heading {
-	-fx-text-fill: white;
-	-fx-padding: 60 0 0 0;
-	-fx-font-family: 'Arial';
-	-fx-font-weight: bold;
-	-fx-font-size: 20;
+#meal-options-heading,
+#meal-type-heading {
+  -fx-text-fill: white;
+  -fx-padding: 60 0 0 0;
+  -fx-font-family: 'Arial';
+  -fx-font-weight: bold;
+  -fx-font-size: 20;
 }
 
 #meal-options-module {
-	-fx-padding: 7 0 0 88;
-	-fx-spacing: 5;
-	-fx-alignment: top-left;
+  -fx-padding: 7 0 0 88;
+  -fx-spacing: 5;
+  -fx-alignment: top-left;
 }
 
-#breakfast, #lunch, #dinner {
-	-fx-text-fill: white;
-	-fx-font-family: 'Arial';
-	-fx-font-weight: bold;
-	-fx-font-size: 15;
-	-fx-padding: 0 0 0 13;
+#breakfast,
+#lunch,
+#dinner {
+  -fx-text-fill: white;
+  -fx-font-family: 'Arial';
+  -fx-font-weight: bold;
+  -fx-font-size: 15;
+  -fx-padding: 0 0 0 13;
 }
 
 #invalid-meal-type-warning {
-	-fx-text-fill: -secondary;
-	-fx-padding: 22 0 0 0;
-	-fx-font-family: 'Arial';
-	-fx-font-weight: bold;
-	-fx-font-size: 18;
+  -fx-text-fill: -secondary;
+  -fx-padding: 22 0 0 0;
+  -fx-font-family: 'Arial';
+  -fx-font-weight: bold;
+  -fx-font-size: 18;
 }
 
 #meal-type-container {
-	-fx-padding: 7 0 0 88;
+  -fx-padding: 7 0 0 88;
 }
 
 #pantry-prompt {
-	-fx-text-fill: white;
-	-fx-padding: 65 0 0 0;
-	-fx-font-family: 'Arial';
-	-fx-font-weight: bold;
-	-fx-font-size: 20;
+  -fx-text-fill: white;
+  -fx-padding: 65 0 0 0;
+  -fx-font-family: 'Arial';
+  -fx-font-weight: bold;
+  -fx-font-size: 20;
 }
 
 #waiting-prompt {
-	-fx-text-fill: white;
-	-fx-padding: 65 0 0 0;
-	-fx-font-family: 'Arial';
-	-fx-font-weight: bold;
-	-fx-font-size: 20;
+  -fx-text-fill: white;
+  -fx-padding: 65 0 0 0;
+  -fx-font-family: 'Arial';
+  -fx-font-weight: bold;
+  -fx-font-size: 20;
 }
 
 #generating-recipe-text {
-	-fx-text-fill: white;
-	-fx-padding: 122 0 0 0;
-	-fx-font-family: 'Arial';
-	-fx-font-weight: bold;
-	-fx-font-size: 20;	
+  -fx-text-fill: white;
+  -fx-padding: 122 0 0 0;
+  -fx-font-family: 'Arial';
+  -fx-font-weight: bold;
+  -fx-font-size: 20;
 }
 
 #recipe-title {
-	-fx-fill: white;
-	-fx-font-family: 'Arial';
+  -fx-fill: white;
+  -fx-font-family: 'Arial';
 }
 
 #information {
-	-fx-text-fill: white;
-	-fx-font-family: 'Arial';
-	-fx-font-size: 11;
+  -fx-text-fill: white;
+  -fx-font-family: 'Arial';
+  -fx-font-size: 11;
 }
 
 #cancel-button {
-	-fx-background-color: -secondary;
-	-fx-background-radius: 4px;
-	-fx-text-fill: white;
-	-fx-padding: 2 5 2 5;
-	-fx-min-width: 40;
-	-fx-font-family: 'Arial';
-	-fx-font-weight: bold;
-	-fx-font-size: 10;
-	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
+  -fx-background-color: -secondary;
+  -fx-background-radius: 4px;
+  -fx-text-fill: white;
+  -fx-padding: 2 5 2 5;
+  -fx-min-width: 40;
+  -fx-font-family: 'Arial';
+  -fx-font-weight: bold;
+  -fx-font-size: 10;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
 }
 
 #save-button {
-	-fx-background-color: -primary;
-	-fx-background-radius: 4px;
-	-fx-text-fill: white;
-	-fx-padding: 2 5 2 5;
-	-fx-min-width: 40;
-	-fx-font-family: 'Arial';
-	-fx-font-weight: bold;
-	-fx-font-size: 10;
-	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
+  -fx-background-color: -primary;
+  -fx-background-radius: 4px;
+  -fx-text-fill: white;
+  -fx-padding: 2 5 2 5;
+  -fx-min-width: 40;
+  -fx-font-family: 'Arial';
+  -fx-font-weight: bold;
+  -fx-font-size: 10;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
 }
 
 #unsaved-button-box {
-	-fx-padding: 0 7 7 7;
-	-fx-spacing: 183;
+  -fx-padding: 0 7 7 7;
+  -fx-spacing: 183;
 }
 
 #delete-button {
-	-fx-background-color: -secondary;
-	-fx-background-radius: 4px;
-	-fx-text-fill: white;
-	-fx-padding: 2 5 2 5;
-	-fx-min-width: 40;
-	-fx-font-family: 'Arial';
-	-fx-font-weight: bold;
-	-fx-font-size: 10;
-	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
+  -fx-background-color: -secondary;
+  -fx-background-radius: 4px;
+  -fx-text-fill: white;
+  -fx-padding: 2 5 2 5;
+  -fx-min-width: 40;
+  -fx-font-family: 'Arial';
+  -fx-font-weight: bold;
+  -fx-font-size: 10;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
 }
 
 #edit-button {
-	-fx-background-color: -ternary;
-	-fx-background-radius: 4px;
-	-fx-text-fill: white;
-	-fx-padding: 2 5 2 5;
-	-fx-min-width: 40;
-	-fx-font-family: 'Arial';
-	-fx-font-weight: bold;
-	-fx-font-size: 10;
-	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
+  -fx-background-color: -ternary;
+  -fx-background-radius: 4px;
+  -fx-text-fill: white;
+  -fx-padding: 2 5 2 5;
+  -fx-min-width: 40;
+  -fx-font-family: 'Arial';
+  -fx-font-weight: bold;
+  -fx-font-size: 10;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
 }
 
 #saved-button-box {
-	-fx-padding: 0 7 7 7;
-	-fx-spacing: 183;
+  -fx-padding: 0 7 7 7;
+  -fx-spacing: 183;
 }
 
 .scroll-pane {
-	-fx-background-color: transparent;
-	-fx-padding: 7 0 0 10;
-	-fx-min-height: 236;
+  -fx-background-color: transparent;
+  -fx-padding: 7 0 0 10;
+  -fx-min-height: 236;
 }
 
 .viewport {
-	-fx-background-color: transparent;
+  -fx-background-color: transparent;
 }
 
-.scroll-bar:horizontal, .scroll-bar:vertical{
-    -fx-background-color: transparent;
+.scroll-bar:horizontal,
+.scroll-bar:vertical {
+  -fx-background-color: transparent;
 }
 
-.increment-button, .decrement-button, .increment-arrow, .decrement-arrow {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-	-fx-padding: 0;
+.increment-button,
+.decrement-button,
+.increment-arrow,
+.decrement-arrow {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-padding: 0;
 }
 
 .scroll-bar:horizontal .track {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-	-fx-pref-height: 3;
-    -fx-background-radius: 0em;
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-pref-height: 3;
+  -fx-background-radius: 0em;
 }
 
 .scroll-bar:vertical .track {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-	-fx-pref-width: 3;
-    -fx-background-radius: 0em;
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-pref-width: 3;
+  -fx-background-radius: 0em;
 }
 
-.scroll-bar:horizontal .thumb, .scroll-bar:vertical .thumb {
-    -fx-background-color: #868686;
-    -fx-background-radius: 5em;
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+  -fx-background-color: #868686;
+  -fx-background-radius: 5em;
 }
 
 .scroll-bar:vertical {
-    -fx-pref-width: 16.5;
-    -fx-padding: 3;
+  -fx-pref-width: 16.5;
+  -fx-padding: 3;
 }
 
 .scroll-bar:horizontal {
-    -fx-pref-height: 16.5;
-    -fx-padding: 3;
+  -fx-pref-height: 16.5;
+  -fx-padding: 3;
 }
 
-.scroll-bar, .scroll-bar:pressed, .scroll-bar:focused {
-    -fx-font-size: 15;
+.scroll-bar,
+.scroll-bar:pressed,
+.scroll-bar:focused {
+  -fx-font-size: 15;
 }
 
 .scroll-pane > .corner {
-    -fx-background-color: transparent;
+  -fx-background-color: transparent;
 }
