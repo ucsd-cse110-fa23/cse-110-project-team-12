@@ -28,6 +28,9 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
 	private VBox content;
 
     private Text recipeTitle;
+    private double titleDefaultSize;
+    private double titleWidthLimit;
+    private HBox recipeTitleSpacer;
     private Label information;
     private ScrollPane scrollPane;
 
@@ -45,7 +48,9 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
     public RecipeDetailedView(Controller c) {
         controller = c;
 
-		this.setId("recipe-detailed");
+        this.setId("recipe-detailed");
+        //this.setMaxWidth(264);
+        //this.setPrefWidth(264);
 
 		spacer = new Spacer(this, new Insets(35, 0, 0, 0), Pos.TOP_CENTER);
 
@@ -53,10 +58,12 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
 		content.setId("content");
 
         //recipe contents
-
         recipeTitle = new Text();
         recipeTitle.setId("recipe-title");
-        setTitleFont(recipeTitle, 19);
+        titleDefaultSize = 19;
+        titleWidthLimit = 240;
+        setTitleFont(recipeTitle, titleDefaultSize, titleWidthLimit);
+        recipeTitleSpacer = new Spacer(recipeTitle, new Insets(0, 11, 0, 11), Pos.TOP_CENTER);
 
         information = new Label();
         information.setId("information");
@@ -135,13 +142,12 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         );
 	}
 
-    private void setTitleFont(Text title, double size){
-		title.setFont(new Font("Helvetica Bold", size));
-		if (size == 11) { return; }
+    private void setTitleFont(Text title, double size, double widthLimit) {
+        title.setFont(new Font("Helvetica Bold", size));
         double width = title.getLayoutBounds().getWidth();
-        if (width >= 266){
+        if (width >= widthLimit) {
             size -= 0.25;
-            setTitleFont(title, size);
+            setTitleFont(title, size, widthLimit);
         }
     }
 
@@ -149,9 +155,11 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
     public void receiveMessage(Message m) {
         if (m.getMessageType() == Message.RecipeDetailedModel.SetTitleBody) {
             recipeTitle.setText((String) m.getKey("RecipeTitle"));
-            information.setText((String) m.getKey("RecipeBody"));
+            information.setText("\n" + (String) m.getKey("RecipeBody"));
+
+            setTitleFont(recipeTitle, titleDefaultSize, titleWidthLimit);
             
-            addChild(recipeTitle);
+            addChild(recipeTitleSpacer);
             addChild(scrollPane);
         }
         if (m.getMessageType() == Message.RecipeDetailedModel.UseUnsavedLayout) {
