@@ -29,6 +29,8 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
     private Spacer spacer;
 	private VBox content;
 
+    private Recipe recipe;
+
     private Text recipeTitle;
     private double titleDefaultSize;
     private double titleWidthLimit;
@@ -46,6 +48,10 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
 
     private HBox backArrowBox;
     private Button backButton;
+
+    private HBox deleteConfirmationPage;
+    private ConfirmDeleteButtonModule confirmDeleteModule;
+    private Button confirmDeleteButton;
 
     public RecipeDetailedView(Controller c) {
         controller = c;
@@ -108,6 +114,13 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         backButton = new Button();
         backButton.setId("back-button");
 
+        Label deleteConfirmationPrompt = new Label("Are you sure you \n want to delete \n this recipe?");
+		deleteConfirmationPrompt.setId("delete-confirmation-prompt");
+		deleteConfirmationPage = new Spacer(deleteConfirmationPrompt, new Insets(20, 0, 0, 0), Pos.TOP_CENTER);
+
+        confirmDeleteModule = new ConfirmDeleteButtonModule();
+        confirmDeleteButton = confirmDeleteModule.getDeleteButton();
+
         this.getChildren().addAll(content);
         addListeners();
     }
@@ -142,6 +155,12 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
 				controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.BackButton));
             }
         );
+
+        confirmDeleteButton.setOnAction(
+            e -> {
+                controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.ConfirmDeleteButton));
+            }
+        );
 	}
 
     private void setTitleFont(Text title, double size, double widthLimit) {
@@ -156,8 +175,9 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
     @Override
     public void receiveMessage(Message m) {
         if (m.getMessageType() == Message.RecipeDetailedModel.SetTitleBody) {
-            recipeTitle.setText((String) m.getKey("RecipeTitle"));
-            information.setText("\n" + (String) m.getKey("RecipeBody"));
+            recipe = (Recipe) m.getKey("Recipe");
+            recipeTitle.setText(recipe.getName());
+            information.setText("\n" + recipe.getInformation());
 
             setTitleFont(recipeTitle, titleDefaultSize, titleWidthLimit);
 
@@ -167,15 +187,28 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         if (m.getMessageType() == Message.RecipeDetailedModel.UseUnsavedLayout) {
             addChild(unsavedButtonBox);
         }
-        if (m.getMessageType() == Message.RecipeDetailedModel.SaveConfirmation) {
-            displaySaveConfirmation();
-        }
         if (m.getMessageType() == Message.RecipeDetailedModel.RemoveUnsavedLayout) {
             removeChild(unsavedButtonBox);
         }
+        if (m.getMessageType() == Message.RecipeDetailedModel.AddBackButton) {
+            this.getChildren().addAll(backArrowBox, backButton);
+        }
+        if (m.getMessageType() == Message.RecipeDetailedModel.RemoveBackButton) {
+            this.getChildren().removeAll(backArrowBox, backButton);
+        }
         if (m.getMessageType() == Message.RecipeDetailedModel.UseSavedLayout) {
             addChild(savedButtonBox);
-            this.getChildren().addAll(backArrowBox, backButton);
+        }
+        if (m.getMessageType() == Message.RecipeDetailedModel.SaveConfirmation) {
+            displaySaveConfirmation();
+        }
+        if (m.getMessageType() == Message.RecipeDetailedModel.GoToDeleteConfirmationPage){
+            content.getChildren().clear();
+            addChild(deleteConfirmationPage);
+            addChild(confirmDeleteModule.getSpacer());
+        }
+        if(m.getMessageType() == Message.RecipeDetailedModel.RemoveDeleteConfirmation) {
+            content.getChildren().clear();
         }
     }
     
@@ -187,6 +220,8 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
 
         alert.showAndWait();
     }
+
+    
     @Override
     public void addChild(Node ui) {
         content.getChildren().add(ui);

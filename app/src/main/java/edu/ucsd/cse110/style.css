@@ -27,15 +27,11 @@
 }
 
 #create-button {
-  -fx-shape: 'M-37,0a37,37 0 1,0 74,0a37,37 0 1,0 -74,0';
-  -fx-background-color: transparent;
+  -fx-shape: 'M-40,0a40,40 0 1,0 80,0a40,40 0 1,0 -80,0';
+  -fx-background-color: -primary;
   -fx-border-width: 0;
-  -fx-min-width: 37;
-  -fx-min-height: 37;
-}
-
-#create-circle {
-  -fx-fill: -primary;
+  -fx-min-width: 40;
+  -fx-min-height: 40;
   -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.1, 0, 0);
 }
 
@@ -45,6 +41,7 @@
   -fx-font-weight: bold;
   -fx-font-size: 36;
   -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 2, 4);
+  -fx-padding: -15 0 -8 0;
 }
 
 #record-background {
@@ -151,6 +148,15 @@
   -fx-font-size: 20;
 }
 
+#delete-confirmation-prompt {
+  -fx-text-fill: white;
+  -fx-padding: 65 0 0 0;
+  -fx-font-family: 'Arial';
+  -fx-font-weight: bold;
+  -fx-font-size: 20;
+  -fx-text-alignment: center;
+}
+
 #generating-recipe-text {
   -fx-text-fill: white;
   -fx-padding: 122 0 0 0;
@@ -226,6 +232,15 @@
 #saved-button-box {
   -fx-padding: 0 7 7 7;
   -fx-spacing: 183;
+}
+
+#delete-confirmation-button {
+  -fx-shape: 'M-56,0a56,56 0 1,0 112,0a56,56 0 1,0 -112,0';
+  -fx-background-color: -secondary; /* Assuming -primary is defined elsewhere in your CSS */
+  -fx-border-width: 0;
+  -fx-min-width: 56;
+  -fx-min-height: 56;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.1, 0, 0);
 }
 
 .scroll-pane {

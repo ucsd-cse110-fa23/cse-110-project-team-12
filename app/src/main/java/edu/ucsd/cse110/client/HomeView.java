@@ -25,7 +25,7 @@ public class HomeView extends BorderPane implements UIInterface {
 		// adds functionality to the createRecipeButton
 		CreateButtonModule createButtonModule = new CreateButtonModule();	
 		this.createButton = createButtonModule.getCreateButton();
-		this.content.getChildren().addAll(createButtonModule.getComponents());
+		addChild(createButtonModule.getSpacer());
 		createButton.setOnAction(
             e -> {
 				controller.receiveMessageFromUI(new Message(Message.HomeView.CreateRecipeButton));

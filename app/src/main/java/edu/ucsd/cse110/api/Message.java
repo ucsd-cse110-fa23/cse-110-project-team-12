@@ -35,7 +35,7 @@ public class Message {
         StartRecording,
         StopRecording,
         SendTitleBody {
-            Set<String> keys = new HashSet<>(Arrays.asList("RecipeTitle", "RecipeBody"));
+            Set<String> keys = new HashSet<>(Arrays.asList("Recipe"));
             @Override public Set<String> allowedKeys() {return keys;}
         },
         CreateRecipeGotoPage {
@@ -50,18 +50,23 @@ public class Message {
         SaveButton,
         BackButton,
         DeleteButton,
-        EditButton;
+        EditButton, 
+        ConfirmDeleteButton;
     }
     public enum RecipeDetailedModel implements Type {
         CloseRecipeDetailedView,
         SetTitleBody {
-            Set<String> keys = new HashSet<>(Arrays.asList("RecipeTitle", "RecipeBody"));
+            Set<String> keys = new HashSet<>(Arrays.asList("Recipe"));
             @Override public Set<String> allowedKeys() {return keys;}
         },
         UseUnsavedLayout,
         UseSavedLayout,
         SaveConfirmation,
-        RemoveUnsavedLayout;
+        GoToDeleteConfirmationPage,
+        RemoveUnsavedLayout, 
+        RemoveDeleteConfirmation, 
+        AddBackButton, 
+        RemoveBackButton;
     }
     
     private Type type;
