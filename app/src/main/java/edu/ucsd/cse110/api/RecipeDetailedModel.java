@@ -46,6 +46,22 @@ public class RecipeDetailedModel implements ModelInterface {
         }
     }
 
+    // private void saveToJSON(String recipeTitle, String recipeBody) {
+    //     try {
+    //         Path path = Paths.get(Controller.storagePath + "json");
+    //         Files.createDirectories(path.getParent());
+
+    //         String jsonString = "{\"RecipeTitle\":\"" + recipeTitle + "\",\"RecipeBody\":\""
+    //                 + recipeBody + "\"}\n";
+
+    //         try (Writer writer = new FileWriter(path.toFile(), true)) {
+    //             writer.write(jsonString);
+    //         }
+    //     } catch (IOException e) {
+    //         e.printStackTrace();
+    //     }
+    // }
+
     private String escapeField(String field) {
         return "\"" + field.replaceAll("\n", "{NEWLINE}") + "\"";
     }
