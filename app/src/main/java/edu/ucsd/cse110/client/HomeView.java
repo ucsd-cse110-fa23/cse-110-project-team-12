@@ -46,7 +46,7 @@ public class HomeView extends BorderPane implements UIInterface {
             }
         );
     }
-
+	@SuppressWarnings("unchecked")
 	@Override
 	public void receiveMessage(Message m) {
 		if (m.getMessageType() == Message.HomeModel.UpdateRecipeList) {

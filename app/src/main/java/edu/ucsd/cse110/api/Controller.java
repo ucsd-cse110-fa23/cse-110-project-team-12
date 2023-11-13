@@ -83,7 +83,7 @@ public class Controller {
 
             uis.get(UIType.HomePage).addChild(createRecipeView.getUI());
         } else if (m.getMessageType() == Message.HomeModel.CloseCreateRecipeView) {
-            models.remove(ModelType.CreateRecipe);
+            //models.remove(ModelType.CreateRecipe);
             uis.get(UIType.HomePage).removeChild(uis.get(UIType.CreateRecipe).getUI());
         } else if (m.getMessageType() == Message.HomeModel.StartRecipeDetailedView) {
             RecipeDetailedModel detailedModel = new RecipeDetailedModel(this);
@@ -94,7 +94,7 @@ public class Controller {
 
             uis.get(UIType.HomePage).addChild(detailedView.getUI());
         } else if (m.getMessageType() == Message.HomeModel.CloseRecipeDetailedView) {
-            models.remove(ModelType.DetailedView);
+            //models.remove(ModelType.DetailedView);
             uis.get(UIType.HomePage).removeChild(uis.get(UIType.DetailedView).getUI());
         }
         uis.forEach((uiType, ui) -> ui.receiveMessage(m));
@@ -108,5 +108,11 @@ public class Controller {
     // Testing Use
     public Object getState(ModelType type) {
         return models.get(type).getState();
+    }
+    public boolean existsModel(ModelType type) {
+        return models.containsKey(type);
+    }
+    public boolean existsUI(UIType type) {
+        return uis.containsKey(type);
     }
 }
