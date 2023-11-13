@@ -1,6 +1,15 @@
 package edu.ucsd.cse110.api;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import edu.ucsd.cse110.client.Recipe;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -9,9 +18,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class RecipeDetailedModel implements ModelInterface {
+    public enum PageType{
+        UnsavedLayout,
+        SavedLayout,
+        EditLayout,
+        DeleteConfirmation;
+    }
+    PageType currentPage;
     Controller controller;
-    private String recipeTitle;
-    private String recipeBody;
+    private Recipe recipe;
 
     public RecipeDetailedModel(Controller c) {
         controller = c;
@@ -20,26 +35,49 @@ public class RecipeDetailedModel implements ModelInterface {
     @Override
     public void receiveMessage(Message m) {
         if (m.getMessageType() == Message.CreateRecipeModel.SendTitleBody) {
-            this.recipeTitle = (String) m.getKey("RecipeTitle");
-            this.recipeBody = (String) m.getKey("RecipeBody");
+            recipe = (Recipe) m.getKey("Recipe");
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetTitleBody,
-                    Map.ofEntries(Map.entry("RecipeTitle", this.recipeTitle),
-                            Map.entry("RecipeBody", this.recipeBody))));
+                    Map.ofEntries(Map.entry("Recipe", new Recipe(recipe.getName(), recipe.getInformation())))));
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseUnsavedLayout));
+            currentPage = PageType.UnsavedLayout;
         }
-        if (m.getMessageType() == Message.RecipeDetailedView.CancelButton
-                || m.getMessageType() == Message.RecipeDetailedView.BackButton) {
-            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.CloseRecipeDetailedView));
+        if (m.getMessageType() == Message.RecipeDetailedView.CancelButton) {
+            if (currentPage == PageType.UnsavedLayout) {
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.CloseRecipeDetailedView));
+            }
+        }
+        if (m.getMessageType() == Message.RecipeDetailedView.BackButton) {
+            if(currentPage == PageType.SavedLayout) {
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.CloseRecipeDetailedView));
+            } else if(currentPage == PageType.DeleteConfirmation) {
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveDeleteConfirmation));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetTitleBody,
+                    Map.ofEntries(Map.entry("Recipe", new Recipe(recipe.getName(), recipe.getInformation())))));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
+                currentPage = PageType.SavedLayout;
+            }
         }
         if (m.getMessageType() == Message.RecipeDetailedView.SaveButton) {
-            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveUnsavedLayout));
-            this.saveToCSV(recipeTitle, recipeBody);
-            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SaveConfirmation));
-            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
+            if(currentPage == PageType.UnsavedLayout) {
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveUnsavedLayout));
+                this.saveToCSV(recipe.getName(), recipe.getInformation());
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SaveConfirmation));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.AddBackButton));
+                currentPage = PageType.SavedLayout;
+            }
         }
         if (m.getMessageType() == Message.RecipeDetailedView.DeleteButton) {
-            // TODO: further actions to add delete confirmation page
-            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.CloseRecipeDetailedView));
+            if (currentPage == PageType.SavedLayout) {
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.GoToDeleteConfirmationPage));
+                currentPage = PageType.DeleteConfirmation;
+            }
+        }
+        if (m.getMessageType() == Message.RecipeDetailedView.ConfirmDeleteButton) {
+            if (currentPage == PageType.DeleteConfirmation){
+                this.deleteFromCSV(recipe.getName(), recipe.getInformation());
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.CloseRecipeDetailedView));
+            }
         }
         if (m.getMessageType() == Message.RecipeDetailedView.EditButton) {
             // TODO: further actions to add edit functionality
@@ -78,16 +116,33 @@ public class RecipeDetailedModel implements ModelInterface {
         }
     }
 
+    private void deleteFromCSV(String recipeTitle, String recipeBody) {
+        try {
+            Path path = Paths.get(Controller.storagePath + "csv");
+            List<String> allLines = Files.readAllLines(path);
+            List<String> updatedLines = new ArrayList<>();
+
+            for (String line : allLines) {
+                if (!(escapeField(recipeTitle) + "," + escapeField(recipeBody)).equals(line)) {
+                    updatedLines.add(line);
+                }
+            }
+            Files.write(path, updatedLines);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public Object getState() {
         return this;
     }
 
     public String getRecipeTitle() {
-        return recipeTitle;
+        return recipe.getName();
     }
 
     public String getRecipeBody() {
-        return recipeBody;
+        return recipe.getInformation();
     }
 }
