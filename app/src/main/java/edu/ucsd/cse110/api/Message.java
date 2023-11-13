@@ -54,16 +54,20 @@ public class Message {
         SaveButton,
         BackButton,
         DeleteButton,
-        ExitEditAction {
+        EditButton, 
+        ConfirmDeleteButton, 
+        UpdateInformation{
             Set<String> keys = new HashSet<>(Arrays.asList("RecipeBody"));
             @Override public Set<String> allowedKeys() {return keys;}
         };
-        EditButton, 
-        ConfirmDeleteButton;
     }
     public enum RecipeDetailedModel implements Type {
         CloseRecipeDetailedView,
-        SetTitleBody {
+        SetTitle {
+            Set<String> keys = new HashSet<>(Arrays.asList("Recipe"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        },
+        SetBody {
             Set<String> keys = new HashSet<>(Arrays.asList("Recipe"));
             @Override public Set<String> allowedKeys() {return keys;}
         },
@@ -75,9 +79,8 @@ public class Message {
             Set<String> keys = new HashSet<>(Arrays.asList("RecipeBody"));
             @Override public Set<String> allowedKeys() {return keys;}
         },
-        RemoveEditRecipe;
+        RemoveEditRecipe,
         GoToDeleteConfirmationPage,
-        RemoveUnsavedLayout, 
         RemoveDeleteConfirmation, 
         AddBackButton, 
         RemoveBackButton;

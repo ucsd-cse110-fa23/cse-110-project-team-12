@@ -141,25 +141,19 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
     private void addListeners() {
 		cancelButton.setOnAction(
             e -> {
-                if (this.inEditMode) {
-                    controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.ExitEditAction,
-                        Map.ofEntries(Map.entry("RecipeBody", ""))));
-                    this.inEditMode = false;
-                }
-                else
-                    controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.CancelButton));
+                if (this.inEditMode) this.inEditMode = false;
+                controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.CancelButton));
             }
         );
 
         saveButton.setOnAction(
             e -> {
                 if (this.inEditMode) {
-                    controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.ExitEditAction,
+                    controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.UpdateInformation,
                         Map.ofEntries(Map.entry("RecipeBody", this.informationEdit.getText()))));
                     this.inEditMode = false;
                 }
-                else
-                    controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.SaveButton));
+                controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.SaveButton));
             }
         );
 
@@ -178,13 +172,7 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
 
         backButton.setOnAction(
             e -> {
-                if (this.inEditMode) {
-                    controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.ExitEditAction,
-                        Map.ofEntries(Map.entry("RecipeBody", ""))));
-                    this.inEditMode = false;
-                }
-                else
-                    controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.BackButton));
+                controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.BackButton));   
             }
         );
 
@@ -206,16 +194,15 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
 
     @Override
     public void receiveMessage(Message m) {
-        if (m.getMessageType() == Message.RecipeDetailedModel.SetTitleBody) {
-            if ((String) m.getKey("RecipeTitle") != "") {
-                recipeTitle.setText((String) m.getKey("RecipeTitle"));
+        if (m.getMessageType() == Message.RecipeDetailedModel.SetTitle) {
+            recipe = (Recipe) m.getKey("Recipe");
+            recipeTitle.setText(recipe.getName());
+            setTitleFont(recipeTitle, titleDefaultSize, titleWidthLimit);
 
-                setTitleFont(recipeTitle, titleDefaultSize, titleWidthLimit);
-                addChild(recipeTitleSpacer);
-            }
-
-            if ((String) m.getKey("RecipeBody") != "")
-                information.setText("\n" + (String) m.getKey("RecipeBody"));
+            addChild(recipeTitleSpacer);
+        }
+        if (m.getMessageType() == Message.RecipeDetailedModel.SetBody) {
+            information.setText("\n" + recipe.getInformation());
 
             addChild(scrollPane);
         }
