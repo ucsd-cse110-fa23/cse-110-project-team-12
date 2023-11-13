@@ -71,7 +71,7 @@ public class HomeView extends BorderPane implements UIInterface {
 	private void populateRecipes(List<Recipe> recipes) {
 		recipeInfo.getChildren().clear();
 		for (Recipe r : recipes) {
-			recipeInfo.getChildren().add(new RecipeTitleView(controller, r.getName(), r.getInformation()));
+			recipeInfo.getChildren().add(new RecipeTitleView(controller, r));
 		}
 	}
 }

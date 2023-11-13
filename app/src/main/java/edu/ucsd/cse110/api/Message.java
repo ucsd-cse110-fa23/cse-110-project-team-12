@@ -49,6 +49,12 @@ public class Message {
         CreateRecipeInvalidMealType,
         StartRecipeDetailedView;
     }
+    public enum RecipeTitleView implements Type {
+        RecipeTitleClick {
+            Set<String> keys = new HashSet<>(Arrays.asList("Recipe"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        }
+    }
     public enum RecipeDetailedView implements Type {
         CancelButton, 
         SaveButton,

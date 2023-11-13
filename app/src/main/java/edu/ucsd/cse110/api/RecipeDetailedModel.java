@@ -76,7 +76,7 @@ public class RecipeDetailedModel implements ModelInterface {
         }
         if (m.getMessageType() == Message.RecipeDetailedView.ConfirmDeleteButton) {
             if (currentPage == PageType.DeleteConfirmation){
-                this.deleteFromCSV(recipe.getName(), recipe.getInformation());
+                this.deleteFromCSV(recipe.getName());
                 controller.receiveMessageFromModel(new Message(Message.HomeView.UpdateRecipeList));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.CloseRecipeDetailedView));
             }
@@ -118,14 +118,14 @@ public class RecipeDetailedModel implements ModelInterface {
         }
     }
 
-    private void deleteFromCSV(String recipeTitle, String recipeBody) {
+    private void deleteFromCSV(String recipeTitle) {
         try {
             Path path = Paths.get(Controller.storagePath + "csv");
             List<String> allLines = Files.readAllLines(path);
             List<String> updatedLines = new ArrayList<>();
 
             for (String line : allLines) {
-                if (!(escapeField(recipeTitle) + "," + escapeField(recipeBody)).equals(line)) {
+                if (!line.contains(recipeTitle)) {
                     updatedLines.add(line);
                 }
             }
