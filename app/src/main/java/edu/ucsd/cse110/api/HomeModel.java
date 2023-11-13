@@ -53,9 +53,9 @@ public class HomeModel implements ModelInterface {
             List<String> allLines = Files.readAllLines(path);
             List<Recipe> recipes = new ArrayList<>();
             for (String line : allLines) {
-                String[] recipeInfo = line.split(",");
-                recipeInfo[0] = recipeInfo[0].replaceAll("\"", "");
-                recipeInfo[0] = recipeInfo[0].trim();
+                // https://stackoverflow.com/a/15739042
+                String[] recipeInfo = line.split(",(?=([^\"]|\"[^\"]*\")*$)");
+                recipeInfo[0] = recipeInfo[0].replace("\"", "");
                 recipes.add(new Recipe(recipeInfo[0], recipeInfo[1]));
             }
             controller.receiveMessageFromModel(
