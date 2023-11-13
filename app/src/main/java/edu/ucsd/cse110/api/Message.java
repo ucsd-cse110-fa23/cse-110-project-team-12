@@ -50,7 +50,11 @@ public class Message {
         SaveButton,
         BackButton,
         DeleteButton,
-        EditButton;
+        EditButton,
+        SaveEditButton {
+            Set<String> keys = new HashSet<>(Arrays.asList("RecipeTitle", "RecipeBody"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        };
     }
     public enum RecipeDetailedModel implements Type {
         CloseRecipeDetailedView,
@@ -61,7 +65,12 @@ public class Message {
         UseUnsavedLayout,
         UseSavedLayout,
         SaveConfirmation,
-        RemoveUnsavedLayout;
+        RemoveUnsavedLayout,
+        EditRecipe {
+            Set<String> keys = new HashSet<>(Arrays.asList("RecipeTitle", "RecipeBody"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        },
+        RemoveEditView;
     }
     
     private Type type;

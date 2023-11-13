@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.client;
 
 import java.io.FileInputStream;
+import java.util.Map;
 
 import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.Message;
@@ -17,6 +18,8 @@ import javafx.scene.text.Text;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Alert;
@@ -34,7 +37,9 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
     private double titleWidthLimit;
     private HBox recipeTitleSpacer;
     private Label information;
-    private ScrollPane scrollPane;
+    private TextArea informationEdit;
+    private ScrollPane scrollPaneInfo;
+    private ScrollPane scrollPaneEdit;
 
     private Button cancelButton;
     private Button saveButton;
@@ -43,6 +48,9 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
     private Button deleteButton;
     private Button editButton;
     private HBox savedButtonBox;
+
+    private Button saveEditButton;
+    private HBox saveEditButtonBox;
 
     private HBox backArrowBox;
     private Button backButton;
@@ -68,8 +76,9 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         recipeTitleSpacer = new Spacer(recipeTitle, new Insets(0, 11, 0, 11), Pos.TOP_CENTER);
 
         information = new Label();
+        information.setWrapText(true);
         information.setId("information");
-        scrollPane = new ScrollPane(information);
+        scrollPaneInfo = new ScrollPane(information);
 
         // UnsavedLayout
         cancelButton = new Button("Cancel");
@@ -88,6 +97,17 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         editButton.setId("edit-button");
         savedButtonBox = new HBox(deleteButton, editButton);
         savedButtonBox.setId("saved-button-box");
+
+        // Edit Layout
+        informationEdit = new TextArea();
+        informationEdit.setWrapText(true);
+        informationEdit.setId("information-edit");
+        scrollPaneEdit = new ScrollPane(informationEdit);
+
+        saveEditButton = new Button("Save");
+        saveEditButton.setId("save-edit-button");
+        saveEditButtonBox = new HBox(saveEditButton);
+        saveEditButtonBox.setId("save-edit-button-box");
 
         // Back button for SavedLayout
         Image backArrow = null;
@@ -142,6 +162,13 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
 				controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.BackButton));
             }
         );
+        saveEditButton.setOnAction(
+            e -> {
+                controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.SaveEditButton,
+                    Map.ofEntries(Map.entry("RecipeTitle", this.recipeTitle.getText()),
+                    Map.entry("RecipeBody", this.informationEdit.getText()))));
+            }
+        );
 	}
 
     private void setTitleFont(Text title, double size, double widthLimit) {
@@ -162,7 +189,7 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
             setTitleFont(recipeTitle, titleDefaultSize, titleWidthLimit);
 
             addChild(recipeTitleSpacer);
-            addChild(scrollPane);
+            addChild(scrollPaneInfo);
         }
         if (m.getMessageType() == Message.RecipeDetailedModel.UseUnsavedLayout) {
             addChild(unsavedButtonBox);
@@ -176,6 +203,21 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         if (m.getMessageType() == Message.RecipeDetailedModel.UseSavedLayout) {
             addChild(savedButtonBox);
             this.getChildren().addAll(backArrowBox, backButton);
+        }
+        if (m.getMessageType() == Message.RecipeDetailedModel.EditRecipe) {
+               
+            this.getChildren().removeAll(backArrowBox, backButton);
+            removeChild(scrollPaneInfo);
+            removeChild(savedButtonBox);
+
+            informationEdit.setText((String) m.getKey("RecipeBody"));
+            addChild(scrollPaneEdit);
+
+            addChild(saveEditButtonBox);
+        }
+        if (m.getMessageType() == Message.RecipeDetailedModel.RemoveEditView) {
+            removeChild(scrollPaneEdit);
+            removeChild(saveEditButtonBox);
         }
     }
     
