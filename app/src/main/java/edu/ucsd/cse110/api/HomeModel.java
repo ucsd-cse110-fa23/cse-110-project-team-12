@@ -3,6 +3,7 @@ package edu.ucsd.cse110.api;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Collections;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -58,6 +59,7 @@ public class HomeModel implements ModelInterface {
                 recipeInfo[0] = recipeInfo[0].replace("\"", "");
                 recipes.add(new Recipe(recipeInfo[0], recipeInfo[1]));
             }
+            Collections.reverse(recipes);
             controller.receiveMessageFromModel(
                 new Message(Message.HomeModel.UpdateRecipeList,
                 Map.ofEntries(Map.entry("Recipes", recipes))
