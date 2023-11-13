@@ -64,6 +64,7 @@ public class RecipeDetailedModel implements ModelInterface {
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SaveConfirmation));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.AddBackButton));
+                controller.receiveMessageFromModel(new Message(Message.HomeView.UpdateRecipeList));
                 currentPage = PageType.SavedLayout;
             }
         }
@@ -76,6 +77,7 @@ public class RecipeDetailedModel implements ModelInterface {
         if (m.getMessageType() == Message.RecipeDetailedView.ConfirmDeleteButton) {
             if (currentPage == PageType.DeleteConfirmation){
                 this.deleteFromCSV(recipe.getName(), recipe.getInformation());
+                controller.receiveMessageFromModel(new Message(Message.HomeView.UpdateRecipeList));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.CloseRecipeDetailedView));
             }
         }

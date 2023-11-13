@@ -18,13 +18,17 @@ public class Message {
     
     public enum HomeView implements Type {
         CreateRecipeButton, // HomeView.CreateRecipeButton
-        
+        UpdateRecipeList,
     }
     public enum HomeModel implements Type {
         StartCreateRecipeView,
         CloseCreateRecipeView,
         StartRecipeDetailedView,
         CloseRecipeDetailedView,
+        UpdateRecipeList {
+            Set<String> keys = new HashSet<>(Arrays.asList("Recipes"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        }
     }
     public enum CreateRecipeView implements Type {
         RecordButton,
