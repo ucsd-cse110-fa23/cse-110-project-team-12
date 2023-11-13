@@ -96,8 +96,9 @@ public class RecipeDetailedModel implements ModelInterface {
                     Map.ofEntries(Map.entry("Recipe", recipe))));
                 // if (updatedRecipeBody != "")
                 //     controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SaveConfirmation));
-                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.AddBackButton));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.AddBackButton));
+                controller.receiveMessageFromModel(new Message(Message.HomeView.UpdateRecipeList));
                 currentPage = PageType.SavedLayout;
             }
         }
