@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.client;
 
+import java.util.*;
 import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.Message;
 import edu.ucsd.cse110.api.UIInterface;
@@ -12,14 +13,19 @@ import javafx.scene.Parent;
 public class HomeView extends BorderPane implements UIInterface {
 	private Controller controller;
 	private StackPane content;
+	private VBox recipeList;
 	private Button createButton;
 
     public HomeView(Controller c) {
 		this.controller = c;
 		this.content = new StackPane();
+		this.recipeList = new VBox();
+		recipeList.setId("recipe-list");
 
         this.setTop(new Header());
         this.setCenter(content);
+		
+		addChild(recipeList);
 		this.setId("app-frame");
 
 		// adds functionality to the createRecipeButton
@@ -32,14 +38,20 @@ public class HomeView extends BorderPane implements UIInterface {
             }
         );
     }
+
 	@Override
 	public void receiveMessage(Message m) {
-
+		if (m.getMessageType() == Message.HomeModel.UpdateRecipeList) {
+			List<Recipe> recipes = (List<Recipe>) m.getKey("Recipes");
+			populateRecipes(recipes);
+		}
 	}
+
 	@Override
 	public void addChild(Node ui) {
 		content.getChildren().add(ui);
 	}
+
 	@Override
 	public void removeChild(Node ui) {
 		content.getChildren().remove(ui);
@@ -48,5 +60,12 @@ public class HomeView extends BorderPane implements UIInterface {
 	@Override
 	public Parent getUI() {
 		return this;
+	}
+
+	private void populateRecipes(List<Recipe> recipes) {
+		recipeList.getChildren().clear();
+		for (Recipe r : recipes) {
+			recipeList.getChildren().add(new RecipeTitleView(controller, r.getName(), r.getInformation()));
+		}
 	}
 }

@@ -64,6 +64,7 @@ public class RecipeDetailedModel implements ModelInterface {
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SaveConfirmation));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.AddBackButton));
+                controller.receiveMessageFromModel(new Message(Message.HomeView.UpdateRecipeList));
                 currentPage = PageType.SavedLayout;
             }
         }
