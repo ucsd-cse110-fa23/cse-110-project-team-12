@@ -6,10 +6,6 @@ import java.util.Map;
 
 import edu.ucsd.cse110.client.Recipe;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -34,6 +30,14 @@ public class RecipeDetailedModel implements ModelInterface {
 
     @Override
     public void receiveMessage(Message m) {
+        if (m.getMessageType() == Message.HomeModel.SendTitleBody) {
+            recipe = (Recipe) m.getKey("Recipe");
+            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetTitleBody,
+                    Map.ofEntries(Map.entry("Recipe", new Recipe(recipe.getName(), recipe.getInformation())))));
+            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
+            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.AddBackButton));
+            currentPage = PageType.SavedLayout;
+        }
         if (m.getMessageType() == Message.CreateRecipeModel.SendTitleBody) {
             recipe = (Recipe) m.getKey("Recipe");
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetTitleBody,
@@ -76,7 +80,7 @@ public class RecipeDetailedModel implements ModelInterface {
         }
         if (m.getMessageType() == Message.RecipeDetailedView.ConfirmDeleteButton) {
             if (currentPage == PageType.DeleteConfirmation){
-                this.deleteFromCSV(recipe.getName(), recipe.getInformation());
+                this.deleteFromCSV(recipe.getName());
                 controller.receiveMessageFromModel(new Message(Message.HomeView.UpdateRecipeList));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.CloseRecipeDetailedView));
             }
@@ -118,14 +122,14 @@ public class RecipeDetailedModel implements ModelInterface {
         }
     }
 
-    private void deleteFromCSV(String recipeTitle, String recipeBody) {
+    private void deleteFromCSV(String recipeTitle) {
         try {
             Path path = Paths.get(Controller.storagePath + "csv");
             List<String> allLines = Files.readAllLines(path);
             List<String> updatedLines = new ArrayList<>();
 
             for (String line : allLines) {
-                if (!(escapeField(recipeTitle) + "," + escapeField(recipeBody)).equals(line)) {
+                if (!line.contains(recipeTitle)) {
                     updatedLines.add(line);
                 }
             }
