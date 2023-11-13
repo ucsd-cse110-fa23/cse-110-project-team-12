@@ -151,8 +151,7 @@ public class CreateRecipeModel implements ModelInterface {
                         controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StartRecipeDetailedView));
                         controller.receiveMessageFromModel(
                             new Message(Message.CreateRecipeModel.SendTitleBody,
-                            Map.ofEntries(Map.entry("RecipeTitle", generatedRecipe.getName()),
-                                            Map.entry("RecipeBody", generatedRecipe.getInformation())))
+                            Map.ofEntries(Map.entry("Recipe", new Recipe(generatedRecipe.getName(), generatedRecipe.getInformation()))))
                         );
                     });
                 }).start();
@@ -165,8 +164,7 @@ public class CreateRecipeModel implements ModelInterface {
                 controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StartRecipeDetailedView));
                 controller.receiveMessageFromModel(
                     new Message(Message.CreateRecipeModel.SendTitleBody,
-                    Map.ofEntries(Map.entry("RecipeTitle", generatedRecipe.getName()),
-                                    Map.entry("RecipeBody", generatedRecipe.getInformation())))
+                    Map.ofEntries(Map.entry("Recipe", new Recipe(generatedRecipe.getName(), generatedRecipe.getInformation()))))
                 );
             }
         }

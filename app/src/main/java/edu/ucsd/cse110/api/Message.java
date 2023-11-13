@@ -18,13 +18,17 @@ public class Message {
     
     public enum HomeView implements Type {
         CreateRecipeButton, // HomeView.CreateRecipeButton
-        
+        UpdateRecipeList,
     }
     public enum HomeModel implements Type {
         StartCreateRecipeView,
         CloseCreateRecipeView,
         StartRecipeDetailedView,
         CloseRecipeDetailedView,
+        UpdateRecipeList {
+            Set<String> keys = new HashSet<>(Arrays.asList("Recipes"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        }
     }
     public enum CreateRecipeView implements Type {
         RecordButton,
@@ -35,7 +39,7 @@ public class Message {
         StartRecording,
         StopRecording,
         SendTitleBody {
-            Set<String> keys = new HashSet<>(Arrays.asList("RecipeTitle", "RecipeBody"));
+            Set<String> keys = new HashSet<>(Arrays.asList("Recipe"));
             @Override public Set<String> allowedKeys() {return keys;}
         },
         CreateRecipeGotoPage {
@@ -50,16 +54,17 @@ public class Message {
         SaveButton,
         BackButton,
         DeleteButton,
-        EditButton,
         ExitEditAction {
             Set<String> keys = new HashSet<>(Arrays.asList("RecipeBody"));
             @Override public Set<String> allowedKeys() {return keys;}
         };
+        EditButton, 
+        ConfirmDeleteButton;
     }
     public enum RecipeDetailedModel implements Type {
         CloseRecipeDetailedView,
         SetTitleBody {
-            Set<String> keys = new HashSet<>(Arrays.asList("RecipeTitle", "RecipeBody"));
+            Set<String> keys = new HashSet<>(Arrays.asList("Recipe"));
             @Override public Set<String> allowedKeys() {return keys;}
         },
         UseUnsavedLayout,
@@ -71,6 +76,11 @@ public class Message {
             @Override public Set<String> allowedKeys() {return keys;}
         },
         RemoveEditRecipe;
+        GoToDeleteConfirmationPage,
+        RemoveUnsavedLayout, 
+        RemoveDeleteConfirmation, 
+        AddBackButton, 
+        RemoveBackButton;
     }
     
     private Type type;

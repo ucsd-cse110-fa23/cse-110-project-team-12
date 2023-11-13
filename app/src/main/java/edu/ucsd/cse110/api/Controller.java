@@ -54,10 +54,10 @@ public class Controller {
         models = new EnumMap<>(ModelType.class);
         uis = new EnumMap<>(UIType.class);
 
-        HomeModel homeModel = new HomeModel(this);
         UIInterface homeView = make(UIType.HomePage);
-        models.put(ModelType.HomePage, homeModel);
         uis.put(UIType.HomePage, homeView);
+        HomeModel homeModel = new HomeModel(this);
+        models.put(ModelType.HomePage, homeModel);
     }
 
     public Parent getUIRoot() {
