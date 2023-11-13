@@ -32,8 +32,10 @@ public class RecipeDetailedModel implements ModelInterface {
     public void receiveMessage(Message m) {
         if (m.getMessageType() == Message.HomeModel.SendTitleBody) {
             recipe = (Recipe) m.getKey("Recipe");
-            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetTitleBody,
-                    Map.ofEntries(Map.entry("Recipe", new Recipe(recipe.getName(), recipe.getInformation())))));
+            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetTitle,
+                    Map.ofEntries(Map.entry("Recipe", recipe))));
+            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetBody,
+                    Map.ofEntries(Map.entry("Recipe", recipe))));
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.AddBackButton));
             currentPage = PageType.SavedLayout;
@@ -42,7 +44,7 @@ public class RecipeDetailedModel implements ModelInterface {
             recipe = (Recipe) m.getKey("Recipe");
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetTitle,
                     Map.ofEntries(Map.entry("Recipe", recipe))));
-                    controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetBody,
+            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetBody,
                     Map.ofEntries(Map.entry("Recipe", recipe))));
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseUnsavedLayout));
             currentPage = PageType.UnsavedLayout;
@@ -171,7 +173,7 @@ public class RecipeDetailedModel implements ModelInterface {
         }
     }
 
-    private void deleteFromCSV(String recipeTitle, String recipeBody) {
+    private void deleteFromCSV(String recipeTitle) {
 
         try {
             Path path = Paths.get(Controller.storagePath + "csv");
