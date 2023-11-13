@@ -146,7 +146,7 @@ public class RecipeDetailedModel implements ModelInterface {
         return "\"" + field.replaceAll("\n", "{NEWLINE}") + "\"";
     }
 
-    private void saveToCSV(String recipeTitle, String recipeBody) {
+    public void saveToCSV(String recipeTitle, String recipeBody) {
         try {
             Path path = Paths.get(Controller.storagePath + "csv");
             Files.createDirectories(path.getParent());
@@ -203,5 +203,8 @@ public class RecipeDetailedModel implements ModelInterface {
 
     public String getRecipeBody() {
         return recipe.getInformation();
+    }
+    public PageType getCurrentPage() {
+        return this.currentPage;
     }
 }

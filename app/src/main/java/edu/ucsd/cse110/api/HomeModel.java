@@ -13,7 +13,7 @@ import edu.ucsd.cse110.client.Recipe;
 
 public class HomeModel implements ModelInterface {
     private Controller controller;
-
+    private List<Recipe> recipes;
     private UIType currentView;
 
     public HomeModel(Controller c) {
@@ -59,7 +59,7 @@ public class HomeModel implements ModelInterface {
         try {
             Path path = Paths.get(Controller.storagePath + "csv");
             List<String> allLines = Files.readAllLines(path);
-            List<Recipe> recipes = new ArrayList<>();
+            recipes = new ArrayList<>();
             for (String line : allLines) {
                 // https://stackoverflow.com/a/15739042
                 String[] recipeInfo = line.split("\",\"");
@@ -76,6 +76,10 @@ public class HomeModel implements ModelInterface {
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Recipe> getRecipes() {
+        return recipes;
     }
 
     @Override
