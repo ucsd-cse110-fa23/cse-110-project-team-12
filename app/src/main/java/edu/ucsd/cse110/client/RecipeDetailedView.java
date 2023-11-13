@@ -165,8 +165,7 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         saveEditButton.setOnAction(
             e -> {
                 controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.SaveEditButton,
-                    Map.ofEntries(Map.entry("RecipeTitle", this.recipeTitle.getText()),
-                    Map.entry("RecipeBody", this.informationEdit.getText()))));
+                    Map.ofEntries(Map.entry("RecipeBody", this.informationEdit.getText()))));
             }
         );
 	}
@@ -183,12 +182,15 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
     @Override
     public void receiveMessage(Message m) {
         if (m.getMessageType() == Message.RecipeDetailedModel.SetTitleBody) {
-            recipeTitle.setText((String) m.getKey("RecipeTitle"));
             information.setText("\n" + (String) m.getKey("RecipeBody"));
 
-            setTitleFont(recipeTitle, titleDefaultSize, titleWidthLimit);
+            if ((String) m.getKey("RecipeTitle") != "") {
+                recipeTitle.setText((String) m.getKey("RecipeTitle"));
 
-            addChild(recipeTitleSpacer);
+                setTitleFont(recipeTitle, titleDefaultSize, titleWidthLimit);
+                addChild(recipeTitleSpacer);
+            }
+
             addChild(scrollPaneInfo);
         }
         if (m.getMessageType() == Message.RecipeDetailedModel.UseUnsavedLayout) {

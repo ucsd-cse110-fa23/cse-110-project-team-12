@@ -50,13 +50,12 @@ public class RecipeDetailedModel implements ModelInterface {
         }
         if (m.getMessageType() == Message.RecipeDetailedView.SaveEditButton) {
 
-            this.recipeTitle = (String) m.getKey("RecipeTitle");
             this.recipeBody = (String) m.getKey("RecipeBody");
 
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveEditView));
 
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetTitleBody,
-                Map.ofEntries(Map.entry("RecipeTitle", this.recipeTitle),
+                Map.ofEntries(Map.entry("RecipeTitle", ""),
                 Map.entry("RecipeBody", this.recipeBody))));
             
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SaveConfirmation));

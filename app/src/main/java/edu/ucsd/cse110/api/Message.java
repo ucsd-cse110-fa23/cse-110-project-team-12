@@ -52,7 +52,7 @@ public class Message {
         DeleteButton,
         EditButton,
         SaveEditButton {
-            Set<String> keys = new HashSet<>(Arrays.asList("RecipeTitle", "RecipeBody"));
+            Set<String> keys = new HashSet<>(Arrays.asList("RecipeBody"));
             @Override public Set<String> allowedKeys() {return keys;}
         };
     }
@@ -67,7 +67,7 @@ public class Message {
         SaveConfirmation,
         RemoveUnsavedLayout,
         EditRecipe {
-            Set<String> keys = new HashSet<>(Arrays.asList("RecipeTitle", "RecipeBody"));
+            Set<String> keys = new HashSet<>(Arrays.asList("RecipeBody"));
             @Override public Set<String> allowedKeys() {return keys;}
         },
         RemoveEditView;
