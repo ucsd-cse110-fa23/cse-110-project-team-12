@@ -32,22 +32,34 @@ public class RecipeDetailedModel implements ModelInterface {
     public void receiveMessage(Message m) {
         if (m.getMessageType() == Message.HomeModel.SendTitleBody) {
             recipe = (Recipe) m.getKey("Recipe");
-            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetTitleBody,
-                    Map.ofEntries(Map.entry("Recipe", new Recipe(recipe.getName(), recipe.getInformation())))));
+            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetTitle,
+                    Map.ofEntries(Map.entry("Recipe", recipe))));
+            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetBody,
+                    Map.ofEntries(Map.entry("Recipe", recipe))));
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.AddBackButton));
             currentPage = PageType.SavedLayout;
         }
         if (m.getMessageType() == Message.CreateRecipeModel.SendTitleBody) {
             recipe = (Recipe) m.getKey("Recipe");
-            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetTitleBody,
-                    Map.ofEntries(Map.entry("Recipe", new Recipe(recipe.getName(), recipe.getInformation())))));
+            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetTitle,
+                    Map.ofEntries(Map.entry("Recipe", recipe))));
+            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetBody,
+                    Map.ofEntries(Map.entry("Recipe", recipe))));
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseUnsavedLayout));
             currentPage = PageType.UnsavedLayout;
         }
         if (m.getMessageType() == Message.RecipeDetailedView.CancelButton) {
             if (currentPage == PageType.UnsavedLayout) {
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.CloseRecipeDetailedView));
+            } else if(currentPage == PageType.EditLayout) {
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveEditRecipe));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveUnsavedLayout));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetBody,
+                    Map.ofEntries(Map.entry("Recipe", recipe))));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.AddBackButton));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
+                currentPage = PageType.SavedLayout;
             }
         }
         if (m.getMessageType() == Message.RecipeDetailedView.BackButton) {
@@ -55,20 +67,37 @@ public class RecipeDetailedModel implements ModelInterface {
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.CloseRecipeDetailedView));
             } else if(currentPage == PageType.DeleteConfirmation) {
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveDeleteConfirmation));
-                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetTitleBody,
-                    Map.ofEntries(Map.entry("Recipe", new Recipe(recipe.getName(), recipe.getInformation())))));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetTitle,
+                    Map.ofEntries(Map.entry("Recipe", recipe))));
+                    controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetBody,
+                    Map.ofEntries(Map.entry("Recipe", recipe))));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
                 currentPage = PageType.SavedLayout;
             }
+        }
+        if(m.getMessageType() == Message.RecipeDetailedView.UpdateInformation) {
+            String updatedRecipeBody = (String) m.getKey("RecipeBody");
+            recipe.setInformation(updatedRecipeBody);
+            this.updateCSV(recipe.getName(), recipe.getInformation());
         }
         if (m.getMessageType() == Message.RecipeDetailedView.SaveButton) {
             if(currentPage == PageType.UnsavedLayout) {
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveUnsavedLayout));
                 this.saveToCSV(recipe.getName(), recipe.getInformation());
-                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SaveConfirmation));
+                //controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SaveConfirmation));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.AddBackButton));
                 controller.receiveMessageFromModel(new Message(Message.HomeView.UpdateRecipeList));
+                currentPage = PageType.SavedLayout;
+            } else if(currentPage == PageType.EditLayout) {
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveEditRecipe));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveUnsavedLayout));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetBody,
+                    Map.ofEntries(Map.entry("Recipe", recipe))));
+                // if (updatedRecipeBody != "")
+                //     controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SaveConfirmation));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.AddBackButton));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
                 currentPage = PageType.SavedLayout;
             }
         }
@@ -86,7 +115,13 @@ public class RecipeDetailedModel implements ModelInterface {
             }
         }
         if (m.getMessageType() == Message.RecipeDetailedView.EditButton) {
-            // TODO: further actions to add edit functionality
+            if (currentPage == PageType.SavedLayout) {
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.EditRecipe,
+                    Map.ofEntries(Map.entry("RecipeBody", recipe.getInformation()))));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveBackButton));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseUnsavedLayout));
+                currentPage = PageType.EditLayout;
+            }
         }
     }
 
@@ -122,7 +157,24 @@ public class RecipeDetailedModel implements ModelInterface {
         }
     }
 
+    private void updateCSV(String recipeTitle, String recipeBody) {
+        try {
+            Path path = Paths.get(Controller.storagePath + "csv");
+            List<String> csvContents = new ArrayList<>(Files.readAllLines(path));
+            for (int i = 0; i < csvContents.size(); i++) {
+                if (csvContents.get(i).contains(escapeField(recipeTitle) + ",")) {
+                    csvContents.set(i, escapeField(recipeTitle) + "," + escapeField(recipeBody));
+                    break;
+                }
+            }
+            Files.write(path, csvContents);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void deleteFromCSV(String recipeTitle) {
+
         try {
             Path path = Paths.get(Controller.storagePath + "csv");
             List<String> allLines = Files.readAllLines(path);

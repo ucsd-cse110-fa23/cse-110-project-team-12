@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.client;
 
 import java.io.FileInputStream;
+import java.util.Map;
 
 import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.Message;
@@ -17,6 +18,8 @@ import javafx.scene.text.Text;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Alert;
@@ -25,6 +28,8 @@ import javafx.scene.control.Alert.AlertType;
 
 public class RecipeDetailedView extends StackPane implements UIInterface {
     private Controller controller;
+
+    private boolean inEditMode;
 
     private Spacer spacer;
 	private VBox content;
@@ -36,6 +41,7 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
     private double titleWidthLimit;
     private HBox recipeTitleSpacer;
     private Label information;
+    private TextArea informationEdit;
     private ScrollPane scrollPane;
 
     private Button cancelButton;
@@ -55,6 +61,8 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
 
     public RecipeDetailedView(Controller c) {
         controller = c;
+
+        inEditMode = false;
 
         this.setId("recipe-detailed");
         //this.setMaxWidth(264);
@@ -95,6 +103,11 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         savedButtonBox = new HBox(deleteButton, editButton);
         savedButtonBox.setId("saved-button-box");
 
+        // Edit Layout
+        informationEdit = new TextArea();
+        informationEdit.setWrapText(true);
+        informationEdit.setId("information-edit");
+
         // Back button for SavedLayout
         Image backArrow = null;
         try {
@@ -128,12 +141,18 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
     private void addListeners() {
 		cancelButton.setOnAction(
             e -> {
+                if (this.inEditMode) this.inEditMode = false;
                 controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.CancelButton));
             }
         );
 
         saveButton.setOnAction(
             e -> {
+                if (this.inEditMode) {
+                    controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.UpdateInformation,
+                        Map.ofEntries(Map.entry("RecipeBody", this.informationEdit.getText()))));
+                    this.inEditMode = false;
+                }
                 controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.SaveButton));
             }
         );
@@ -147,12 +166,13 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         editButton.setOnAction(
             e -> {
                 controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.EditButton));
+                this.inEditMode = true;
             }
         );
 
         backButton.setOnAction(
             e -> {
-				controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.BackButton));
+                controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.BackButton));   
             }
         );
 
@@ -174,14 +194,16 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
 
     @Override
     public void receiveMessage(Message m) {
-        if (m.getMessageType() == Message.RecipeDetailedModel.SetTitleBody) {
+        if (m.getMessageType() == Message.RecipeDetailedModel.SetTitle) {
             recipe = (Recipe) m.getKey("Recipe");
             recipeTitle.setText(recipe.getName());
-            information.setText("\n" + recipe.getInformation());
-
             setTitleFont(recipeTitle, titleDefaultSize, titleWidthLimit);
 
             addChild(recipeTitleSpacer);
+        }
+        if (m.getMessageType() == Message.RecipeDetailedModel.SetBody) {
+            information.setText("\n" + recipe.getInformation());
+
             addChild(scrollPane);
         }
         if (m.getMessageType() == Message.RecipeDetailedModel.UseUnsavedLayout) {
@@ -209,6 +231,17 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         }
         if(m.getMessageType() == Message.RecipeDetailedModel.RemoveDeleteConfirmation) {
             content.getChildren().clear();
+        }
+        if (m.getMessageType() == Message.RecipeDetailedModel.EditRecipe) {
+            removeChild(scrollPane);
+            removeChild(savedButtonBox);
+
+            informationEdit.setText((String) m.getKey("RecipeBody"));
+            addChild(informationEdit);
+        }
+        if (m.getMessageType() == Message.RecipeDetailedModel.RemoveEditRecipe) {
+            removeChild(informationEdit);
+            this.getChildren().removeAll(backArrowBox, backButton);
         }
     }
     

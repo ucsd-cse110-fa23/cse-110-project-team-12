@@ -326,3 +326,15 @@
 .scroll-pane > .corner {
   -fx-background-color: transparent;
 }
+
+#information-edit{
+  -fx-text-fill: white;
+  -fx-font-family: 'Arial';
+  -fx-font-size: 11;
+  -fx-margin-bottom: 10;
+  -fx-background-color: -background;
+}
+#information-edit .content{
+  -fx-background-color: -background;
+  -fx-margin-bottom: 10;
+}
