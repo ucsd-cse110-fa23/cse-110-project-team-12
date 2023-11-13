@@ -23,14 +23,9 @@ public class RecipeTitleView extends HBox implements UIInterface {
         this.getChildren().add(titleButton);
 
         titleButton.setOnAction(e -> {
-            controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StartRecipeDetailedView));
-            controller.receiveMessageFromModel(
-                new Message(Message.CreateRecipeModel.SendTitleBody,
-                Map.ofEntries(Map.entry("Recipe", recipe)))
-            );
-            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveUnsavedLayout));
-            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));  
-            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.AddBackButton));
+            controller.receiveMessageFromUI(new Message(Message.HomeView.OpenRecipe,
+                                                        Map.ofEntries(Map.entry("Recipe", recipe))));
+            
         });
     }
 

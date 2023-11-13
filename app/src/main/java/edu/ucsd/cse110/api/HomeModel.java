@@ -42,6 +42,13 @@ public class HomeModel implements ModelInterface {
         if (m.getMessageType() == Message.HomeView.UpdateRecipeList) {
             updateRecipeList();
         }
+        if(m.getMessageType() == Message.HomeView.OpenRecipe) {
+            currentView = UIType.DetailedView;
+            controller.receiveMessageFromModel(new Message(Message.HomeModel.StartRecipeDetailedView));
+            Recipe openRecipe = (Recipe) m.getKey("Recipe");
+            controller.receiveMessageFromModel(new Message(Message.HomeModel.SendTitleBody,
+                                                Map.ofEntries(Map.entry("Recipe", openRecipe))));
+        }
     }
 
     public UIType getCurrentView() {
@@ -57,6 +64,7 @@ public class HomeModel implements ModelInterface {
                 // https://stackoverflow.com/a/15739042
                 String[] recipeInfo = line.split("\",\"");
                 recipeInfo[0] = recipeInfo[0].replace("\"", "");
+                recipeInfo[1] = recipeInfo[1].replace("{NEWLINE}", "\n");
                 recipes.add(new Recipe(recipeInfo[0], recipeInfo[1]));
             }
             Collections.reverse(recipes);

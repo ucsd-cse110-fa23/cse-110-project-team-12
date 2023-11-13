@@ -18,6 +18,8 @@ public class HomeView extends BorderPane implements UIInterface {
 	private VBox recipeInfo;
 	private Button createButton;
 
+	private List<Recipe> recipes;
+
     public HomeView(Controller c) {
 		this.controller = c;
 		this.content = new StackPane();
@@ -48,7 +50,7 @@ public class HomeView extends BorderPane implements UIInterface {
 	@Override
 	public void receiveMessage(Message m) {
 		if (m.getMessageType() == Message.HomeModel.UpdateRecipeList) {
-			List<Recipe> recipes = (List<Recipe>) m.getKey("Recipes");
+			recipes = (List<Recipe>) m.getKey("Recipes");
 			populateRecipes(recipes);
 		}
 	}

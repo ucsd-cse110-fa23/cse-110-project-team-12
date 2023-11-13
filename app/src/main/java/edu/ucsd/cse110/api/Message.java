@@ -18,7 +18,11 @@ public class Message {
     
     public enum HomeView implements Type {
         CreateRecipeButton, // HomeView.CreateRecipeButton
-        UpdateRecipeList,
+        UpdateRecipeList, 
+        OpenRecipe {
+            Set<String> keys = new HashSet<>(Arrays.asList("Recipe"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        },
     }
     public enum HomeModel implements Type {
         StartCreateRecipeView,
@@ -27,6 +31,10 @@ public class Message {
         CloseRecipeDetailedView,
         UpdateRecipeList {
             Set<String> keys = new HashSet<>(Arrays.asList("Recipes"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        }, 
+        SendTitleBody {
+            Set<String> keys = new HashSet<>(Arrays.asList("Recipe"));
             @Override public Set<String> allowedKeys() {return keys;}
         }
     }

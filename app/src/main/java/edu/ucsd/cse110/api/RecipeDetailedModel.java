@@ -34,6 +34,14 @@ public class RecipeDetailedModel implements ModelInterface {
 
     @Override
     public void receiveMessage(Message m) {
+        if (m.getMessageType() == Message.HomeModel.SendTitleBody) {
+            recipe = (Recipe) m.getKey("Recipe");
+            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetTitleBody,
+                    Map.ofEntries(Map.entry("Recipe", new Recipe(recipe.getName(), recipe.getInformation())))));
+            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
+            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.AddBackButton));
+            currentPage = PageType.SavedLayout;
+        }
         if (m.getMessageType() == Message.CreateRecipeModel.SendTitleBody) {
             recipe = (Recipe) m.getKey("Recipe");
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetTitleBody,
