@@ -7,11 +7,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import edu.ucsd.cse110.api.*;
-import edu.ucsd.cse110.api.CreateRecipeModel.MealType;
-import edu.ucsd.cse110.api.CreateRecipeModel.PageType;
 
 import java.util.List;
-import java.util.Map;
 import java.util.ArrayList;
 
 public class US7Test {
