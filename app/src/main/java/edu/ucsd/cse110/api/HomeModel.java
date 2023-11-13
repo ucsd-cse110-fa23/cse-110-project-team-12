@@ -54,7 +54,7 @@ public class HomeModel implements ModelInterface {
             List<Recipe> recipes = new ArrayList<>();
             for (String line : allLines) {
                 // https://stackoverflow.com/a/15739042
-                String[] recipeInfo = line.split(",(?=([^\"]|\"[^\"]*\")*$)");
+                String[] recipeInfo = line.split("\",\"");
                 recipeInfo[0] = recipeInfo[0].replace("\"", "");
                 recipes.add(new Recipe(recipeInfo[0], recipeInfo[1]));
             }

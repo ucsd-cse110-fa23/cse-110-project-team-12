@@ -5,6 +5,7 @@ import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.Message;
 import edu.ucsd.cse110.api.UIInterface;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -13,25 +14,30 @@ import javafx.scene.Parent;
 public class HomeView extends BorderPane implements UIInterface {
 	private Controller controller;
 	private StackPane content;
-	private VBox recipeList;
+	private ScrollPane recipeList;
+	private VBox recipeInfo;
 	private Button createButton;
 
     public HomeView(Controller c) {
 		this.controller = c;
 		this.content = new StackPane();
-		this.recipeList = new VBox();
+		this.recipeList = new ScrollPane();
+		this.recipeInfo = new VBox();
+		
+		recipeList.setContent(recipeInfo);
 		recipeList.setId("recipe-list");
 
         this.setTop(new Header());
         this.setCenter(content);
+		CreateButtonModule createButtonModule = new CreateButtonModule();	
 		
+		// Important that put in spacer before recipeList, or else button won't be clickale
+		addChild(createButtonModule.getSpacer());
 		addChild(recipeList);
 		this.setId("app-frame");
 
 		// adds functionality to the createRecipeButton
-		CreateButtonModule createButtonModule = new CreateButtonModule();	
 		this.createButton = createButtonModule.getCreateButton();
-		addChild(createButtonModule.getSpacer());
 		createButton.setOnAction(
             e -> {
 				controller.receiveMessageFromUI(new Message(Message.HomeView.CreateRecipeButton));
@@ -63,9 +69,9 @@ public class HomeView extends BorderPane implements UIInterface {
 	}
 
 	private void populateRecipes(List<Recipe> recipes) {
-		recipeList.getChildren().clear();
+		recipeInfo.getChildren().clear();
 		for (Recipe r : recipes) {
-			recipeList.getChildren().add(new RecipeTitleView(controller, r.getName(), r.getInformation()));
+			recipeInfo.getChildren().add(new RecipeTitleView(controller, r.getName(), r.getInformation()));
 		}
 	}
 }
