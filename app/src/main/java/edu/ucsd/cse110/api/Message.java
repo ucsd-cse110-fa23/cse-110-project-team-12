@@ -51,7 +51,7 @@ public class Message {
         BackButton,
         DeleteButton,
         EditButton,
-        SaveEditButton {
+        ExitEditAction {
             Set<String> keys = new HashSet<>(Arrays.asList("RecipeBody"));
             @Override public Set<String> allowedKeys() {return keys;}
         };
@@ -70,7 +70,7 @@ public class Message {
             Set<String> keys = new HashSet<>(Arrays.asList("RecipeBody"));
             @Override public Set<String> allowedKeys() {return keys;}
         },
-        RemoveEditView;
+        RemoveEditRecipe;
     }
     
     private Type type;
