@@ -1,7 +1,7 @@
 * {
   -primary: #93d786;
   -secondary: #bc8b8b;
-  -ternary: #92c2c7;
+  -ternary: #84c4c8;
   -background: #5b5b5b;
 }
 
@@ -51,9 +51,10 @@
 
 #create-recipe {
   -fx-background-color: rgba(91, 91, 91, 0.96);
-  -fx-pref-width: 280;
-  -fx-pref-height: 290;
+  -fx-max-width: 280;
+  -fx-min-width: 280;
   -fx-max-height: 290;
+  -fx-min-height: 290;
   -fx-alignment: top-left;
   -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
 }
@@ -61,31 +62,42 @@
 #recipe-detailed {
   -fx-background-color: rgba(91, 91, 91, 0.96);
   -fx-max-width: 280;
-  -fx-pref-width: 280;
-  -fx-pref-height: 290;
+  -fx-min-width: 280;
   -fx-max-height: 290;
+  -fx-min-height: 290;
   -fx-alignment: top-left;
   -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
 }
 
 #recipe-list {
-	-fx-max-height: 290;  
-  -fx-pref-width: 325;
-  -fx-padding: -25 0 0 0;
+	-fx-min-width: 325;
+	-fx-max-width: 325;
+	-fx-min-height: 382;  
+	-fx-max-height: 382; 
 }
 
 #recipe-title-view {
+	-fx-min-width: 295;
+	-fx-max-width: 295;
+	-fx-alignment: center-left;
+	-fx-padding: 5 0 10 5;
+}
+
+#recipe-title-button {
 	-fx-background-color: transparent;
-	-fx-background-radius: 4px;
-	-fx-text-fill: #5B5B5B;
-	-fx-padding: 2 5 2 5;
-	-fx-min-width: 40;
-	-fx-font-family: 'Arial';
-	-fx-font-weight: bold;
-	-fx-font-size: 20;
-	-fx-padding: 20 0 0 0;
-	-fx-pref-width: 325;
-	-fx-text-alignment: center;
+	-fx-min-width: 295;
+	-fx-max-width: 295;
+}
+
+#recipe-title-text {
+	-fx-fill: -background;
+}
+
+#icon-and-title {
+	-fx-min-width: 295;
+	-fx-max-width: 295;
+	-fx-spacing: 10;
+	-fx-alignment: center-left;
 }
 
 #content {
@@ -97,7 +109,7 @@
 }
 
 #back-arrow-box {
-  -fx-padding: 11 0 0 5;
+  -fx-padding: 10 0 0 5;
   -fx-max-width: 36;
   -fx-max-height: 40;
 }
@@ -170,10 +182,10 @@
 
 #delete-confirmation-prompt {
   -fx-text-fill: white;
-  -fx-padding: 65 0 0 0;
+  -fx-padding: 55 0 0 0;
   -fx-font-family: 'Arial';
   -fx-font-weight: bold;
-  -fx-font-size: 20;
+  -fx-font-size: 24;
   -fx-text-alignment: center;
 }
 
@@ -186,16 +198,15 @@
 }
 
 #recipe-title {
-  -fx-fill: white;
-  -fx-font-family: 'Arial';
+	-fx-fill: white;
+	-fx-font-family: 'Arial';
 }
 
-#information {
-  -fx-text-fill: white;
-  -fx-font-family: 'Arial';
-  -fx-font-size: 11;
+#recipe-title-spacer {
+	-fx-min-height: 21;
 }
 
+#delete-button,
 #cancel-button {
   -fx-background-color: -secondary;
   -fx-background-radius: 4px;
@@ -220,23 +231,6 @@
   -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
 }
 
-#unsaved-button-box {
-  -fx-padding: 0 7 7 7;
-  -fx-spacing: 183;
-}
-
-#delete-button {
-  -fx-background-color: -secondary;
-  -fx-background-radius: 4px;
-  -fx-text-fill: white;
-  -fx-padding: 2 5 2 5;
-  -fx-min-width: 45;
-  -fx-font-family: 'Arial';
-  -fx-font-weight: bold;
-  -fx-font-size: 10;
-  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
-}
-
 #edit-button {
   -fx-background-color: -ternary;
   -fx-background-radius: 4px;
@@ -249,24 +243,45 @@
   -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
 }
 
-#saved-button-box {
-  -fx-padding: 0 7 7 7;
-  -fx-spacing: 183;
+#saved-button-box,
+#unsaved-button-box {
+  -fx-padding: 7;
+  -fx-spacing: 181;
 }
 
 #delete-confirmation-button {
-  -fx-shape: 'M-56,0a56,56 0 1,0 112,0a56,56 0 1,0 -112,0';
-  -fx-background-color: -secondary; /* Assuming -primary is defined elsewhere in your CSS */
+  -fx-shape: 'M-57,0a57,57 0 1,0 114,0a57,57 0 1,0 -114,0';
+  -fx-background-color: -secondary;
   -fx-border-width: 0;
   -fx-min-width: 56;
   -fx-min-height: 56;
   -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.1, 0, 0);
 }
 
+.text-area {
+	-fx-text-fill: white;
+	-fx-font-family: 'Arial';
+	-fx-font-size: 11;
+	-fx-background-color: transparent;
+	-fx-min-height: 229;
+  	-fx-max-height: 229;
+}
+
+.text-area .content,
+.text-area .scroll-pane,
+.text-area .viewport {
+	-fx-background-color: transparent;
+}
+
+.text-area .content {
+	-fx-padding: 0;
+}
+
 .scroll-pane {
-  -fx-background-color: transparent;
-  -fx-padding: 7 0 0 10;
-  -fx-min-height: 236;
+	-fx-background-color: transparent;
+	-fx-padding: 7 0 0 10;
+	-fx-min-height: 229;
+	-fx-max-height: 229;
 }
 
 .viewport {
@@ -275,66 +290,54 @@
 
 .scroll-bar:horizontal,
 .scroll-bar:vertical {
-  -fx-background-color: transparent;
+	-fx-background-color: transparent;
 }
 
 .increment-button,
 .decrement-button,
 .increment-arrow,
 .decrement-arrow {
-  -fx-background-color: transparent;
-  -fx-border-color: transparent;
-  -fx-padding: 0;
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
+	-fx-padding: 0;
 }
 
 .scroll-bar:horizontal .track {
-  -fx-background-color: transparent;
-  -fx-border-color: transparent;
-  -fx-pref-height: 3;
-  -fx-background-radius: 0em;
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
+	-fx-pref-height: 3;
+	-fx-background-radius: 0em;
 }
 
 .scroll-bar:vertical .track {
-  -fx-background-color: transparent;
-  -fx-border-color: transparent;
-  -fx-pref-width: 3;
-  -fx-background-radius: 0em;
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
+	-fx-pref-width: 3;
+	-fx-background-radius: 0em;
 }
 
 .scroll-bar:horizontal .thumb,
 .scroll-bar:vertical .thumb {
-  -fx-background-color: #868686;
-  -fx-background-radius: 5em;
+	-fx-background-color: #868686;
+	-fx-background-radius: 5em;
 }
 
 .scroll-bar:vertical {
-  -fx-pref-width: 16.5;
-  -fx-padding: 3;
+	-fx-pref-width: 16.5;
+	-fx-padding: 3;
 }
 
 .scroll-bar:horizontal {
-  -fx-pref-height: 16.5;
-  -fx-padding: 3;
+	-fx-pref-height: 16.5;
+	-fx-padding: 3;
 }
 
 .scroll-bar,
 .scroll-bar:pressed,
 .scroll-bar:focused {
-  -fx-font-size: 15;
+	-fx-font-size: 15;
 }
 
 .scroll-pane > .corner {
-  -fx-background-color: transparent;
-}
-
-#information-edit{
-  -fx-text-fill: white;
-  -fx-font-family: 'Arial';
-  -fx-font-size: 11;
-  -fx-margin-bottom: 10;
-  -fx-background-color: -background;
-}
-#information-edit .content{
-  -fx-background-color: -background;
-  -fx-margin-bottom: 10;
+	-fx-background-color: transparent;
 }

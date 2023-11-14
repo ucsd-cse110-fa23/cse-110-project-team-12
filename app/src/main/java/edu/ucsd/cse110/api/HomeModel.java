@@ -65,7 +65,8 @@ public class HomeModel implements ModelInterface {
                 String[] recipeInfo = line.split("\",\"");
                 recipeInfo[0] = recipeInfo[0].replace("\"", "");
                 recipeInfo[1] = recipeInfo[1].replace("{NEWLINE}", "\n");
-                recipes.add(new Recipe(recipeInfo[0], recipeInfo[1]));
+				recipeInfo[2] = recipeInfo[2].replace("\"", "");
+                recipes.add(new Recipe(recipeInfo[0], recipeInfo[1], recipeInfo[2]));
             }
             Collections.reverse(recipes);
             controller.receiveMessageFromModel(

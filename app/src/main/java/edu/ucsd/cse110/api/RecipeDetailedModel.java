@@ -78,12 +78,12 @@ public class RecipeDetailedModel implements ModelInterface {
         if(m.getMessageType() == Message.RecipeDetailedView.UpdateInformation) {
             String updatedRecipeBody = (String) m.getKey("RecipeBody");
             recipe.setInformation(updatedRecipeBody);
-            this.updateCSV(recipe.getName(), recipe.getInformation());
+            this.updateCSV(recipe.getName(), recipe.getInformation(), recipe.getMealType());
         }
         if (m.getMessageType() == Message.RecipeDetailedView.SaveButton) {
             if(currentPage == PageType.UnsavedLayout) {
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveUnsavedLayout));
-                this.saveToCSV(recipe.getName(), recipe.getInformation());
+                this.saveToCSV(recipe.getName(), recipe.getInformation(), recipe.getMealType());
                 //controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SaveConfirmation));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.AddBackButton));
@@ -146,25 +146,25 @@ public class RecipeDetailedModel implements ModelInterface {
         return "\"" + field.replaceAll("\n", "{NEWLINE}") + "\"";
     }
 
-    public void saveToCSV(String recipeTitle, String recipeBody) {
+    public void saveToCSV(String recipeTitle, String recipeBody, String recipeMealType) {
         try {
             Path path = Paths.get(Controller.storagePath + "csv");
             Files.createDirectories(path.getParent());
             try (Writer writer = new FileWriter(path.toFile(), true)) {
-                writer.write(escapeField(recipeTitle) + "," + escapeField(recipeBody) + "\n");
+                writer.write(escapeField(recipeTitle) + "," + escapeField(recipeBody) + "," + escapeField(recipeMealType) + "\n");
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void updateCSV(String recipeTitle, String recipeBody) {
+    private void updateCSV(String recipeTitle, String recipeBody, String recipeMealType) {
         try {
             Path path = Paths.get(Controller.storagePath + "csv");
             List<String> csvContents = new ArrayList<>(Files.readAllLines(path));
             for (int i = 0; i < csvContents.size(); i++) {
                 if (csvContents.get(i).contains(escapeField(recipeTitle) + ",")) {
-                    csvContents.set(i, escapeField(recipeTitle) + "," + escapeField(recipeBody));
+                    csvContents.set(i, escapeField(recipeTitle) + "," + escapeField(recipeBody) + "," + escapeField(recipeMealType));
                     break;
                 }
             }
