@@ -18,6 +18,7 @@ public class CreateButtonModule {
 		
 		createButton.setGraphic(createPlus);
 		createSpacer = new Spacer(createButton, new Insets(0, 10, 10, 0), Pos.BOTTOM_RIGHT);
+		createSpacer.setPickOnBounds(false);
 		
 		createButton.setId("create-button");
 		createPlus.setId("create-plus");

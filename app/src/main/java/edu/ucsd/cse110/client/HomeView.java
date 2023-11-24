@@ -7,6 +7,7 @@ import edu.ucsd.cse110.api.UIInterface;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 
@@ -29,13 +30,15 @@ public class HomeView extends BorderPane implements UIInterface {
 		recipeList.setContent(recipeInfo);
 		recipeList.setId("recipe-list");
 
+		content.setAlignment(Pos.TOP_CENTER);
+
         this.setTop(new Header());
         this.setCenter(content);
 		CreateButtonModule createButtonModule = new CreateButtonModule();	
 		
 		// Important that put in spacer before recipeList, or else button won't be clickale
-		addChild(createButtonModule.getSpacer());
 		addChild(recipeList);
+		addChild(createButtonModule.getSpacer());
 		this.setId("app-frame");
 
 		// adds functionality to the createRecipeButton

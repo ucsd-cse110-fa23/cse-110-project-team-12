@@ -29,8 +29,7 @@ public class ConfirmDeleteButtonModule {
         trashcanView.setFitHeight(25);
 
 		deleteButton.setGraphic(trashcanView);
-
-		deleteButtonSpacer = new Spacer(deleteButton, new Insets(40, 0, 0, 0), Pos.TOP_CENTER);
+		deleteButtonSpacer = new Spacer(deleteButton, new Insets(48, 0, 0, 0), Pos.TOP_CENTER);
 	}
 	
 	public Button getDeleteButton() {

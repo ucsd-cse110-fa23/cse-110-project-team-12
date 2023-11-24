@@ -10,7 +10,7 @@ public class RecipeTest {
 
     @Test
     public void testRecipeConstructor() {
-        recipe = new Recipe("Banana Bread", "Bananas, Bread");
+        recipe = new Recipe("Banana Bread", "Bananas, Bread", "Breakfast");
 
         assertNotNull(recipe);
         assertEquals("Banana Bread", recipe.getName());
@@ -31,7 +31,7 @@ public class RecipeTest {
 
     @Test
     public void testRecipeSetMethodsWithNonDefaultConstructor() {
-        recipe = new Recipe("Banana Bread", "Bananas, Bread");
+        recipe = new Recipe("Banana Bread", "Bananas, Bread", "Breakfast");
         assertNotNull(recipe);
 
         recipe.setName("Icecream Sandwich");

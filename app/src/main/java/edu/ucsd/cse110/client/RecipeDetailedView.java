@@ -17,7 +17,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -39,9 +38,8 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
     private double titleDefaultSize;
     private double titleWidthLimit;
     private HBox recipeTitleSpacer;
-    private Label information;
+    private TextArea information;
     private TextArea informationEdit;
-    private ScrollPane scrollPane;
 
     private Button cancelButton;
     private Button saveButton;
@@ -64,8 +62,6 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         inEditMode = false;
 
         this.setId("recipe-detailed");
-        //this.setMaxWidth(264);
-        //this.setPrefWidth(264);
 
 		spacer = new Spacer(this, new Insets(35, 0, 0, 0), Pos.TOP_CENTER);
 
@@ -76,15 +72,19 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         recipeTitle = new Text();
         recipeTitle.setId("recipe-title");
         titleDefaultSize = 19;
-        titleWidthLimit = 240;
+        titleWidthLimit = 220;
         setTitleFont(recipeTitle, titleDefaultSize, titleWidthLimit);
-        recipeTitleSpacer = new Spacer(recipeTitle, new Insets(0, 11, 0, 11), Pos.TOP_CENTER);
 
-        information = new Label();
+        recipeTitleSpacer = new Spacer(recipeTitle, new Insets(0, 30, 0, 30), Pos.CENTER);
+		recipeTitleSpacer.setId("recipe-title-spacer");
+
+        information = new TextArea();
+		information.setWrapText(true);
+		information.setEditable(false);
+		information.setFocusTraversable(false);
         information.setId("information");
-        scrollPane = new ScrollPane(information);
 
-        // UnsavedLayout
+        //  UnsavedLayout
         cancelButton = new Button("Cancel");
         cancelButton.setId("cancel-button");
 
@@ -93,7 +93,7 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         unsavedButtonBox = new HBox(cancelButton, saveButton);
         unsavedButtonBox.setId("unsaved-button-box");
 
-        //SavedLayout
+        // SavedLayout
         deleteButton = new Button("Delete");	
         deleteButton.setId("cancel-button");
 
@@ -182,15 +182,6 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         );
 	}
 
-    private void setTitleFont(Text title, double size, double widthLimit) {
-        title.setFont(new Font("Helvetica Bold", size));
-        double width = title.getLayoutBounds().getWidth();
-        if (width >= widthLimit) {
-            size -= 0.25;
-            setTitleFont(title, size, widthLimit);
-        }
-    }
-
     @Override
     public void receiveMessage(Message m) {
         if (m.getMessageType() == Message.RecipeDetailedModel.SetTitle) {
@@ -201,9 +192,12 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
             addChild(recipeTitleSpacer);
         }
         if (m.getMessageType() == Message.RecipeDetailedModel.SetBody) {
-            information.setText("\n" + recipe.getInformation());
-
-            addChild(scrollPane);
+            information.setEditable(true);
+			information.setFocusTraversable(true);
+			information.setText(recipe.getInformation().trim());
+			information.setEditable(false);
+			information.setFocusTraversable(false);
+            addChild(information);
         }
         if (m.getMessageType() == Message.RecipeDetailedModel.UseUnsavedLayout) {
             addChild(unsavedButtonBox);
@@ -232,10 +226,10 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
             content.getChildren().clear();
         }
         if (m.getMessageType() == Message.RecipeDetailedModel.EditRecipe) {
-            removeChild(scrollPane);
+            removeChild(information);
             removeChild(savedButtonBox);
 
-            informationEdit.setText((String) m.getKey("RecipeBody"));
+            informationEdit.setText(((String) m.getKey("RecipeBody")).trim());
             addChild(informationEdit);
         }
         if (m.getMessageType() == Message.RecipeDetailedModel.RemoveEditRecipe) {
@@ -265,5 +259,14 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
     @Override
     public Parent getUI() {
         return this.spacer;
+    }
+
+	private void setTitleFont(Text title, double size, double widthLimit) {
+        title.setFont(new Font("Arial Bold", size));
+        double width = title.getLayoutBounds().getWidth();
+        if (width >= widthLimit) {
+            size -= 0.25;
+            setTitleFont(title, size, widthLimit);
+        }
     }
 }
