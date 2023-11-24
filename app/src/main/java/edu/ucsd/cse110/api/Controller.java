@@ -4,25 +4,21 @@ import java.util.*;
 
 import edu.ucsd.cse110.client.CreateRecipeView;
 import edu.ucsd.cse110.client.HomeView;
-import edu.ucsd.cse110.client.LogInView;
 import edu.ucsd.cse110.client.RecipeDetailedView;
 import edu.ucsd.cse110.client.NoUI;
 import javafx.scene.Parent;
-import javafx.scene.layout.StackPane;
 
 public class Controller {
     public enum ModelType {
         CreateRecipe,
         HomePage,
         DetailedView,
-		LogIn,
     }
 
     public enum UIType {
         CreateRecipe,
         HomePage,
         DetailedView,
-		LogIn,
     }
 
     private UIInterface make(UIType type) {
@@ -33,8 +29,6 @@ public class Controller {
                 return new HomeView(this);
             else if (type == UIType.DetailedView)
                 return new RecipeDetailedView(this);
-			else if (type == UIType.LogIn)
-                return new LogInView(this);
             else
                 return new NoUI();
         } else
@@ -43,7 +37,6 @@ public class Controller {
 
     private Map<ModelType, ModelInterface> models;
     private Map<UIType, UIInterface> uis;
-	private StackPane root;
 
     public boolean useUI;
     public static final String storagePath = "./src/main/java/edu/ucsd/cse110/api/assets/savedRecipes.";
@@ -60,17 +53,15 @@ public class Controller {
 
         models = new EnumMap<>(ModelType.class);
         uis = new EnumMap<>(UIType.class);
-		root = new StackPane();
 
         UIInterface homeView = make(UIType.HomePage);
         uis.put(UIType.HomePage, homeView);
         HomeModel homeModel = new HomeModel(this);
         models.put(ModelType.HomePage, homeModel);
-		root.getChildren().add(homeView.getUI());
     }
 
     public Parent getUIRoot() {
-        return root;
+        return uis.get(UIType.HomePage).getUI();
     }
 
     public void addModel(ModelType type, ModelInterface model) {
