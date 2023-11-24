@@ -6,7 +6,10 @@ import edu.ucsd.cse110.api.Message;
 import edu.ucsd.cse110.api.UIInterface;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -32,7 +35,9 @@ public class HomeView extends BorderPane implements UIInterface {
 
 		content.setAlignment(Pos.TOP_CENTER);
 
-        this.setTop(new Header());
+		Header header = new Header();
+		header.setEffect(new DropShadow(BlurType.GAUSSIAN, new Color(0, 0, 0, 0.5), 20, 0.2, 0, 0));
+        this.setTop(header);
         this.setCenter(content);
 		CreateButtonModule createButtonModule = new CreateButtonModule();	
 		
