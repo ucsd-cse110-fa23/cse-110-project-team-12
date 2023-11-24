@@ -62,11 +62,15 @@ public class Controller {
         uis = new EnumMap<>(UIType.class);
 		root = new StackPane();
 
+		UIInterface loginView = make(UIType.LogIn);
         UIInterface homeView = make(UIType.HomePage);
+        uis.put(UIType.LogIn, loginView);
         uis.put(UIType.HomePage, homeView);
+
         HomeModel homeModel = new HomeModel(this);
         models.put(ModelType.HomePage, homeModel);
-		root.getChildren().add(homeView.getUI());
+
+		root.getChildren().add(loginView.getUI());
     }
 
     public Parent getUIRoot() {
