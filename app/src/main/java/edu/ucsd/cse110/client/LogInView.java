@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 public class LogInView extends VBox implements UIInterface {
 	private Controller controller;
 	boolean rememberMe;
+	boolean invalid;
 
 	public LogInView(Controller c) {
 		this.controller = c;
@@ -65,11 +66,15 @@ public class LogInView extends VBox implements UIInterface {
 		this.getChildren().addAll(loginSpacer, userBox, passBox, rememberBox, loginButtonBox);
 
 		// not to stay, simply to be able to change UI things
+		invalid = false; 
 		logIn.setOnAction(
             e -> {
-				Label invalidEntry = new Label("Invalid username/password");
-				invalidEntry.setId("invalid-entry");
-				loginSpacer.getChildren().add(invalidEntry);
+				if (!invalid) {
+					invalid = true;
+					Label invalidEntry = new Label("Invalid username/password");
+					invalidEntry.setId("invalid-entry");
+					loginSpacer.getChildren().add(invalidEntry);
+				}
             }
         );
 
@@ -109,13 +114,11 @@ public class LogInView extends VBox implements UIInterface {
 	@Override
 	public void addChild(Node ui) {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'addChild'");
 	}
 
 	@Override
 	public void removeChild(Node ui) {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'removeChild'");
 	}
 
 	@Override
