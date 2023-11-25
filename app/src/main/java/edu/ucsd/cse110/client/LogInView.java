@@ -17,7 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class LogInView extends VBox implements UIInterface {
-	private Controller controller;
+	Controller controller;
 	boolean rememberMe;
 	boolean invalid;
 
@@ -27,7 +27,7 @@ public class LogInView extends VBox implements UIInterface {
 		
 		Header header = new Header();
 		this.setAlignment(Pos.CENTER);
-		this.getChildren().add(header);
+		this.addChild(header);
 
 		// after sucessful server connect
 		this.setAlignment(Pos.TOP_CENTER);
@@ -108,17 +108,16 @@ public class LogInView extends VBox implements UIInterface {
 	@Override
 	public void receiveMessage(Message m) {
 		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'receiveMessage'");
 	}
 
 	@Override
 	public void addChild(Node ui) {
-		// TODO Auto-generated method stub
+		this.getChildren().add(ui);
 	}
 
 	@Override
 	public void removeChild(Node ui) {
-		// TODO Auto-generated method stub
+		this.getChildren().remove(ui);
 	}
 
 	@Override

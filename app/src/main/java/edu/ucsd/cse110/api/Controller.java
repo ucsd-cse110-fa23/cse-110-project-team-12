@@ -6,9 +6,9 @@ import edu.ucsd.cse110.client.CreateRecipeView;
 import edu.ucsd.cse110.client.HomeView;
 import edu.ucsd.cse110.client.LogInView;
 import edu.ucsd.cse110.client.RecipeDetailedView;
+import edu.ucsd.cse110.client.Root;
 import edu.ucsd.cse110.client.NoUI;
 import javafx.scene.Parent;
-import javafx.scene.layout.StackPane;
 
 public class Controller {
     public enum ModelType {
@@ -43,7 +43,7 @@ public class Controller {
 
     private Map<ModelType, ModelInterface> models;
     private Map<UIType, UIInterface> uis;
-	private StackPane root;
+	private UIInterface root;
 
     public boolean useUI;
     public static final String storagePath = "./src/main/java/edu/ucsd/cse110/api/assets/savedRecipes.";
@@ -60,7 +60,7 @@ public class Controller {
 
         models = new EnumMap<>(ModelType.class);
         uis = new EnumMap<>(UIType.class);
-		root = new StackPane();
+		root = new Root();
 
 		UIInterface loginView = make(UIType.LogIn);
         UIInterface homeView = make(UIType.HomePage);
@@ -70,11 +70,11 @@ public class Controller {
         HomeModel homeModel = new HomeModel(this);
         models.put(ModelType.HomePage, homeModel);
 
-		root.getChildren().add(loginView.getUI());
+		root.addChild(loginView.getUI());
     }
 
     public Parent getUIRoot() {
-        return root;
+        return root.getUI();
     }
 
     public void addModel(ModelType type, ModelInterface model) {
