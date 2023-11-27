@@ -40,6 +40,7 @@ public class Controller {
 
     public boolean useUI;
     public static final String storagePath = "./src/main/java/edu/ucsd/cse110/api/assets/savedRecipes.";
+    public static final String mongoURI = "mongodb+srv://akjain:92Tc0QE0BB1nCNTr@pantrypal.lzohxez.mongodb.net/?retryWrites=true&w=majority";
     private VoicePromptInterface voicePrompt;
     private WhisperInterface whisper;
     private ChatGPTInterface chatGPT;
