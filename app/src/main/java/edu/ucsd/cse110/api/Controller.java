@@ -47,16 +47,19 @@ public class Controller {
 
     public boolean useUI;
     public static final String storagePath = "./src/main/java/edu/ucsd/cse110/api/assets/savedRecipes.";
+    public static final String mongoURI = "mongodb+srv://akjain:92Tc0QE0BB1nCNTr@pantrypal.lzohxez.mongodb.net/?retryWrites=true&w=majority";
     private VoicePromptInterface voicePrompt;
     private WhisperInterface whisper;
     private ChatGPTInterface chatGPT;
+    private boolean useMongoDB;
 
     public Controller(boolean useUI, VoicePromptInterface voicePrompt, WhisperInterface whisper,
-            ChatGPTInterface chatGPT) {
+            ChatGPTInterface chatGPT, boolean useMDB) {
         this.useUI = useUI;
         this.voicePrompt = voicePrompt;
         this.whisper = whisper;
         this.chatGPT = chatGPT;
+        this.useMongoDB = useMDB;
 
         models = new EnumMap<>(ModelType.class);
         uis = new EnumMap<>(UIType.class);
@@ -71,6 +74,10 @@ public class Controller {
         models.put(ModelType.HomePage, homeModel);
 
 		root.addChild(loginView.getUI());
+    }
+
+    public boolean getUseMongoDB() {
+        return useMongoDB;
     }
 
     public Parent getUIRoot() {
@@ -96,7 +103,7 @@ public class Controller {
 
             uis.get(UIType.HomePage).addChild(createRecipeView.getUI());
         } else if (m.getMessageType() == Message.HomeModel.CloseCreateRecipeView) {
-            //models.remove(ModelType.CreateRecipe);
+            // models.remove(ModelType.CreateRecipe);
             uis.get(UIType.HomePage).removeChild(uis.get(UIType.CreateRecipe).getUI());
         } else if (m.getMessageType() == Message.HomeModel.StartRecipeDetailedView) {
             RecipeDetailedModel detailedModel = new RecipeDetailedModel(this);
@@ -107,7 +114,7 @@ public class Controller {
 
             uis.get(UIType.HomePage).addChild(detailedView.getUI());
         } else if (m.getMessageType() == Message.HomeModel.CloseRecipeDetailedView) {
-            //models.remove(ModelType.DetailedView);
+            // models.remove(ModelType.DetailedView);
             uis.get(UIType.HomePage).removeChild(uis.get(UIType.DetailedView).getUI());
         }
         uis.forEach((uiType, ui) -> ui.receiveMessage(m));
@@ -122,9 +129,11 @@ public class Controller {
     public Object getState(ModelType type) {
         return models.get(type).getState();
     }
+
     public boolean existsModel(ModelType type) {
         return models.containsKey(type);
     }
+
     public boolean existsUI(UIType type) {
         return uis.containsKey(type);
     }

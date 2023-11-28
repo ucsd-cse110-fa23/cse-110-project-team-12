@@ -25,12 +25,13 @@ public class US6Test {
      * Then I will be taken to the input recipe ingredients page in the pop-up window
      * And my preference will be displayed.
      */
+  
     // @Test
     // public void testUS6BDD1() {
     //     List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
     //     promptTypes.add(VoicePromptMock.PromptType.MealType);
     //     voicePrompt = new VoicePromptMock(promptTypes);
-    //     controller = new Controller(false, voicePrompt, new WhisperMock(), new ChatGPTMock());
+    //     controller = new Controller(false, voicePrompt, new WhisperMock(), new ChatGPTMock(), false);
 
     //     controller.receiveMessageFromUI(new Message(Message.HomeView.CreateRecipeButton));
 
@@ -57,7 +58,7 @@ public class US6Test {
     //     List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
     //     promptTypes.add(VoicePromptMock.PromptType.InvalidNotMealType);
     //     voicePrompt = new VoicePromptMock(promptTypes);
-    //     controller = new Controller(false, voicePrompt, new WhisperMock(), new ChatGPTMock());
+    //     controller = new Controller(false, voicePrompt, new WhisperMock(), new ChatGPTMock(), false);
 
     //     controller.receiveMessageFromUI(new Message(Message.HomeView.CreateRecipeButton));
 
@@ -83,7 +84,7 @@ public class US6Test {
     // public void testUS6BDD3() {
     //     List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
     //     voicePrompt = new VoicePromptMock(promptTypes);
-    //     controller = new Controller(false, voicePrompt, new WhisperMock(), new ChatGPTMock());
+    //     controller = new Controller(false, voicePrompt, new WhisperMock(), new ChatGPTMock(), false);
 
     //     controller.receiveMessageFromUI(new Message(Message.HomeView.CreateRecipeButton));
 
