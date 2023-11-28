@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.Message;
 import edu.ucsd.cse110.api.UIInterface;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -19,21 +20,16 @@ import javafx.scene.image.ImageView;
 public class CreateAccountView extends VBox implements UIInterface {
 	private Controller controller;
 	boolean rememberMe;
-	boolean invalid;
 
 	public CreateAccountView(Controller c) {
 		this.controller = c;
 		this.setId("signup-view");
-
-		Header header = new Header();
-		this.setAlignment(Pos.CENTER);
-		this.addChild(header);
-
-		// after sucessful server connect
 		this.setAlignment(Pos.TOP_CENTER);
 
-		HBox loginSpacer = new HBox();
-		loginSpacer.setId("signup-spacer");
+		Header header = new Header();
+
+		HBox createSpacer = new HBox();
+		createSpacer.setId("create-spacer");
 
 		Label username = new Label("Username");
 		TextField userArea = new TextField();
@@ -51,39 +47,44 @@ public class CreateAccountView extends VBox implements UIInterface {
 
 		Label confirmPassword = new Label("Confirm Password");
 		confirmPassword.setWrapText(true);
+		confirmPassword.setId("confirm-password");
 		
 		TextField confirmPassArea = new TextField();
-		HBox confirmPassBox = new HBox(confirmPassword, confirmPassArea);
-		confirmPassword.setId("confirm-password");
+		
 		confirmPassArea.setId("confirm-pass-area");
-		confirmPassBox.setId("confirm-pass-box");
-
 		Label remember = new Label("Remember Me?");
 		Button rememberToggle = new Button();
 		HBox rememberBox = new HBox(remember, rememberToggle);
+		rememberBox.setPadding(new Insets(10, 0, 0, 109));
 		remember.setId("remember");
 		rememberToggle.setId("remember-toggle");
 		rememberBox.setId("remember-box");
+		
+		HBox confirmPassBox = new HBox(confirmPassword, new VBox(confirmPassArea, rememberBox));
+		confirmPassBox.setId("confirm-pass-box");
 
+		Button back = new Button("Back");
 		Button signUp = new Button("Sign Up");
-		Button logIn = new Button("Log In");
-		HBox loginButtonBox = new HBox(signUp, logIn);
+		HBox signupButtonBox = new HBox(back, signUp);
+		back.setId("back");
 		signUp.setId("sign-up");
-		logIn.setId("log-in");
-		loginButtonBox.setId("login-button-box");
+		signupButtonBox.setId("signup-button-box");
 
-		this.getChildren().addAll(loginSpacer, userBox, passBox, confirmPassBox, rememberBox, loginButtonBox);
+		this.getChildren().addAll(header, createSpacer, userBox, passBox, confirmPassBox, signupButtonBox);
 
 		// not to stay, simply to be able to change UI things
-		invalid = false; 
-		logIn.setOnAction(
+		signUp.setOnAction(
             e -> {
-				if (!invalid) {
-					invalid = true;
-					Label invalidEntry = new Label("Invalid username/password");
-					invalidEntry.setId("invalid-entry");
-					loginSpacer.getChildren().add(invalidEntry);
+				createSpacer.getChildren().clear();
+				Label invalidEntry = null;
+				if (true) {
+					invalidEntry = new Label("Passwords must match");
 				}
+				else {
+					invalidEntry = new Label("\"taken_username\" is taken");
+				}
+				invalidEntry.setId("invalid-entry");
+				createSpacer.getChildren().add(invalidEntry);
             }
         );
 
