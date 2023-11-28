@@ -70,7 +70,7 @@ public class Controller {
         HomeModel homeModel = new HomeModel(this);
         models.put(ModelType.HomePage, homeModel);
 
-		root.addChild(homeView.getUI());
+		root.addChild(loginView.getUI());
     }
 
     public Parent getUIRoot() {
