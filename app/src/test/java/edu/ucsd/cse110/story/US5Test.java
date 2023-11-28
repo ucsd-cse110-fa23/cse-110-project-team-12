@@ -21,7 +21,7 @@ public class US5Test {
 
     @Test
     public void TestUS5BDD1() {
-        controller = new Controller(false, new VoicePromptMock(new ArrayList<>()), new WhisperMock(), new ChatGPTMock());
+        controller = new Controller(false, new VoicePromptMock(new ArrayList<>()), new WhisperMock(), new ChatGPTMock(), false);
 
         controller.receiveMessageFromUI(new Message(Message.HomeView.CreateRecipeButton)); // When I click on the add button
         
@@ -31,7 +31,7 @@ public class US5Test {
     @Test
     public void TestUS5BDD2() {
         // Open recipe.
-        controller = new Controller(false, new VoicePromptMock(new ArrayList<>()), new WhisperMock(), new ChatGPTMock());
+        controller = new Controller(false, new VoicePromptMock(new ArrayList<>()), new WhisperMock(), new ChatGPTMock(), false);
         
         controller.receiveMessageFromUI(new Message(Message.HomeView.CreateRecipeButton)); // When I click on the add button
         assertEquals(UIType.CreateRecipe, ((HomeModel) controller.getState(ModelType.HomePage)).getCurrentView());

@@ -145,65 +145,116 @@ public class RecipeDetailedModel implements ModelInterface {
         }
     }
 
-    // private void saveToJSON(String recipeTitle, String recipeBody) {
-    // try {
-    // Path path = Paths.get(Controller.storagePath + "json");
-    // Files.createDirectories(path.getParent());
-
-    // String jsonString = "{\"RecipeTitle\":\"" + recipeTitle +
-    // "\",\"RecipeBody\":\""
-    // + recipeBody + "\"}\n";
-
-    // try (Writer writer = new FileWriter(path.toFile(), true)) {
-    // writer.write(jsonString);
-    // }
-    // } catch (IOException e) {
-    // e.printStackTrace();
-    // }
-    // }
-
     private String escapeField(String field) {
         return "\"" + field.replaceAll("\n", "{NEWLINE}") + "\"";
     }
 
     public void saveRecipeToMongoDB(String recipeTitle, String recipeBody, String recipeMealType) {
-        try (MongoClient mongoClient = MongoClients.create(Controller.mongoURI)) {
+        if (controller.getUseMongoDB()) {
+            try (MongoClient mongoClient = MongoClients.create(Controller.mongoURI)) {
 
-            MongoDatabase sampleTrainingDB = mongoClient.getDatabase("PantryPal");
-            MongoCollection<Document> recipes = sampleTrainingDB.getCollection("recipes");
+                MongoDatabase sampleTrainingDB = mongoClient.getDatabase("PantryPal");
+                MongoCollection<Document> recipes = sampleTrainingDB.getCollection("recipes");
 
-            Document recipe = new Document("_id", new ObjectId());
-            recipe.append("name", recipeTitle)
-                    .append("description", recipeBody)
-                    .append("mealType", recipeMealType).append("timestamp", new BSONTimestamp());
+                Document recipe = new Document("_id", new ObjectId());
+                recipe.append("name", recipeTitle)
+                        .append("description", recipeBody)
+                        .append("mealType", recipeMealType).append("timestamp", new BSONTimestamp());
 
-            recipes.insertOne(recipe);
+                recipes.insertOne(recipe);
+                System.out.println("Recipe with title '" + recipeTitle + "' added to MongoDB.");
+            }
+        } else {
+            try {
+                Path path = Paths.get(Controller.storagePath + "csv");
+                Files.createDirectories(path.getParent());
+                try (Writer writer = new FileWriter(path.toFile(), true)) {
+                    writer.write(escapeField(recipeTitle) + "," + escapeField(recipeBody) + ","
+                            + escapeField(recipeMealType) + "\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }
 
     public void updateRecipeMongoDB(String recipeTitle, String updatedRecipeBody, String updatedRecipeMealType) {
-        try (MongoClient mongoClient = MongoClients.create(Controller.mongoURI)) {
+        if (controller.getUseMongoDB()) {
+            try (MongoClient mongoClient = MongoClients.create(Controller.mongoURI)) {
 
-            MongoDatabase database = mongoClient.getDatabase("PantryPal");
-            MongoCollection<Document> recipes = database.getCollection("recipes");
+                MongoDatabase database = mongoClient.getDatabase("PantryPal");
+                MongoCollection<Document> recipes = database.getCollection("recipes");
 
-            Bson filter = Filters.eq("name", recipeTitle);
-            Document update = new Document("$set", new Document("description", updatedRecipeBody)
-                    .append("mealType", updatedRecipeMealType)
-                    .append("timestamp", new BSONTimestamp()));
+                Bson filter = Filters.eq("name", recipeTitle);
+                Document update = new Document("$set", new Document("description", updatedRecipeBody)
+                        .append("mealType", updatedRecipeMealType)
+                        .append("timestamp", new BSONTimestamp()));
 
-            UpdateOptions options = new UpdateOptions().upsert(false);
-            UpdateResult updateResult = recipes.updateOne(filter, update, options);
+                UpdateOptions options = new UpdateOptions().upsert(false);
+                UpdateResult updateResult = recipes.updateOne(filter, update, options);
 
-            if (updateResult.getModifiedCount() == 0) {
-                System.out.println("Recipe with title '" + recipeTitle + "' not found.");
-            } else {
-                System.out.println("Recipe with title '" + recipeTitle + "' updated successfully.");
+                if (updateResult.getModifiedCount() == 0) {
+                    System.out.println("Recipe with title '" + recipeTitle + "' not found.");
+                } else {
+                    System.out.println("Recipe with title '" + recipeTitle + "' updated successfully.");
+                }
+
+            } catch (MongoException e) {
+                e.printStackTrace();
             }
+        } else {
+            try {
+                Path path = Paths.get(Controller.storagePath + "csv");
+                List<String> csvContents = new ArrayList<>(Files.readAllLines(path));
+                for (int i = 0; i < csvContents.size(); i++) {
+                    if (csvContents.get(i).contains(escapeField(recipeTitle) + ",")) {
+                        csvContents.set(i, escapeField(recipeTitle) + "," + escapeField(updatedRecipeBody) + ","
+                                + escapeField(updatedRecipeMealType));
+                        break;
+                    }
+                }
+                Files.write(path, csvContents);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-        } catch (MongoException e) {
-            e.printStackTrace();
+    public void deleteRecipeFromMongoDB(String recipeTitle) {
+        if (controller.getUseMongoDB()) {
+            try (MongoClient mongoClient = MongoClients.create(Controller.mongoURI)) {
+
+                MongoDatabase database = mongoClient.getDatabase("PantryPal");
+                MongoCollection<Document> recipes = database.getCollection("recipes");
+
+                Bson filter = Filters.eq("name", recipeTitle);
+                DeleteResult deleteResult = recipes.deleteOne(filter);
+
+                if (deleteResult.getDeletedCount() == 0) {
+                    System.out.println("Recipe with title '" + recipeTitle + "' not found.");
+                } else {
+                    System.out.println("Recipe with title '" + recipeTitle + "' deleted successfully.");
+                }
+
+            } catch (MongoException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                Path path = Paths.get(Controller.storagePath + "csv");
+                List<String> allLines = Files.readAllLines(path);
+                List<String> updatedLines = new ArrayList<>();
+
+                for (String line : allLines) {
+                    if (!line.contains(recipeTitle)) {
+                        updatedLines.add(line);
+                    }
+                }
+                Files.write(path, updatedLines);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -233,26 +284,6 @@ public class RecipeDetailedModel implements ModelInterface {
             }
             Files.write(path, csvContents);
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void deleteRecipeFromMongoDB(String recipeTitle) {
-        try (MongoClient mongoClient = MongoClients.create(Controller.mongoURI)) {
-
-            MongoDatabase database = mongoClient.getDatabase("PantryPal");
-            MongoCollection<Document> recipes = database.getCollection("recipes");
-
-            Bson filter = Filters.eq("name", recipeTitle);
-            DeleteResult deleteResult = recipes.deleteOne(filter);
-
-            if (deleteResult.getDeletedCount() == 0) {
-                System.out.println("Recipe with title '" + recipeTitle + "' not found.");
-            } else {
-                System.out.println("Recipe with title '" + recipeTitle + "' deleted successfully.");
-            }
-
-        } catch (MongoException e) {
             e.printStackTrace();
         }
     }
@@ -291,4 +322,21 @@ public class RecipeDetailedModel implements ModelInterface {
     public PageType getCurrentPage() {
         return this.currentPage;
     }
+
+    // private void saveToJSON(String recipeTitle, String recipeBody) {
+    // try {
+    // Path path = Paths.get(Controller.storagePath + "json");
+    // Files.createDirectories(path.getParent());
+
+    // String jsonString = "{\"RecipeTitle\":\"" + recipeTitle +
+    // "\",\"RecipeBody\":\""
+    // + recipeBody + "\"}\n";
+
+    // try (Writer writer = new FileWriter(path.toFile(), true)) {
+    // writer.write(jsonString);
+    // }
+    // } catch (IOException e) {
+    // e.printStackTrace();
+    // }
+    // }
 }

@@ -67,29 +67,50 @@ public class HomeModel implements ModelInterface {
     }
 
     private void updateRecipeList() {
+        if (controller.getUseMongoDB()) {
+            try (MongoClient mongoClient = MongoClients.create(Controller.mongoURI)) {
+                recipes = new ArrayList<>();
+                MongoDatabase database = mongoClient.getDatabase("PantryPal");
+                MongoCollection<Document> recipesCollection = database.getCollection("recipes");
 
-        try (MongoClient mongoClient = MongoClients.create(Controller.mongoURI)) {
-            recipes = new ArrayList<>();
-            MongoDatabase database = mongoClient.getDatabase("PantryPal");
-            MongoCollection<Document> recipesCollection = database.getCollection("recipes");
+                FindIterable<Document> iterable = recipesCollection.find();
+                MongoCursor<Document> cursor = iterable.iterator();
 
-            FindIterable<Document> iterable = recipesCollection.find();
-            MongoCursor<Document> cursor = iterable.iterator();
-
-            while (cursor.hasNext()) {
-                Document recipeDocument = cursor.next();
-                String name = recipeDocument.getString("name");
-                String description = recipeDocument.getString("description");
-                String mealType = recipeDocument.getString("mealType");
-
-                recipes.add(new Recipe(name, description, mealType));
+                while (cursor.hasNext()) {
+                    Document recipeDocument = cursor.next();
+                    String name = recipeDocument.getString("name");
+                    String description = recipeDocument.getString("description");
+                    String mealType = recipeDocument.getString("mealType");
+                    System.out.println("Received recipe \'" + name + "\' from MongoDB.");
+                    recipes.add(new Recipe(name, description, mealType));
+                }
+                Collections.reverse(recipes);
+                controller.receiveMessageFromModel(
+                        new Message(Message.HomeModel.UpdateRecipeList,
+                                Map.ofEntries(Map.entry("Recipes", recipes))));
+            } catch (MongoException e) {
+                e.printStackTrace();
             }
-            Collections.reverse(recipes);
-            controller.receiveMessageFromModel(
-                    new Message(Message.HomeModel.UpdateRecipeList,
-                            Map.ofEntries(Map.entry("Recipes", recipes))));
-        } catch (MongoException e) {
-            e.printStackTrace();
+        } else {
+            try {
+                Path path = Paths.get(Controller.storagePath + "csv");
+                List<String> allLines = Files.readAllLines(path);
+                recipes = new ArrayList<>();
+                for (String line : allLines) {
+                    // https://stackoverflow.com/a/15739042
+                    String[] recipeInfo = line.split("\",\"");
+                    recipeInfo[0] = recipeInfo[0].replace("\"", "");
+                    recipeInfo[1] = recipeInfo[1].replace("{NEWLINE}", "\n");
+                    recipeInfo[2] = recipeInfo[2].replace("\"", "");
+                    recipes.add(new Recipe(recipeInfo[0], recipeInfo[1], recipeInfo[2]));
+                }
+                Collections.reverse(recipes);
+                controller.receiveMessageFromModel(
+                        new Message(Message.HomeModel.UpdateRecipeList,
+                                Map.ofEntries(Map.entry("Recipes", recipes))));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
