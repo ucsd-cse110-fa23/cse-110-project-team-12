@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.Message;
 import edu.ucsd.cse110.api.UIInterface;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -19,7 +20,6 @@ import javafx.scene.layout.VBox;
 public class LogInView extends VBox implements UIInterface {
 	Controller controller;
 	boolean rememberMe;
-	boolean invalid;
 
 	public LogInView(Controller c) {
 		this.controller = c;
@@ -52,6 +52,7 @@ public class LogInView extends VBox implements UIInterface {
 		Label remember = new Label("Remember Me?");
 		Button rememberToggle = new Button();
 		HBox rememberBox = new HBox(remember, rememberToggle);
+		rememberBox.setPadding(new Insets(10, 10, 0, 216));
 		remember.setId("remember");
 		rememberToggle.setId("remember-toggle");
 		rememberBox.setId("remember-box");
@@ -66,15 +67,12 @@ public class LogInView extends VBox implements UIInterface {
 		this.getChildren().addAll(loginSpacer, userBox, passBox, rememberBox, loginButtonBox);
 
 		// not to stay, simply to be able to change UI things
-		invalid = false; 
 		logIn.setOnAction(
             e -> {
-				if (!invalid) {
-					invalid = true;
-					Label invalidEntry = new Label("Invalid username/password");
-					invalidEntry.setId("invalid-entry");
-					loginSpacer.getChildren().add(invalidEntry);
-				}
+				loginSpacer.getChildren().clear();
+				Label invalidEntry = new Label("Invalid username/password");
+				invalidEntry.setId("invalid-entry");
+				loginSpacer.getChildren().add(invalidEntry);
             }
         );
 
