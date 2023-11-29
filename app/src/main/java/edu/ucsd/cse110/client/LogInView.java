@@ -17,14 +17,18 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.util.*;
+
+
 public class LogInView extends VBox implements UIInterface {
 	Controller controller;
 	boolean rememberMe;
 
 	public LogInView(Controller c) {
 		this.controller = c;
+
 		this.setId("log-in-view");
-		
+
 		Header header = new Header();
 		this.setAlignment(Pos.CENTER);
 		this.addChild(header);
@@ -68,40 +72,43 @@ public class LogInView extends VBox implements UIInterface {
 
 		// not to stay, simply to be able to change UI things
 		logIn.setOnAction(
-            e -> {
-				loginSpacer.getChildren().clear();
-				Label invalidEntry = new Label("Invalid username/password");
-				invalidEntry.setId("invalid-entry");
-				loginSpacer.getChildren().add(invalidEntry);
-            }
-        );
+				e -> {
+					controller.receiveMessageFromModel(
+							new Message(Message.LoginView.Login,
+									Map.ofEntries(Map.entry("username", userArea.getText()),
+											Map.entry("password", passArea.getText()),
+											Map.entry("savelogin", rememberMe))));
+					loginSpacer.getChildren().clear();
+					Label invalidEntry = new Label("Invalid username/password");
+					invalidEntry.setId("invalid-entry");
+					loginSpacer.getChildren().add(invalidEntry);
+				});
 
-		rememberMe = false; 
+		rememberMe = false;
 		rememberToggle.setOnAction(
-            e -> {
-				if (rememberMe) {
-					rememberMe = false;
-					rememberToggle.setGraphic(null);
-				}
-				else {
-					rememberMe = true;
-					Image x = null;
-					try {
-						x = new Image(new FileInputStream("./src/main/java/edu/ucsd/cse110/client/resources/x.png"));
-					}
-					catch (Exception except) {
-						except.printStackTrace();
-					}
-					ImageView xView = new ImageView(x);
-					xView.setFitWidth(10);
-					xView.setFitHeight(10);
+				e -> {
+					if (rememberMe) {
+						rememberMe = false;
+						rememberToggle.setGraphic(null);
+					} else {
+						rememberMe = true;
+						Image x = null;
+						try {
+							x = new Image(
+									new FileInputStream("./src/main/java/edu/ucsd/cse110/client/resources/x.png"));
+						} catch (Exception except) {
+							except.printStackTrace();
+						}
+						ImageView xView = new ImageView(x);
+						xView.setFitWidth(10);
+						xView.setFitHeight(10);
 
-					rememberToggle.setGraphic(xView);
-				}
-            }
-        );
+						rememberToggle.setGraphic(xView);
+					}
+				});
+		// First check if user wants to save their login.
+
 	}
-
 
 	@Override
 	public void receiveMessage(Message m) {
