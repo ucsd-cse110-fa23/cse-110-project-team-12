@@ -14,4 +14,8 @@ app/bin
 
 *.csv
 
+app/src/main/java/edu/ucsd/cse110/api/assets/savedRecipes*
+
+app/src/main/java/edu/ucsd/cse110/api/assets/savelogin.txt
+
 !app/src/main/java/edu/ucsd/cse110/api/assets/*.wav

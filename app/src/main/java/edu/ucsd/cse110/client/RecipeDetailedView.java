@@ -217,7 +217,7 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         if (m.getMessageType() == Message.RecipeDetailedModel.SaveConfirmation) {
             displaySaveConfirmation();
         }
-        if (m.getMessageType() == Message.RecipeDetailedModel.GoToDeleteConfirmationPage){
+        if (m.getMessageType() == Message.RecipeDetailedModel.GoToDeleteConfirmationPage) {
             content.getChildren().clear();
             addChild(deleteConfirmationPage);
             addChild(confirmDeleteModule.getSpacer());

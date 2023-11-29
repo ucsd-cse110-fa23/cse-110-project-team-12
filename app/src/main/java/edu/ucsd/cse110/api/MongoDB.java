@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.bson.types.BSONTimestamp;
 import org.bson.types.ObjectId;
 
@@ -18,12 +17,10 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
-import com.mongodb.client.result.DeleteResult;
-import com.mongodb.client.result.UpdateResult;
 
 import edu.ucsd.cse110.client.Recipe;
 
-public class MongoDB implements MongoDBInterface{
+public class MongoDB implements MongoDBInterface {
     // users
     private ObjectId getUserId(String username, String password) {
         ObjectId id = null;
@@ -39,8 +36,6 @@ public class MongoDB implements MongoDBInterface{
     
             if (foundDocument != null) {
                 id = foundDocument.getObjectId("_id");
-            } else {
-                System.out.println("No matching user found.");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,7 +44,7 @@ public class MongoDB implements MongoDBInterface{
         return id;
     }
     @Override
-    public boolean isValidUser(String username, String password){
+    public boolean isValidUser(String username, String password) {
         try (MongoClient mongoClient = MongoClients.create(Controller.mongoURI)) {
             MongoDatabase database = mongoClient.getDatabase("PantryPal");
             MongoCollection<Document> collection = database.getCollection("users");
@@ -69,14 +64,13 @@ public class MongoDB implements MongoDBInterface{
     }
 
     @Override
-    public boolean createUser(String username, String password){
+    public boolean createUser(String username, String password) {
         try (MongoClient mongoClient = MongoClients.create(Controller.mongoURI)) {
             MongoDatabase database = mongoClient.getDatabase("PantryPal");
             MongoCollection<Document> users = database.getCollection("users");
 
             long count = users.countDocuments(Filters.eq("username", username));
             if (count > 0) {
-                System.out.println("Username already exists.");
                 return false;
             }
 
@@ -85,7 +79,6 @@ public class MongoDB implements MongoDBInterface{
                     .append("password", password);
             users.insertOne(newUser);
 
-            System.out.println("User created successfully.");
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -112,7 +105,6 @@ public class MongoDB implements MongoDBInterface{
                 String name = recipeDocument.getString("name");
                 String description = recipeDocument.getString("description");
                 String mealType = recipeDocument.getString("mealType");
-                System.out.println("Received recipe \'" + name + "\' from MongoDB.");
                 recipes.add(new Recipe(name, description, mealType));
             }
             Collections.reverse(recipes);
@@ -141,8 +133,6 @@ public class MongoDB implements MongoDBInterface{
                 String mealType = recipeDocument.getString("mealType");
                 // You may also want to retrieve other fields, if available
                 recipe = new Recipe(name, description, mealType);
-            } else {
-                System.out.println("Recipe with title '" + recipeTitle + "' not found.");
             }
         } catch (MongoException e) {
             e.printStackTrace();
@@ -167,7 +157,6 @@ public class MongoDB implements MongoDBInterface{
             .append("userId", userId);
             
             recipes.insertOne(recipe);
-            System.out.println("Recipe with title '" + recipeTitle + "' added to MongoDB.");
         }        
     }
 
@@ -189,13 +178,7 @@ public class MongoDB implements MongoDBInterface{
             
             
             UpdateOptions options = new UpdateOptions().upsert(false);
-            UpdateResult updateResult = recipes.updateOne(query, update, options);
-            
-            if (updateResult.getModifiedCount() == 0) {
-                System.out.println("Recipe with title '" + recipeTitle + "' not found.");
-            } else {
-                System.out.println("Recipe with title '" + recipeTitle + "' updated successfully.");
-            }
+            recipes.updateOne(query, update, options);
             
         } catch (MongoException e) {
             e.printStackTrace();
@@ -214,13 +197,7 @@ public class MongoDB implements MongoDBInterface{
             Document query = new Document()
                     .append("name", recipeTitle)
                     .append("userId", userId);
-            DeleteResult deleteResult = recipes.deleteOne(query);
-            
-            if (deleteResult.getDeletedCount() == 0) {
-                System.out.println("Recipe with title '" + recipeTitle + "' not found.");
-            } else {
-                System.out.println("Recipe with title '" + recipeTitle + "' deleted successfully.");
-            }
+            recipes.deleteOne(query);
             
         } catch (MongoException e) {
             e.printStackTrace();

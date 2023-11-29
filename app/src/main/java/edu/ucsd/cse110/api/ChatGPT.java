@@ -33,7 +33,6 @@ public class ChatGPT implements ChatGPTInterface {
         requestBody.put("max_tokens", MAX_TOKENS);
         requestBody.put("temperature", 1.0);
         
-        // System.out.println("Request Body: " + requestBody.toString());
         
         // Create the HTTP Client
         HttpClient client = HttpClient.newHttpClient();
@@ -47,23 +46,19 @@ public class ChatGPT implements ChatGPTInterface {
         .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
         .build();
         
-        // System.out.println("Sending Request: " + request.toString());
         
         // Send the request and receive the response
         HttpResponse<String> response = client.send(
         request,
         HttpResponse.BodyHandlers.ofString());
         
-        // System.out.println("Response Code: " + response.statusCode());
         
         // Process the response
         String responseBody = response.body();
-        // System.out.println("Response Body: " + responseBody);
         
         JSONObject responseJson = new JSONObject(responseBody);
         
         JSONArray choices = responseJson.getJSONArray("choices");
-        // System.out.println("Number of Choices: " + choices.length());
         
         if (choices.length() > 0) {
             String generatedText = choices.getJSONObject(0).getString("text");

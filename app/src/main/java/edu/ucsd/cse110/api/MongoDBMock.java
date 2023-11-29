@@ -15,7 +15,7 @@ import org.json.JSONObject;
 
 import edu.ucsd.cse110.client.Recipe;
 
-public class MongoDBMock implements MongoDBInterface{
+public class MongoDBMock implements MongoDBInterface {
     public static final String storagePath = "./src/main/java/edu/ucsd/cse110/api/assets/savedRecipes.";
     
     private String getUserId(String username, String password) {
@@ -74,7 +74,6 @@ public class MongoDBMock implements MongoDBInterface{
             for (int i = 0; i < users.length(); i++) {
                 JSONObject user = users.getJSONObject(i);
                 if (user.getString("username").equals(username)) {
-                    System.out.println("Username already exists.");
                     return false;
                 }
             }
@@ -90,8 +89,6 @@ public class MongoDBMock implements MongoDBInterface{
             try (BufferedWriter writer = Files.newBufferedWriter(path)) {
                 writer.write(users.toString());
             }
-
-            System.out.println("User created successfully.");
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -143,7 +140,6 @@ public class MongoDBMock implements MongoDBInterface{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Recipe with title '" + recipeTitle + "' not found.");
         return null;
     }
 

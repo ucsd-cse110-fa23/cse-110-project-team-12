@@ -41,7 +41,7 @@ public class HomeView extends BorderPane implements UIInterface {
 		logOut.setId("log-out");
 		logOut.setOnAction(
             e -> {
-				controller.receiveMessageFromModel(new Message(Message.HomeView.Logout));
+				controller.receiveMessageFromModel(new Message(Message.HomeView.LogOut));
             }
         );
 
