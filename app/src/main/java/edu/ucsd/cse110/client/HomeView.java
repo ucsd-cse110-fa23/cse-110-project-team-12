@@ -37,7 +37,6 @@ public class HomeView extends BorderPane implements UIInterface {
 
 		Header header = new Header();
 		header.setEffect(new DropShadow(BlurType.GAUSSIAN, new Color(0, 0, 0, 0.5), 20, 0.2, 0, 0));
-		
 		Button logOut = new Button("Log Out");
 		logOut.setId("log-out");
 		logOut.setOnAction(
