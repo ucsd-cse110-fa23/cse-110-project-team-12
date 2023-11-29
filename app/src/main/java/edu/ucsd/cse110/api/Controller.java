@@ -81,6 +81,7 @@ public class Controller {
 
         HomeModel homeModel = new HomeModel(this);
         models.put(ModelType.HomePage, homeModel);
+        models.put(ModelType.LogIn, new LoginModel(this));
 
 		root.addChild(loginView.getUI());
     }
@@ -107,6 +108,13 @@ public class Controller {
             addUI(UIType.CreateRecipe, createRecipeView);
 
             uis.get(UIType.HomePage).addChild(createRecipeView.getUI());
+        }
+        else if (m.getMessageType() == Message.HomeView.Logout) {
+            root.removeChild(uis.get(UIType.HomePage).getUI());
+            root.addChild(uis.get(UIType.LogIn).getUI());
+        } else if (m.getMessageType() == Message.LoginModel.Login) {
+            root.removeChild(uis.get(UIType.LogIn).getUI());
+            root.addChild(uis.get(UIType.HomePage).getUI());
         } else if (m.getMessageType() == Message.HomeModel.CloseCreateRecipeView) {
             // models.remove(ModelType.CreateRecipe);
             uis.get(UIType.HomePage).removeChild(uis.get(UIType.CreateRecipe).getUI());

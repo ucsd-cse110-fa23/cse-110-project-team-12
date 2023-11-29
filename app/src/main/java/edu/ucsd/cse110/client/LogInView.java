@@ -17,6 +17,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.util.*;
+
 public class LogInView extends VBox implements UIInterface {
 	Controller controller;
 	boolean rememberMe;
@@ -69,6 +71,11 @@ public class LogInView extends VBox implements UIInterface {
 		// not to stay, simply to be able to change UI things
 		logIn.setOnAction(
             e -> {
+                controller.receiveMessageFromModel(
+                    new Message(Message.LoginView.Login,
+                    Map.ofEntries(Map.entry("username", userArea.getText()),
+                                  Map.entry("password", passArea.getText())))
+                );
 				loginSpacer.getChildren().clear();
 				Label invalidEntry = new Label("Invalid username/password");
 				invalidEntry.setId("invalid-entry");
