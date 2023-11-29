@@ -18,6 +18,8 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import edu.ucsd.cse110.client.Recipe;
 
 public class MongoDB implements MongoDBInterface {
