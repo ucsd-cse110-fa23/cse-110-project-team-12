@@ -28,15 +28,8 @@ public class CreateRecipeModel implements ModelInterface {
     private String selectedIngredients;
     private Recipe generatedRecipe;
 
-    private VoicePromptInterface voicePrompt;
-    private WhisperInterface whisper;
-    private ChatGPTInterface chatGPT;
-
-    public CreateRecipeModel(Controller c, VoicePromptInterface voicePrompt, WhisperInterface whisper, ChatGPTInterface chatGPT) {
+    public CreateRecipeModel(Controller c) {
         controller = c;
-        this.voicePrompt = voicePrompt;
-        this.whisper = whisper;
-        this.chatGPT = chatGPT;
 
         currentPage = PageType.MealTypeInput;
         selectedMealType = MealType.None;
@@ -76,7 +69,7 @@ public class CreateRecipeModel implements ModelInterface {
             mealTypeString = "Dinner";
 
         try {
-            String[] gptResult = chatGPT.promptGPT(mealTypeString, selectedIngredients);
+            String[] gptResult = controller.chatGPT.promptGPT(mealTypeString, selectedIngredients);
             generatedRecipe = new Recipe(gptResult[0], gptResult[1], mealTypeString);
         }
         catch (Exception e) {
@@ -87,11 +80,11 @@ public class CreateRecipeModel implements ModelInterface {
     private void handleRecord() {
         if (isRecording) {
             controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StopRecording));
-            File recordingFile = voicePrompt.stopRecording();
+            File recordingFile = controller.voicePrompt.stopRecording();
             if(controller.useUI){
                 new Thread(() -> {
                     try {
-                        String transcript = whisper.transcribe(recordingFile);
+                        String transcript = controller.whisper.transcribe(recordingFile);
                         Platform.runLater(() -> {
                             processTranscript(transcript);
                         });
@@ -104,7 +97,7 @@ public class CreateRecipeModel implements ModelInterface {
                 isRecording = false;
             }else{
                 try {
-                    String transcript = whisper.transcribe(recordingFile);
+                    String transcript = controller.whisper.transcribe(recordingFile);
                     processTranscript(transcript);
                 }
                 catch (Exception e) {
@@ -115,7 +108,7 @@ public class CreateRecipeModel implements ModelInterface {
         }
         else {
             controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StartRecording));
-            voicePrompt.startRecording();
+            controller.voicePrompt.startRecording();
             isRecording = true;
         }
     }

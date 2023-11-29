@@ -1,11 +1,8 @@
 package edu.ucsd.cse110.api;
 
-import static org.junit.Assert.assertEquals;
 
 import javafx.scene.Node;
 import javafx.scene.Parent;
-
-import org.junit.Test;
 
 public class ControllerTest {
     // @Test
