@@ -51,7 +51,7 @@ public class HomeModel implements ModelInterface {
     }
 
     private void updateRecipeList() {
-        recipes = controller.mongoDB.getRecipeList();
+        recipes = controller.mongoDB.getRecipeList(controller.username, controller.password);
         controller.receiveMessageFromModel(
                         new Message(Message.HomeModel.UpdateRecipeList,
                                 Map.ofEntries(Map.entry("Recipes", recipes))));
