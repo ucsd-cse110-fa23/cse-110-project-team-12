@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.client;
 
 import java.io.FileInputStream;
+import java.util.Map;
 
 import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.Message;
@@ -20,6 +21,10 @@ import javafx.scene.image.ImageView;
 public class CreateAccountView extends VBox implements UIInterface {
 	private Controller controller;
 	boolean rememberMe;
+	
+	TextField userArea;
+	TextField passArea;
+	HBox createSpacer;
 
 	public CreateAccountView(Controller c) {
 		this.controller = c;
@@ -28,18 +33,18 @@ public class CreateAccountView extends VBox implements UIInterface {
 
 		Header header = new Header();
 
-		HBox createSpacer = new HBox();
+		createSpacer = new HBox();
 		createSpacer.setId("create-spacer");
 
 		Label username = new Label("Username");
-		TextField userArea = new TextField();
+		userArea = new TextField();
 		HBox userBox = new HBox(username, userArea);
 		username.setId("username");
 		userArea.setId("user-area");
 		userBox.setId("user-box");
 
 		Label password = new Label("Password");
-		TextField passArea = new TextField();
+		passArea = new TextField();
 		HBox passBox = new HBox(password, passArea);
 		password.setId("password");
 		passArea.setId("pass-area");
@@ -73,18 +78,28 @@ public class CreateAccountView extends VBox implements UIInterface {
 		this.getChildren().addAll(header, createSpacer, userBox, passBox, confirmPassBox, signupButtonBox);
 
 		// not to stay, simply to be able to change UI things
+		back.setOnAction(
+			e -> {
+				controller.receiveMessageFromModel(new Message(Message.CreateAccountView.BackButton));
+			}
+		);
+
 		signUp.setOnAction(
             e -> {
-				createSpacer.getChildren().clear();
-				Label invalidEntry = null;
-				if (true) {
+				if(!passArea.getText().equals(confirmPassArea.getText())){
+					createSpacer.getChildren().clear();
+					Label invalidEntry = null;
 					invalidEntry = new Label("Passwords must match");
+					invalidEntry.setId("invalid-entry");
+					createSpacer.getChildren().add(invalidEntry);
+				} else{
+					controller.receiveMessageFromModel(
+						new Message(Message.CreateAccountView.SignUpButton,
+						Map.ofEntries(Map.entry("Username", userArea.getText()),
+									Map.entry("Password", passArea.getText()),
+									Map.entry("AutomaticLogIn", rememberMe)))
+					);
 				}
-				else {
-					invalidEntry = new Label("\"taken_username\" is taken");
-				}
-				invalidEntry.setId("invalid-entry");
-				createSpacer.getChildren().add(invalidEntry);
             }
         );
 
@@ -118,7 +133,14 @@ public class CreateAccountView extends VBox implements UIInterface {
 
 	@Override
 	public void receiveMessage(Message m) {
-		// TODO Auto-generated method stub
+		if(m.getMessageType() == Message.CreateAccountModel.ErrorUsernameTaken){
+			createSpacer.getChildren().clear();
+				
+			Label invalidEntry = null;
+			invalidEntry = new Label(userArea.getText() + " is taken");
+			invalidEntry.setId("invalid-entry");
+			createSpacer.getChildren().add(invalidEntry);
+		}
 	}
 
 	@Override

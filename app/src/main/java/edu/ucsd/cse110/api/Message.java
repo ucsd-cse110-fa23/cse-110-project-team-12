@@ -15,6 +15,32 @@ public class Message {
     }
 
     // Class Type Enum
+
+    public enum LogInView implements Type {
+        SignUpButton,
+        LogInButton,
+    }
+
+    public enum LogInModel implements Type {
+        CloseLogInView,
+        StartCreateAccountView,
+        StartHomeView;
+    }
+
+    public enum CreateAccountView implements Type {
+        BackButton,
+        SignUpButton {
+            Set<String> keys = new HashSet<>(Arrays.asList("Username", "Password","AutomaticLogIn"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        },
+    }
+
+    public enum CreateAccountModel implements Type {
+        CloseCreateAccountView,
+        StartLogInView,
+        StartHomeView,
+        ErrorUsernameTaken,
+    }
     
     public enum HomeView implements Type {
         CreateRecipeButton, // HomeView.CreateRecipeButton
@@ -36,7 +62,9 @@ public class Message {
         SendTitleBody {
             Set<String> keys = new HashSet<>(Arrays.asList("Recipe"));
             @Override public Set<String> allowedKeys() {return keys;}
-        }
+        },
+        CloseHomeView,
+        StartLogInView,
     }
     public enum CreateRecipeView implements Type {
         RecordButton,
