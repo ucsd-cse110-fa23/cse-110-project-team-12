@@ -72,22 +72,8 @@ public class Controller {
 
         models = new EnumMap<>(ModelType.class);
         uis = new EnumMap<>(UIType.class);
-		root = new Root();
-
-		UIInterface createAccountView = make(UIType.CreateAccount);
-        UIInterface homeView = make(UIType.HomePage);
-		UIInterface loginView = make(UIType.LogIn);
-        uis.put(UIType.CreateAccount, createAccountView);
-        uis.put(UIType.LogIn, loginView);
-        uis.put(UIType.HomePage, homeView);
-
-        HomeModel homeModel = new HomeModel(this);
-        models.put(ModelType.HomePage, homeModel);
-        models.put(ModelType.LogIn, new LoginModel(this));
-
-        File f = new File("./src/main/java/edu/ucsd/cse110/api/assets/savelogin.txt");
-		if (f.exists()) root.addChild(homeView.getUI());
-		else root.addChild(loginView.getUI());
+		    root = new Root();
+		    this.receiveMessageFromModel(new Message(Message.HomeModel.StartLogInView));
     }
 
     public Parent getUIRoot() {
@@ -104,7 +90,42 @@ public class Controller {
 
     public void receiveMessageFromModel(Message m) {
         // Controller intercepts all message that update UI Types
-        if (m.getMessageType() == Message.HomeModel.StartCreateRecipeView) {
+        if (m.getMessageType() == Message.CreateAccountModel.StartLogInView || m.getMessageType() == Message.HomeModel.StartLogInView) {
+            LogInModel logInModel = new LogInModel(this);
+            addModel(ModelType.LogIn, logInModel);
+            System.out.println("Hi");
+
+            UIInterface logInView = make(UIType.LogIn);
+            addUI(UIType.LogIn, logInView);
+
+            root.addChild(logInView.getUI());
+        } else if(m.getMessageType() == Message.LogInModel.CloseLogInView) {
+            models.remove(ModelType.LogIn);
+            root.removeChild(uis.get(UIType.LogIn).getUI());
+        } else if(m.getMessageType() == Message.LogInModel.StartCreateAccountView) {
+            CreateAccountModel createAccountModel = new CreateAccountModel(this);
+            addModel(ModelType.CreateAccount, createAccountModel);
+
+            UIInterface createAccountView = make(UIType.CreateAccount);
+            addUI(UIType.CreateAccount, createAccountView);
+
+            root.addChild(createAccountView.getUI());
+        }
+        else if (m.getMessageType() == Message.CreateAccountModel.CloseCreateAccountView) {
+            models.remove(ModelType.CreateAccount);
+            root.removeChild(uis.get(UIType.CreateAccount).getUI());
+        }else if (m.getMessageType() == Message.LogInModel.StartHomeView || m.getMessageType() == Message.CreateAccountModel.StartHomeView) {
+            HomeModel homeModel = new HomeModel(this);
+            addModel(ModelType.HomePage, homeModel);
+
+            UIInterface homeView = make(UIType.HomePage);
+            addUI(UIType.HomePage, homeView);
+
+            root.addChild(homeView.getUI());
+        } else if (m.getMessageType() == Message.HomeModel.CloseHomeView) {
+            models.remove(ModelType.HomePage);
+            root.removeChild(uis.get(UIType.HomePage).getUI());
+        } else if (m.getMessageType() == Message.HomeModel.StartCreateRecipeView) {
             CreateRecipeModel createRecipeModel = new CreateRecipeModel(this);
             addModel(ModelType.CreateRecipe, createRecipeModel);
 
@@ -120,7 +141,7 @@ public class Controller {
             root.removeChild(uis.get(UIType.LogIn).getUI());
             root.addChild(uis.get(UIType.HomePage).getUI());
         } else if (m.getMessageType() == Message.HomeModel.CloseCreateRecipeView) {
-            // models.remove(ModelType.CreateRecipe);
+            models.remove(ModelType.CreateRecipe);
             uis.get(UIType.HomePage).removeChild(uis.get(UIType.CreateRecipe).getUI());
         } else if (m.getMessageType() == Message.HomeModel.StartRecipeDetailedView) {
             RecipeDetailedModel detailedModel = new RecipeDetailedModel(this);
@@ -131,7 +152,7 @@ public class Controller {
 
             uis.get(UIType.HomePage).addChild(detailedView.getUI());
         } else if (m.getMessageType() == Message.HomeModel.CloseRecipeDetailedView) {
-            // models.remove(ModelType.DetailedView);
+            models.remove(ModelType.DetailedView);
             uis.get(UIType.HomePage).removeChild(uis.get(UIType.DetailedView).getUI());
         }
         uis.forEach((uiType, ui) -> ui.receiveMessage(m));
