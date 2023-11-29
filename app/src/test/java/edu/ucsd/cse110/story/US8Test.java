@@ -28,6 +28,7 @@ public class US8Test {
      * When the recipe is created
      * Then I am taken to the detailed view for the recipe
      */
+  
     // @Test
     // public void testUS8BDD1() {
 
@@ -36,7 +37,7 @@ public class US8Test {
     //     promptTypes.add(VoicePromptMock.PromptType.MealType);
     //     promptTypes.add(VoicePromptMock.PromptType.IngredientsList);
     //     voice = new VoicePromptMock(promptTypes);
-    //     controller = new Controller(false, voice, new WhisperMock(), new ChatGPTMock());
+    //     controller = new Controller(false, voice, new WhisperMock(), new ChatGPTMock(), false);
     //     controller.receiveMessageFromUI(new Message(Message.HomeView.CreateRecipeButton));
     //     controller.receiveMessageFromUI(new Message(Message.CreateRecipeView.RecordButton));
     //     controller.receiveMessageFromUI(new Message(Message.CreateRecipeView.RecordButton));
@@ -51,7 +52,4 @@ public class US8Test {
     //     assertNotEquals("", ((RecipeDetailedModel)controller.getState(Controller.ModelType.DetailedView)).getRecipeTitle());
     //     assertNotEquals("", ((RecipeDetailedModel)controller.getState(Controller.ModelType.DetailedView)).getRecipeBody());
     // }
-
-    
-
 }

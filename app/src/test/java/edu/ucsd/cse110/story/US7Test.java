@@ -23,13 +23,14 @@ public class US7Test {
      * And I click on the stop record voice button
      * Then the app will transcribe the recording into text.
      */
+
     // @Test
     // public void testUS7BDD1() {
     //     List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
     //     promptTypes.add(VoicePromptMock.PromptType.MealType);
     //     promptTypes.add(VoicePromptMock.PromptType.IngredientsList);
     //     voice = new VoicePromptMock(promptTypes);
-    //     controller = new Controller(false, voice, new WhisperMock(), new ChatGPTMock());
+    //     controller = new Controller(false, voice, new WhisperMock(), new ChatGPTMock(), false);
     //     controller.receiveMessageFromUI(new Message(Message.HomeView.CreateRecipeButton));
     //     controller.receiveMessageFromUI(new Message(Message.CreateRecipeView.RecordButton));
     //     controller.receiveMessageFromUI(new Message(Message.CreateRecipeView.RecordButton));
@@ -61,7 +62,7 @@ public class US7Test {
     //     List<VoicePromptMock.PromptType> promptTypes = new ArrayList<>();
     //     promptTypes.add(VoicePromptMock.PromptType.MealType);
     //     voice = new VoicePromptMock(promptTypes);
-    //     controller = new Controller(false, voice, new WhisperMock(), new ChatGPTMock());
+    //     controller = new Controller(false, voice, new WhisperMock(), new ChatGPTMock(), false);
     //     controller.receiveMessageFromUI(new Message(Message.HomeView.CreateRecipeButton));
     //     controller.receiveMessageFromUI(new Message(Message.CreateRecipeView.RecordButton));
     //     controller.receiveMessageFromUI(new Message(Message.CreateRecipeView.RecordButton));

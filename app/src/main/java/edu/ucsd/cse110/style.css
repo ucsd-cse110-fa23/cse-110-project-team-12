@@ -24,7 +24,6 @@
 
 #username,
 #password,
-#confirm-password {
 	-fx-text-fill: white;
 	-fx-font-family: 'Helvetica';
 	-fx-font-weight: bold;
@@ -83,7 +82,7 @@
 #pass-box,
 #confirm-pass-box {
 	-fx-padding: 15 10 0 10;
-	-fx-alignment: top_center;
+	-fx-alignment: center;
 	-fx-spacing: 10;
 }
 
