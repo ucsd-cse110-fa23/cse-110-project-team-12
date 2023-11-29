@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.bson.types.BSONTimestamp;
 import org.bson.types.ObjectId;
 

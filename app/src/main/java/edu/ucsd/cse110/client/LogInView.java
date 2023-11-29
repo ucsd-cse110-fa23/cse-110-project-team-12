@@ -70,14 +70,20 @@ public class LogInView extends VBox implements UIInterface {
 
 		this.getChildren().addAll(loginSpacer, userBox, passBox, rememberBox, loginButtonBox);
 
+		signUp.setOnAction(
+				e-> {
+					controller.receiveMessageFromUI(new Message(Message.LogInView.SignUpButton));
+				}
+		);
+
 		// not to stay, simply to be able to change UI things
 		logIn.setOnAction(
 				e -> {
 					controller.receiveMessageFromModel(
-							new Message(Message.LoginView.Login,
-									Map.ofEntries(Map.entry("username", userArea.getText()),
-											Map.entry("password", passArea.getText()),
-											Map.entry("savelogin", rememberMe))));
+							new Message(Message.LogInView.LogInButton,
+									Map.ofEntries(Map.entry("Username", userArea.getText()),
+											Map.entry("Password", passArea.getText()),
+											Map.entry("AutomaticLogIn", rememberMe))));
 					loginSpacer.getChildren().clear();
 					Label invalidEntry = new Label("Invalid username/password");
 					invalidEntry.setId("invalid-entry");

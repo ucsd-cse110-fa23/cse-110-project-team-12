@@ -11,8 +11,6 @@ import edu.ucsd.cse110.client.Root;
 import edu.ucsd.cse110.client.NoUI;
 import javafx.scene.Parent;
 
-import java.io.File;
-
 public class Controller {
     public enum ModelType {
         CreateRecipe,
@@ -93,7 +91,6 @@ public class Controller {
         if (m.getMessageType() == Message.CreateAccountModel.StartLogInView || m.getMessageType() == Message.HomeModel.StartLogInView) {
             LogInModel logInModel = new LogInModel(this);
             addModel(ModelType.LogIn, logInModel);
-            System.out.println("Hi");
 
             UIInterface logInView = make(UIType.LogIn);
             addUI(UIType.LogIn, logInView);
@@ -120,6 +117,7 @@ public class Controller {
 
             UIInterface homeView = make(UIType.HomePage);
             addUI(UIType.HomePage, homeView);
+            this.receiveMessageFromUI(new Message(Message.HomeView.UpdateRecipeList));
 
             root.addChild(homeView.getUI());
         } else if (m.getMessageType() == Message.HomeModel.CloseHomeView) {
@@ -133,13 +131,6 @@ public class Controller {
             addUI(UIType.CreateRecipe, createRecipeView);
 
             uis.get(UIType.HomePage).addChild(createRecipeView.getUI());
-        }
-        else if (m.getMessageType() == Message.HomeView.Logout) {
-            root.removeChild(uis.get(UIType.HomePage).getUI());
-            root.addChild(uis.get(UIType.LogIn).getUI());
-        } else if (m.getMessageType() == Message.LoginModel.Login) {
-            root.removeChild(uis.get(UIType.LogIn).getUI());
-            root.addChild(uis.get(UIType.HomePage).getUI());
         } else if (m.getMessageType() == Message.HomeModel.CloseCreateRecipeView) {
             models.remove(ModelType.CreateRecipe);
             uis.get(UIType.HomePage).removeChild(uis.get(UIType.CreateRecipe).getUI());

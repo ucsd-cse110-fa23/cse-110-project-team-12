@@ -1,34 +1,39 @@
 package edu.ucsd.cse110.api;
 
-import java.io.FileWriter; 
-import java.io.IOException; 
+import java.io.*;
 
-import edu.ucsd.cse110.api.Controller.UIType;
-
-public class LoginModel implements ModelInterface {
+public class LogInModel implements ModelInterface {
     private Controller controller;
 
-    public LoginModel(Controller c) {
+    public LogInModel(Controller c) {
         this.controller = c;
     }
 
     public void receiveMessage(Message m) {
-        if (m.getMessageType() == Message.LoginView.Login) {
-            String username = (String) m.getKey("username");
-            String password = (String) m.getKey("password");
-            boolean rememberMe = (boolean) m.getKey("savelogin");
+        if (m.getMessageType() == Message.LogInView.LogInButton) {
+            String username = (String) m.getKey("Username");
+            String password = (String) m.getKey("Password");
+            boolean rememberMe = (boolean) m.getKey("AutomaticLogIn");
             if (userValid(username, password) || true) {
-                controller.receiveMessageFromModel(new Message(Message.LoginModel.Login));
+                controller.username = username;
+                controller.password = password;
+                controller.receiveMessageFromModel(new Message(Message.LogInModel.CloseLogInView));
+                controller.receiveMessageFromModel(new Message(Message.LogInModel.StartHomeView));
                 if (rememberMe) {
                     try {
-                        FileWriter fw = new FileWriter("./src/main/java/edu/ucsd/cse110/api/assets/savelogin.txt");
-                        fw.close();
+                        PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("./src/main/java/edu/ucsd/cse110/api/assets/savelogin.txt")));
+                        pw.println(username);
+                        pw.println(password);
+                        pw.close();
                     }
                     catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
             }
+        } else if(m.getMessageType() == Message.LogInView.SignUpButton) {
+            controller.receiveMessageFromModel(new Message(Message.LogInModel.CloseLogInView));
+            controller.receiveMessageFromModel(new Message(Message.LogInModel.StartCreateAccountView));
         }
     }
 

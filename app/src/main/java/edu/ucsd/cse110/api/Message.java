@@ -18,7 +18,10 @@ public class Message {
 
     public enum LogInView implements Type {
         SignUpButton,
-        LogInButton,
+        LogInButton {
+            Set<String> keys = new HashSet<>(Arrays.asList("Username", "Password","AutomaticLogIn"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        },
     }
 
     public enum LogInModel implements Type {
@@ -49,7 +52,7 @@ public class Message {
             Set<String> keys = new HashSet<>(Arrays.asList("Recipe"));
             @Override public Set<String> allowedKeys() {return keys;}
         },
-        Logout
+        LogOut
     }
     public enum HomeModel implements Type {
         StartCreateRecipeView,
@@ -91,15 +94,6 @@ public class Message {
             Set<String> keys = new HashSet<>(Arrays.asList("Recipe"));
             @Override public Set<String> allowedKeys() {return keys;}
         }
-    }
-    public enum LoginView implements Type {
-        Login {
-            Set<String> keys = new HashSet<>(Arrays.asList("username", "password", "savelogin"));
-            @Override public Set<String> allowedKeys() {return keys;}
-        }
-    }
-    public enum LoginModel implements Type {
-        Login
     }
     public enum RecipeDetailedView implements Type {
         CancelButton, 

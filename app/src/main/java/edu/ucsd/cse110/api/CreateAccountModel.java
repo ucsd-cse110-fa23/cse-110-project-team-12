@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.api;
 
+import java.io.*;
+
 public class CreateAccountModel implements ModelInterface{
 
     private Controller controller;
@@ -23,6 +25,18 @@ public class CreateAccountModel implements ModelInterface{
 
                 controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.CloseCreateAccountView));
                 controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.StartHomeView));
+
+                if (rememberMe) {
+                    try {
+                        PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("./src/main/java/edu/ucsd/cse110/api/assets/savelogin.txt")));
+                        pw.println(username);
+                        pw.println(password);
+                        pw.close();
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }else{
                 controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.ErrorUsernameTaken));
             }

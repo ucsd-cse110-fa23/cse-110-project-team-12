@@ -44,6 +44,13 @@ public class HomeModel implements ModelInterface {
             controller.receiveMessageFromModel(new Message(Message.HomeModel.SendTitleBody,
                     Map.ofEntries(Map.entry("Recipe", openRecipe))));
         }
+        if (m.getMessageType() == Message.HomeView.LogOut) {
+            currentView = UIType.HomePage;
+            controller.username = null;
+            controller.password = null;
+            controller.receiveMessageFromModel(new Message(Message.HomeModel.CloseHomeView));
+            controller.receiveMessageFromModel(new Message(Message.HomeModel.StartLogInView));
+        }
     }
 
     public UIType getCurrentView() {
