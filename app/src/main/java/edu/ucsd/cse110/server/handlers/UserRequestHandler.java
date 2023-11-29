@@ -2,9 +2,6 @@ package edu.ucsd.cse110.server.handlers;
 
 import com.sun.net.httpserver.*;
 import java.io.*;
-import java.net.*;
-import java.util.*;
-
 
 public class UserRequestHandler implements HttpHandler {
     @Override

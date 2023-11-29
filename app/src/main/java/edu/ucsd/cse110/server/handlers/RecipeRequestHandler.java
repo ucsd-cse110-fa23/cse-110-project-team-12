@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.server.handlers;
 
 import com.sun.net.httpserver.*;
-import com.google.common.net.HttpHeaders;
 import com.google.gson.Gson;
 
 // TODO(eth003): move this to services in server
@@ -11,8 +10,6 @@ import edu.ucsd.cse110.server.schemas.RecipeSchema;
 import edu.ucsd.cse110.server.services.Utils;
 
 import java.io.*;
-import java.net.*;
-import java.time.*;
 import java.util.*;
 
 public class RecipeRequestHandler implements HttpHandler {

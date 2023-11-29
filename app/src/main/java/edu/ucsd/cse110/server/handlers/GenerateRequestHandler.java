@@ -1,15 +1,12 @@
 package edu.ucsd.cse110.server.handlers;
 
 import com.google.gson.Gson;
-import com.google.gson.internal.Excluder;
 import com.sun.net.httpserver.*;
 
 import edu.ucsd.cse110.api.ChatGPT;
-import edu.ucsd.cse110.client.Recipe;
 import edu.ucsd.cse110.server.schemas.RecipeSchema;
 
 import java.io.*;
-import java.net.*;
 import java.util.*;
 import java.time.*;
 
