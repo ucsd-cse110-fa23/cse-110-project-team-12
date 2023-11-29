@@ -52,5 +52,4 @@ public class US8Test {
     //     assertNotEquals("", ((RecipeDetailedModel)controller.getState(Controller.ModelType.DetailedView)).getRecipeTitle());
     //     assertNotEquals("", ((RecipeDetailedModel)controller.getState(Controller.ModelType.DetailedView)).getRecipeBody());
     // }
-
 }

@@ -6,7 +6,7 @@
 	-background: #5b5b5b;
 }
 
-#log-in-view {
+#log-in-view, #signup-view {
 	-fx-background-color: -green;
 }
 
@@ -16,17 +16,26 @@
 	-fx-alignment: bottom-center;
 }
 
+#create-spacer {
+	-fx-min-height: 95;
+	-fx-max-height: 95;
+	-fx-alignment: bottom-center;
+}
+
 #username,
-#password {
+#password,
+#confirm-password {
 	-fx-text-fill: white;
 	-fx-font-family: 'Helvetica';
 	-fx-font-weight: bold;
 	-fx-font-size: 18;
-	-fx-min-width: 86;
+	-fx-min-width: 88;
+	-fx-max-width: 88;
 }
 
 #user-area,
-#pass-area {
+#pass-area,
+#confirm-pass-area {
 	-fx-background-color: white;
 	-fx-background-radius: 0em;
 	-fx-text-fill: -background;
@@ -58,8 +67,9 @@
 	-fx-max-height: 10;
 }
 
+#log-in,
 #sign-up,
-#log-in {
+#back {
 	-fx-background-color: transparent;
 	-fx-border-width: 0;
 	-fx-text-fill: white;
@@ -70,7 +80,8 @@
 }
 
 #user-box,
-#pass-box {
+#pass-box,
+#confirm-pass-box {
 	-fx-padding: 15 10 0 10;
 	-fx-alignment: center;
 	-fx-spacing: 10;
@@ -85,6 +96,12 @@
 	-fx-padding: 135 0 0 0;
 	-fx-alignment: center;
 	-fx-spacing: 170;
+}
+
+#signup-button-box {
+	-fx-padding: 120 0 0 0;
+	-fx-alignment: center;
+	-fx-spacing: 185;
 }
 
 #invalid-entry {

@@ -2,6 +2,7 @@ package edu.ucsd.cse110.api;
 
 import java.util.*;
 
+import edu.ucsd.cse110.client.CreateAccountView;
 import edu.ucsd.cse110.client.CreateRecipeView;
 import edu.ucsd.cse110.client.HomeView;
 import edu.ucsd.cse110.client.LogInView;
@@ -15,13 +16,15 @@ public class Controller {
         CreateRecipe,
         HomePage,
         DetailedView,
-		LogIn,
+        CreateAccount,
+        LogIn,
     }
 
     public enum UIType {
         CreateRecipe,
         HomePage,
         DetailedView,
+		CreateAccount,
 		LogIn,
     }
 
@@ -32,9 +35,11 @@ public class Controller {
             else if (type == UIType.HomePage)
                 return new HomeView(this);
             else if (type == UIType.DetailedView)
-                return new RecipeDetailedView(this);
+				return new RecipeDetailedView(this);
+			else if (type == UIType.CreateAccount)
+				return new CreateAccountView(this);
 			else if (type == UIType.LogIn)
-                return new LogInView(this);
+				return new LogInView(this);
             else
                 return new NoUI();
         } else
@@ -67,8 +72,10 @@ public class Controller {
         uis = new EnumMap<>(UIType.class);
 		root = new Root();
 
-		UIInterface loginView = make(UIType.LogIn);
+		UIInterface createAccountView = make(UIType.CreateAccount);
         UIInterface homeView = make(UIType.HomePage);
+		UIInterface loginView = make(UIType.LogIn);
+        uis.put(UIType.CreateAccount, createAccountView);
         uis.put(UIType.LogIn, loginView);
         uis.put(UIType.HomePage, homeView);
 

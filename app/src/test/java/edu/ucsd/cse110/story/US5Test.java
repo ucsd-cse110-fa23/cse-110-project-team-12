@@ -27,7 +27,7 @@ public class US5Test {
     //     assertEquals(UIType.CreateRecipe, ((HomeModel) controller.getState(ModelType.HomePage)).getCurrentView()); // Then I will see the input meal type page in a pop-up window..
     // }
 
-
+  
     // @Test
     // public void TestUS5BDD2() {
     //     // Open recipe.
