@@ -37,7 +37,18 @@ public class HomeView extends BorderPane implements UIInterface {
 
 		Header header = new Header();
 		header.setEffect(new DropShadow(BlurType.GAUSSIAN, new Color(0, 0, 0, 0.5), 20, 0.2, 0, 0));
-        this.setTop(header);
+		Button logOut = new Button("Log Out");
+		logOut.setId("log-out");
+		logOut.setOnAction(
+            e -> {
+				// nothing
+            }
+        );
+
+		StackPane topPane = new StackPane(header, logOut);
+		topPane.setId("top-pane");
+
+        this.setTop(topPane);
         this.setCenter(content);
 		CreateButtonModule createButtonModule = new CreateButtonModule();	
 		

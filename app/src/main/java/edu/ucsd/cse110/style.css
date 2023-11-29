@@ -114,6 +114,22 @@
 	-fx-font-size: 41;
 }
 
+#log-out {
+	-fx-background-color: transparent;
+	-fx-border-width: 0;
+	-fx-text-fill: white;
+	-fx-font-family: 'Helvetica';
+	-fx-font-weight: bold;
+	-fx-font-size: 10;
+	-fx-padding: 5 6 5 5;
+}
+
+#top-pane {
+	-fx-alignment: top-right;
+	-fx-pref-width: 325;
+	-fx-pref-height: 68;
+}
+
 #create-button {
 	-fx-shape: 'M-40,0a40,40 0 1,0 80,0a40,40 0 1,0 -80,0';
 	-fx-background-color: -green;
