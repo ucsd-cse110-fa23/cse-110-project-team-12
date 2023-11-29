@@ -24,6 +24,7 @@
 
 #username,
 #password,
+#confirm-password {
 	-fx-text-fill: white;
 	-fx-font-family: 'Helvetica';
 	-fx-font-weight: bold;

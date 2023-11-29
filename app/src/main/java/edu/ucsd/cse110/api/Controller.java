@@ -24,8 +24,8 @@ public class Controller {
         CreateRecipe,
         HomePage,
         DetailedView,
-		    CreateAccount,
-	    	LogIn,
+		CreateAccount,
+		LogIn,
     }
 
     private UIInterface make(UIType type) {
@@ -35,11 +35,11 @@ public class Controller {
             else if (type == UIType.HomePage)
                 return new HomeView(this);
             else if (type == UIType.DetailedView)
-                return new RecipeDetailedView(this);
-		    	  else if (type == UIType.CreateAccount)
-                 return new CreateAccountView(this);
-		      	else if (type == UIType.LogIn)
-                 return new LogInView(this);
+				return new RecipeDetailedView(this);
+			else if (type == UIType.CreateAccount)
+				return new CreateAccountView(this);
+			else if (type == UIType.LogIn)
+				return new LogInView(this);
             else
                 return new NoUI();
         } else
@@ -68,12 +68,11 @@ public class Controller {
 
         models = new EnumMap<>(ModelType.class);
         uis = new EnumMap<>(UIType.class);
-		    root = new Root();
+		root = new Root();
 
-		    UIInterface createAccountView = make(UIType.CreateAccount);
+		UIInterface createAccountView = make(UIType.CreateAccount);
         UIInterface homeView = make(UIType.HomePage);
-		    UIInterface loginView = make(UIType.LogIn);
-        UIInterface homeView = make(UIType.HomePage);
+		UIInterface loginView = make(UIType.LogIn);
         uis.put(UIType.CreateAccount, createAccountView);
         uis.put(UIType.LogIn, loginView);
         uis.put(UIType.HomePage, homeView);
@@ -81,7 +80,7 @@ public class Controller {
         HomeModel homeModel = new HomeModel(this);
         models.put(ModelType.HomePage, homeModel);
 
-    		root.addChild(loginView.getUI());
+		root.addChild(loginView.getUI());
     }
 
     public boolean getUseMongoDB() {
