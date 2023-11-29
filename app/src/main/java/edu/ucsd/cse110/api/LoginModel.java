@@ -9,6 +9,7 @@ public class LogInModel implements ModelInterface {
         this.controller = c;
     }
 
+    @Override
     public void receiveMessage(Message m) {
         if (m.getMessageType() == Message.LogInView.LogInButton) {
             String username = (String) m.getKey("Username");
@@ -41,7 +42,9 @@ public class LogInModel implements ModelInterface {
         return controller.mongoDB.isValidUser(username, password);
     }
 
+    @Override
     public Object getState() {
         return this;
     }
+    
 }
