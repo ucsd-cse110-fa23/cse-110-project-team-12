@@ -46,20 +46,22 @@ public class Controller {
 	private UIInterface root;
 
     public boolean useUI;
-    public static final String storagePath = "./src/main/java/edu/ucsd/cse110/api/assets/savedRecipes.";
+    
     public static final String mongoURI = "mongodb+srv://akjain:92Tc0QE0BB1nCNTr@pantrypal.lzohxez.mongodb.net/?retryWrites=true&w=majority";
-    private VoicePromptInterface voicePrompt;
-    private WhisperInterface whisper;
-    private ChatGPTInterface chatGPT;
-    private boolean useMongoDB;
+   
+    // API Interfaces
+    public VoicePromptInterface voicePrompt;
+    public WhisperInterface whisper;
+    public ChatGPTInterface chatGPT;
+    public MongoDBInterface mongoDB;
 
     public Controller(boolean useUI, VoicePromptInterface voicePrompt, WhisperInterface whisper,
-            ChatGPTInterface chatGPT, boolean useMDB) {
+            ChatGPTInterface chatGPT, MongoDBInterface mongoDB) {
         this.useUI = useUI;
         this.voicePrompt = voicePrompt;
         this.whisper = whisper;
         this.chatGPT = chatGPT;
-        this.useMongoDB = useMDB;
+        this.mongoDB = mongoDB;
 
         models = new EnumMap<>(ModelType.class);
         uis = new EnumMap<>(UIType.class);
@@ -74,10 +76,6 @@ public class Controller {
         models.put(ModelType.HomePage, homeModel);
 
 		root.addChild(loginView.getUI());
-    }
-
-    public boolean getUseMongoDB() {
-        return useMongoDB;
     }
 
     public Parent getUIRoot() {
@@ -95,7 +93,7 @@ public class Controller {
     public void receiveMessageFromModel(Message m) {
         // Controller intercepts all message that update UI Types
         if (m.getMessageType() == Message.HomeModel.StartCreateRecipeView) {
-            CreateRecipeModel createRecipeModel = new CreateRecipeModel(this, voicePrompt, whisper, chatGPT);
+            CreateRecipeModel createRecipeModel = new CreateRecipeModel(this);
             addModel(ModelType.CreateRecipe, createRecipeModel);
 
             UIInterface createRecipeView = make(UIType.CreateRecipe);
