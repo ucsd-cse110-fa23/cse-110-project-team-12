@@ -130,6 +130,9 @@ public class Controller {
         models.forEach((mType, model) -> model.receiveMessage(m));
     }
 
+    // Saving username and password for access
+    public String username, password;
+   
     // Testing Use
     public Object getState(ModelType type) {
         return models.get(type).getState();

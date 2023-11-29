@@ -70,12 +70,12 @@ public class RecipeDetailedModel implements ModelInterface {
         if (m.getMessageType() == Message.RecipeDetailedView.UpdateInformation) {
             String updatedRecipeBody = (String) m.getKey("RecipeBody");
             recipe.setInformation(updatedRecipeBody);
-            controller.mongoDB.updateRecipe(recipe.getName(), recipe.getInformation(), recipe.getMealType());
+            controller.mongoDB.updateRecipe(recipe.getName(), recipe.getInformation(), recipe.getMealType(), controller.username, controller.password);
         }
         if (m.getMessageType() == Message.RecipeDetailedView.SaveButton) {
             if (currentPage == PageType.UnsavedLayout) {
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveUnsavedLayout));
-                controller.mongoDB.saveRecipe(recipe.getName(), recipe.getInformation(), recipe.getMealType());
+                controller.mongoDB.saveRecipe(recipe.getName(), recipe.getInformation(), recipe.getMealType(), controller.username, controller.password);
                 // controller.receiveMessageFromModel(new
                 // Message(Message.RecipeDetailedModel.SaveConfirmation));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
@@ -104,7 +104,7 @@ public class RecipeDetailedModel implements ModelInterface {
         }
         if (m.getMessageType() == Message.RecipeDetailedView.ConfirmDeleteButton) {
             if (currentPage == PageType.DeleteConfirmation) {
-                controller.mongoDB.deleteRecipe(recipe.getName());
+                controller.mongoDB.deleteRecipe(recipe.getName(), controller.username, controller.password);
                 controller.receiveMessageFromModel(new Message(Message.HomeView.UpdateRecipeList));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.CloseRecipeDetailedView));
             }

@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,12 +17,92 @@ import edu.ucsd.cse110.client.Recipe;
 
 public class MongoDBMock implements MongoDBInterface{
     public static final String storagePath = "./src/main/java/edu/ucsd/cse110/api/assets/savedRecipes.";
-    public MongoDBMock(){
-        
+    
+    private String getUserId(String username, String password) {
+        String userId = null;
+        try {
+            Path path = Paths.get(storagePath + "users.json");
+            JSONArray users = new JSONArray();
+            if (Files.exists(path)) {
+                String content = new String(Files.readAllBytes(path));
+                users = new JSONArray(content);
+            }
+            for (int i = 0; i < users.length(); i++) {
+                JSONObject user = users.getJSONObject(i);
+                if (user.getString("username").equals(username) && user.getString("password").equals(password)) {
+                    userId = user.getString("_id");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return userId;
     }
 
     @Override
-    public List<Recipe> getRecipeList() {
+    public boolean isValidUser(String username, String password) {
+        try {
+            Path path = Paths.get(storagePath + "users.json");
+            JSONArray users = new JSONArray();
+            if (Files.exists(path)) {
+                String content = new String(Files.readAllBytes(path));
+                users = new JSONArray(content);
+            }
+            for (int i = 0; i < users.length(); i++) {
+                JSONObject user = users.getJSONObject(i);
+                if (user.getString("username").equals(username) && user.getString("password").equals(password)) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean createUser(String username, String password) {
+        try {
+            Path path = Paths.get(storagePath + "users.json");
+            JSONArray users = new JSONArray();
+            if (Files.exists(path)) {
+                String content = new String(Files.readAllBytes(path));
+                users = new JSONArray(content);
+            }
+
+            // check if username already exists
+            for (int i = 0; i < users.length(); i++) {
+                JSONObject user = users.getJSONObject(i);
+                if (user.getString("username").equals(username)) {
+                    System.out.println("Username already exists.");
+                    return false;
+                }
+            }
+
+            String id = UUID.randomUUID().toString(); // mock object id
+
+            JSONObject newUser = new JSONObject();
+            newUser.put("_id", id);
+            newUser.put("username", username);
+            newUser.put("password", password);
+            users.put(newUser);
+
+            try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+                writer.write(users.toString());
+            }
+
+            System.out.println("User created successfully.");
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public List<Recipe> getRecipeList(String username, String password) {
+        String userId = getUserId(username, password);
+
         List<Recipe> recipes = new ArrayList<>();
         try {
             Path path = Paths.get(storagePath + "recipes.json");
@@ -30,6 +111,7 @@ public class MongoDBMock implements MongoDBInterface{
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject recipeObject = jsonArray.getJSONObject(i);
+                if(!recipeObject.getString("userId").equals(userId)) continue;
                 String title = recipeObject.getString("title");
                 String body = recipeObject.getString("body");
                 String mealType = recipeObject.getString("mealType");
@@ -42,7 +124,9 @@ public class MongoDBMock implements MongoDBInterface{
     }
 
     @Override
-    public Recipe getRecipe(String recipeTitle) {
+    public Recipe getRecipe(String recipeTitle, String username, String password) {
+        String userId = getUserId(username, password);
+
         try {
             Path path = Paths.get(storagePath + "recipes.json");
             String content = new String(Files.readAllBytes(path));
@@ -50,6 +134,8 @@ public class MongoDBMock implements MongoDBInterface{
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject recipeObject = jsonArray.getJSONObject(i);
+                if(!recipeObject.getString("userId").equals(userId)) continue;
+
                 if (recipeObject.getString("title").equals(recipeTitle)) {
                     return new Recipe(recipeTitle, recipeObject.getString("body"),recipeObject.getString("mealType"));
                 }
@@ -62,7 +148,9 @@ public class MongoDBMock implements MongoDBInterface{
     }
 
     @Override
-    public void saveRecipe(String recipeTitle, String recipeBody, String recipeMealType) {
+    public void saveRecipe(String recipeTitle, String recipeBody, String recipeMealType, String username, String password) {
+        String userId = getUserId(username, password);
+
          try {
             Path path = Paths.get(storagePath + "recipes.json");
             Files.createDirectories(path.getParent());
@@ -78,9 +166,12 @@ public class MongoDBMock implements MongoDBInterface{
             }
 
             JSONObject newRecipe = new JSONObject();
+            String id = UUID.randomUUID().toString();
+            newRecipe.put("_id", id);
             newRecipe.put("title", recipeTitle);
             newRecipe.put("body", recipeBody);
             newRecipe.put("mealType", recipeMealType);
+            newRecipe.put("userId", userId);
 
             jsonArray.put(newRecipe);
 
@@ -93,7 +184,9 @@ public class MongoDBMock implements MongoDBInterface{
     }
 
     @Override
-    public void updateRecipe(String recipeTitle, String updatedRecipeBody, String updatedRecipeMealType) {
+    public void updateRecipe(String recipeTitle, String updatedRecipeBody, String updatedRecipeMealType, String username, String password) {
+        String userId = getUserId(username, password);
+
         try {
             Path path = Paths.get(storagePath + "recipes.json");
             String content = new String(Files.readAllBytes(path));
@@ -101,6 +194,8 @@ public class MongoDBMock implements MongoDBInterface{
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject recipeObject = jsonArray.getJSONObject(i);
+                if(!recipeObject.getString("userId").equals(userId)) continue;
+                
                 if (recipeObject.getString("title").equals(recipeTitle)) {
                     recipeObject.put("body", updatedRecipeBody);
                     recipeObject.put("mealType", updatedRecipeMealType);
@@ -117,7 +212,9 @@ public class MongoDBMock implements MongoDBInterface{
     }
 
     @Override
-    public void deleteRecipe(String recipeTitle) {
+    public void deleteRecipe(String recipeTitle, String username, String password) {
+        String userId = getUserId(username, password);
+
         try {
             Path path = Paths.get(storagePath + "recipes.json");
             String content = new String(Files.readAllBytes(path));
@@ -126,7 +223,7 @@ public class MongoDBMock implements MongoDBInterface{
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject recipeObject = jsonArray.getJSONObject(i);
-                if (!recipeObject.getString("title").equals(recipeTitle)) {
+                if (!(recipeObject.getString("userId").equals(userId) && recipeObject.getString("title").equals(recipeTitle))) {
                     updatedJsonArray.put(recipeObject);
                 }
             }
@@ -144,8 +241,12 @@ public class MongoDBMock implements MongoDBInterface{
         try {
             Path path = Paths.get(storagePath + "recipes.json");
             Files.deleteIfExists(path);
+            path = Paths.get(storagePath + "users.json");
+            Files.deleteIfExists(path);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    
 }

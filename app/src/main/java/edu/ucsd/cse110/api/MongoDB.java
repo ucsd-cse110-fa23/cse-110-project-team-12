@@ -24,14 +24,87 @@ import com.mongodb.client.result.UpdateResult;
 import edu.ucsd.cse110.client.Recipe;
 
 public class MongoDB implements MongoDBInterface{
+    // users
+    private ObjectId getUserId(String username, String password) {
+        ObjectId id = null;
+    
+        try (MongoClient mongoClient = MongoClients.create(Controller.mongoURI)) {
+            MongoDatabase database = mongoClient.getDatabase("PantryPal");
+            MongoCollection<Document> collection = database.getCollection("users");
+    
+            Document query = new Document()
+                    .append("username", username)
+                    .append("password", password);
+            Document foundDocument = collection.find(query).first();
+    
+            if (foundDocument != null) {
+                id = foundDocument.getObjectId("_id");
+            } else {
+                System.out.println("No matching user found.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    
+        return id;
+    }
     @Override
-    public List<Recipe> getRecipeList() {
+    public boolean isValidUser(String username, String password){
+        try (MongoClient mongoClient = MongoClients.create(Controller.mongoURI)) {
+            MongoDatabase database = mongoClient.getDatabase("PantryPal");
+            MongoCollection<Document> collection = database.getCollection("users");
+
+            Document query = new Document()
+                    .append("username", username)
+                    .append("password", password);
+            Document foundDocument = collection.find(query).first();
+
+            if (foundDocument != null) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean createUser(String username, String password){
+        try (MongoClient mongoClient = MongoClients.create(Controller.mongoURI)) {
+            MongoDatabase database = mongoClient.getDatabase("PantryPal");
+            MongoCollection<Document> users = database.getCollection("users");
+
+            long count = users.countDocuments(Filters.eq("username", username));
+            if (count > 0) {
+                System.out.println("Username already exists.");
+                return false;
+            }
+
+            Document newUser = new Document("_id", new ObjectId())
+                    .append("username", username)
+                    .append("password", password);
+            users.insertOne(newUser);
+
+            System.out.println("User created successfully.");
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    // recipes
+    @Override
+    public List<Recipe> getRecipeList(String username, String password) {
+        ObjectId userId = getUserId(username, password);
+
         List<Recipe> recipes = new ArrayList<>();
         try (MongoClient mongoClient = MongoClients.create(Controller.mongoURI)) {
             MongoDatabase database = mongoClient.getDatabase("PantryPal");
             MongoCollection<Document> recipesCollection = database.getCollection("recipes");
             
-            FindIterable<Document> iterable = recipesCollection.find();
+            Document query = new Document()
+                    .append("userId", userId);
+            FindIterable<Document> iterable = recipesCollection.find(query);
             MongoCursor<Document> cursor = iterable.iterator();
             
             while (cursor.hasNext()) {
@@ -49,15 +122,18 @@ public class MongoDB implements MongoDBInterface{
         return recipes;
     }
     @Override
-    public Recipe getRecipe(String recipeTitle) {
+    public Recipe getRecipe(String recipeTitle, String username, String password) {
+        ObjectId userId = getUserId(username, password);
+
         Recipe recipe = null;
-    
         try (MongoClient mongoClient = MongoClients.create(Controller.mongoURI)) {
             MongoDatabase database = mongoClient.getDatabase("PantryPal");
             MongoCollection<Document> recipes = database.getCollection("recipes");
     
-            Bson filter = Filters.eq("name", recipeTitle);
-            Document recipeDocument = recipes.find(filter).first();
+            Document query = new Document()
+                    .append("name", recipeTitle)
+                    .append("userId", userId);
+            Document recipeDocument = recipes.find(query).first();
     
             if (recipeDocument != null) {
                 String name = recipeDocument.getString("name");
@@ -75,7 +151,9 @@ public class MongoDB implements MongoDBInterface{
     }
     
     @Override
-    public void saveRecipe(String recipeTitle, String recipeBody, String recipeMealType) {
+    public void saveRecipe(String recipeTitle, String recipeBody, String recipeMealType, String username, String password) {
+        ObjectId userId = getUserId(username, password);
+
         try (MongoClient mongoClient = MongoClients.create(Controller.mongoURI)) {
             
             MongoDatabase sampleTrainingDB = mongoClient.getDatabase("PantryPal");
@@ -84,26 +162,34 @@ public class MongoDB implements MongoDBInterface{
             Document recipe = new Document("_id", new ObjectId());
             recipe.append("name", recipeTitle)
             .append("description", recipeBody)
-            .append("mealType", recipeMealType).append("timestamp", new BSONTimestamp());
+            .append("mealType", recipeMealType)
+            .append("timestamp", new BSONTimestamp())
+            .append("userId", userId);
             
             recipes.insertOne(recipe);
             System.out.println("Recipe with title '" + recipeTitle + "' added to MongoDB.");
         }        
     }
-    
-    public void updateRecipe(String recipeTitle, String updatedRecipeBody, String updatedRecipeMealType) {
+
+    @Override
+    public void updateRecipe(String recipeTitle, String updatedRecipeBody, String updatedRecipeMealType, String username, String password) {
+        ObjectId userId = getUserId(username, password);
+
         try (MongoClient mongoClient = MongoClients.create(Controller.mongoURI)) {
             
             MongoDatabase database = mongoClient.getDatabase("PantryPal");
             MongoCollection<Document> recipes = database.getCollection("recipes");
             
-            Bson filter = Filters.eq("name", recipeTitle);
+            Document query = new Document()
+                    .append("name", recipeTitle)
+                    .append("userId", userId);
             Document update = new Document("$set", new Document("description", updatedRecipeBody)
             .append("mealType", updatedRecipeMealType)
             .append("timestamp", new BSONTimestamp()));
             
+            
             UpdateOptions options = new UpdateOptions().upsert(false);
-            UpdateResult updateResult = recipes.updateOne(filter, update, options);
+            UpdateResult updateResult = recipes.updateOne(query, update, options);
             
             if (updateResult.getModifiedCount() == 0) {
                 System.out.println("Recipe with title '" + recipeTitle + "' not found.");
@@ -115,15 +201,20 @@ public class MongoDB implements MongoDBInterface{
             e.printStackTrace();
         }
     }
-    
-    public void deleteRecipe(String recipeTitle) {
+
+    @Override
+    public void deleteRecipe(String recipeTitle, String username, String password) {
+        ObjectId userId = getUserId(username, password);
+
         try (MongoClient mongoClient = MongoClients.create(Controller.mongoURI)) {
             
             MongoDatabase database = mongoClient.getDatabase("PantryPal");
             MongoCollection<Document> recipes = database.getCollection("recipes");
             
-            Bson filter = Filters.eq("name", recipeTitle);
-            DeleteResult deleteResult = recipes.deleteOne(filter);
+            Document query = new Document()
+                    .append("name", recipeTitle)
+                    .append("userId", userId);
+            DeleteResult deleteResult = recipes.deleteOne(query);
             
             if (deleteResult.getDeletedCount() == 0) {
                 System.out.println("Recipe with title '" + recipeTitle + "' not found.");
@@ -135,6 +226,7 @@ public class MongoDB implements MongoDBInterface{
             e.printStackTrace();
         }
     }
+
     @Override
     public void clearDB() {
         throw new UnsupportedOperationException("Unimplemented method 'clearDB'");
