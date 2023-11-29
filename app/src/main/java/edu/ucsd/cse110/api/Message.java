@@ -66,7 +66,7 @@ public class Message {
     }
     public enum LoginView implements Type {
         Login {
-            Set<String> keys = new HashSet<>(Arrays.asList("username", "password"));
+            Set<String> keys = new HashSet<>(Arrays.asList("username", "password", "savelogin"));
             @Override public Set<String> allowedKeys() {return keys;}
         }
     }
