@@ -11,8 +11,6 @@ import edu.ucsd.cse110.client.Root;
 import edu.ucsd.cse110.client.NoUI;
 import javafx.scene.Parent;
 
-import java.io.File;
-
 public class Controller {
     public enum ModelType {
         CreateRecipe,
@@ -85,9 +83,7 @@ public class Controller {
         models.put(ModelType.HomePage, homeModel);
         models.put(ModelType.LogIn, new LoginModel(this));
 
-        File f = new File("./src/main/java/edu/ucsd/cse110/api/assets/savelogin.txt");
-		if (f.exists()) root.addChild(homeView.getUI());
-		else root.addChild(loginView.getUI());
+		root.addChild(loginView.getUI());
     }
 
     public Parent getUIRoot() {

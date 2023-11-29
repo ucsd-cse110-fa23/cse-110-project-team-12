@@ -1,8 +1,5 @@
 package edu.ucsd.cse110.api;
 
-import java.io.FileWriter; 
-import java.io.IOException; 
-
 import edu.ucsd.cse110.api.Controller.UIType;
 
 public class LoginModel implements ModelInterface {
@@ -16,18 +13,8 @@ public class LoginModel implements ModelInterface {
         if (m.getMessageType() == Message.LoginView.Login) {
             String username = (String) m.getKey("username");
             String password = (String) m.getKey("password");
-            boolean rememberMe = (boolean) m.getKey("savelogin");
             if (userValid(username, password) || true) {
                 controller.receiveMessageFromModel(new Message(Message.LoginModel.Login));
-                if (rememberMe) {
-                    try {
-                        FileWriter fw = new FileWriter("./src/main/java/edu/ucsd/cse110/api/assets/savelogin.txt");
-                        fw.close();
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
             }
         }
     }
