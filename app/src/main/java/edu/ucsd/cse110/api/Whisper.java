@@ -71,7 +71,6 @@ public class Whisper implements WhisperInterface {
         }
         errorReader.close();
         String errorResult = errorResponse.toString();
-        System.out.println(errorResult);
         return "!Error Result: " + errorResult;
     }
     

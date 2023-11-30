@@ -81,7 +81,7 @@ public class CreateRecipeModel implements ModelInterface {
         if (isRecording) {
             controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StopRecording));
             File recordingFile = controller.voicePrompt.stopRecording();
-            if(controller.useUI){
+            if(controller.useUI) {
                 new Thread(() -> {
                     try {
                         String transcript = controller.whisper.transcribe(recordingFile);
@@ -95,7 +95,7 @@ public class CreateRecipeModel implements ModelInterface {
                     
                 }).start();
                 isRecording = false;
-            }else{
+            }else {
                 try {
                     String transcript = controller.whisper.transcribe(recordingFile);
                     processTranscript(transcript);
@@ -133,7 +133,7 @@ public class CreateRecipeModel implements ModelInterface {
             controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.CreateRecipeGotoPage,
                     Map.ofEntries(Map.entry("PageType", currentPage.name()),
                                   Map.entry("MealType", selectedMealType.name()))));
-            if(controller.useUI){
+            if(controller.useUI) {
                 selectedIngredients = transcript;
                 new Thread(() -> {
                     createNewChatGPTRecipe();
@@ -148,7 +148,7 @@ public class CreateRecipeModel implements ModelInterface {
                         );
                     });
                 }).start();
-            }else{
+            }else {
                 selectedIngredients = transcript;
                 createNewChatGPTRecipe();
                 controller.receiveMessageFromModel(

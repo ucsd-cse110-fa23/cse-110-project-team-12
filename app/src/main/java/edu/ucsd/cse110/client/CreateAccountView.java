@@ -86,13 +86,13 @@ public class CreateAccountView extends VBox implements UIInterface {
 
 		signUp.setOnAction(
             e -> {
-				if(!passArea.getText().equals(confirmPassArea.getText())){
+				if(!passArea.getText().equals(confirmPassArea.getText())) {
 					createSpacer.getChildren().clear();
 					Label invalidEntry = null;
 					invalidEntry = new Label("Passwords must match");
 					invalidEntry.setId("invalid-entry");
 					createSpacer.getChildren().add(invalidEntry);
-				} else{
+				} else {
 					controller.receiveMessageFromModel(
 						new Message(Message.CreateAccountView.SignUpButton,
 						Map.ofEntries(Map.entry("Username", userArea.getText()),
@@ -133,7 +133,7 @@ public class CreateAccountView extends VBox implements UIInterface {
 
 	@Override
 	public void receiveMessage(Message m) {
-		if(m.getMessageType() == Message.CreateAccountModel.ErrorUsernameTaken){
+		if(m.getMessageType() == Message.CreateAccountModel.ErrorUsernameTaken) {
 			createSpacer.getChildren().clear();
 				
 			Label invalidEntry = null;

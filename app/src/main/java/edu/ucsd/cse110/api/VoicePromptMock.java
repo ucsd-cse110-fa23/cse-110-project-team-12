@@ -22,7 +22,6 @@ public class VoicePromptMock implements VoicePromptInterface {
     }
 
     public File stopRecording() {
-        System.out.println(System.getProperty("user.dir"));
         File f = null;
         if (pt.get(promptIdx) == PromptType.MealType)
             f = new File("./src/main/java/edu/ucsd/cse110/api/assets/iwantlunch.wav");
