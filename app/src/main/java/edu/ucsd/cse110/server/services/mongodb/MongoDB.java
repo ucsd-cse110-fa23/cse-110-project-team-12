@@ -3,6 +3,7 @@ package edu.ucsd.cse110.server.services.mongodb;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.time.LocalDateTime;
 
 import org.bson.Document;
 import org.bson.types.BSONTimestamp;
@@ -21,13 +22,14 @@ import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import edu.ucsd.cse110.client.Recipe;
+import edu.ucsd.cse110.server.schemas.RecipeSchema;
 
 public class MongoDB implements MongoDBInterface {
     private MongoDatabase database;
 
-    public MongoDB() {
+    public MongoDB(String uri) {
         try {
-            MongoClient mongoClient = MongoClients.create(Controller.mongoURI);
+            MongoClient mongoClient = MongoClients.create(uri);
             database = mongoClient.getDatabase("PantryPal");
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,18 +136,15 @@ public class MongoDB implements MongoDBInterface {
     }
 
     @Override
-    public void saveRecipe(String recipeTitle, String recipeBody, String recipeMealType, String username,
-            String password) {
-        ObjectId userId = getUserId(username, password);
-
+    public void saveRecipe(RecipeSchema rs) {
         MongoCollection<Document> recipes = database.getCollection("recipes");
 
-        Document recipe = new Document("_id", new ObjectId());
-        recipe.append("name", recipeTitle)
-                .append("description", recipeBody)
-                .append("mealType", recipeMealType)
-                .append("timestamp", new BSONTimestamp())
-                .append("userId", userId);
+        Document recipe = new Document("_id", new ObjectId())
+                .append("title", rs.title)
+                .append("description", rs.description)
+                .append("mealType", rs.mealType)
+                .append("timeCreated", LocalDateTime.now().toString())
+                .append("userId", rs.userId);
 
         recipes.insertOne(recipe);
     }

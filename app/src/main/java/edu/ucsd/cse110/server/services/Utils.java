@@ -1,6 +1,8 @@
 package edu.ucsd.cse110.server.services;
 
 import java.util.*;
+
+import com.google.gson.Gson;
 import com.sun.net.httpserver.*;
 import java.nio.charset.StandardCharsets;
 import java.net.URI;
@@ -22,5 +24,16 @@ public class Utils {
         }
 
         return result;
+    }
+    
+    public static <T> T unmarshalJson(String jsonString, Class<T> type) {
+        try {
+            Gson gson = new Gson();
+            return gson.fromJson(jsonString, type);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
