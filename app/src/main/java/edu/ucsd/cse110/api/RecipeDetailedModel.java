@@ -22,21 +22,17 @@ public class RecipeDetailedModel implements ModelInterface {
 
     @Override
     public void receiveMessage(Message m) {
-        if (m.getMessageType() == Message.HomeModel.SendTitleBody) {
+        if (m.getMessageType() == Message.HomeModel.SendRecipe) {
             recipe = (Recipe) m.getKey("Recipe");
-            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetTitle,
-                    Map.ofEntries(Map.entry("Recipe", recipe))));
-            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetBody,
+            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetRecipe,
                     Map.ofEntries(Map.entry("Recipe", recipe))));
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.AddBackButton));
             currentPage = PageType.SavedLayout;
         }
-        if (m.getMessageType() == Message.CreateRecipeModel.SendTitleBody) {
+        if (m.getMessageType() == Message.CreateRecipeModel.SendRecipe) {
             recipe = (Recipe) m.getKey("Recipe");
-            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetTitle,
-                    Map.ofEntries(Map.entry("Recipe", recipe))));
-            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetBody,
+            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetRecipe,
                     Map.ofEntries(Map.entry("Recipe", recipe))));
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseUnsavedLayout));
             currentPage = PageType.UnsavedLayout;
@@ -47,7 +43,7 @@ public class RecipeDetailedModel implements ModelInterface {
             } else if (currentPage == PageType.EditLayout) {
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveEditRecipe));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveUnsavedLayout));
-                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetBody,
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetRecipe,
                         Map.ofEntries(Map.entry("Recipe", recipe))));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.AddBackButton));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
@@ -59,9 +55,7 @@ public class RecipeDetailedModel implements ModelInterface {
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.CloseRecipeDetailedView));
             } else if (currentPage == PageType.DeleteConfirmation) {
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveDeleteConfirmation));
-                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetTitle,
-                        Map.ofEntries(Map.entry("Recipe", recipe))));
-                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetBody,
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetRecipe,
                         Map.ofEntries(Map.entry("Recipe", recipe))));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
                 currentPage = PageType.SavedLayout;
@@ -74,7 +68,7 @@ public class RecipeDetailedModel implements ModelInterface {
         }
         if (m.getMessageType() == Message.RecipeDetailedView.SaveButton) {
             if (currentPage == PageType.UnsavedLayout) {
-                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveUnsavedLayout));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveUnsavedLayout));   
                 controller.mongoDB.saveRecipe(recipe.getName(), recipe.getInformation(), recipe.getMealType(), controller.username, controller.password);
                 // controller.receiveMessageFromModel(new
                 // Message(Message.RecipeDetailedModel.SaveConfirmation));
@@ -85,7 +79,7 @@ public class RecipeDetailedModel implements ModelInterface {
             } else if (currentPage == PageType.EditLayout) {
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveEditRecipe));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveUnsavedLayout));
-                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetBody,
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetRecipe,
                         Map.ofEntries(Map.entry("Recipe", recipe))));
                 // if (updatedRecipeBody != "")
                 // controller.receiveMessageFromModel(new

@@ -184,14 +184,13 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
 
     @Override
     public void receiveMessage(Message m) {
-        if (m.getMessageType() == Message.RecipeDetailedModel.SetTitle) {
+        if (m.getMessageType() == Message.RecipeDetailedModel.SetRecipe) {
             recipe = (Recipe) m.getKey("Recipe");
             recipeTitle.setText(recipe.getName());
             setTitleFont(recipeTitle, titleDefaultSize, titleWidthLimit);
 
+            removeChild(recipeTitleSpacer);
             addChild(recipeTitleSpacer);
-        }
-        if (m.getMessageType() == Message.RecipeDetailedModel.SetBody) {
             information.setEditable(true);
 			information.setFocusTraversable(true);
 			information.setText(recipe.getInformation().trim());

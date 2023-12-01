@@ -45,7 +45,7 @@ public class HomeModel implements ModelInterface {
             currentView = UIFactory.Type.DetailedView;
             controller.receiveMessageFromModel(new Message(Message.HomeModel.StartRecipeDetailedView));
             Recipe openRecipe = (Recipe) m.getKey("Recipe");
-            controller.receiveMessageFromModel(new Message(Message.HomeModel.SendTitleBody,
+            controller.receiveMessageFromModel(new Message(Message.HomeModel.SendRecipe,
                     Map.ofEntries(Map.entry("Recipe", openRecipe))));
         }
         if (m.getMessageType() == Message.HomeView.LogOut) {

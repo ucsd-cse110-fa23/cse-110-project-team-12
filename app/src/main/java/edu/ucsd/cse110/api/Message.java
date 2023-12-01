@@ -63,7 +63,7 @@ public class Message {
             Set<String> keys = new HashSet<>(Arrays.asList("Recipes"));
             @Override public Set<String> allowedKeys() {return keys;}
         }, 
-        SendTitleBody {
+        SendRecipe {
             Set<String> keys = new HashSet<>(Arrays.asList("Recipe"));
             @Override public Set<String> allowedKeys() {return keys;}
         },
@@ -78,7 +78,7 @@ public class Message {
         CloseCreateRecipeView,
         StartRecording,
         StopRecording,
-        SendTitleBody {
+        SendRecipe {
             Set<String> keys = new HashSet<>(Arrays.asList("Recipe"));
             @Override public Set<String> allowedKeys() {return keys;}
         },
@@ -109,11 +109,7 @@ public class Message {
     }
     public enum RecipeDetailedModel implements Type {
         CloseRecipeDetailedView,
-        SetTitle {
-            Set<String> keys = new HashSet<>(Arrays.asList("Recipe"));
-            @Override public Set<String> allowedKeys() {return keys;}
-        },
-        SetBody {
+        SetRecipe {
             Set<String> keys = new HashSet<>(Arrays.asList("Recipe"));
             @Override public Set<String> allowedKeys() {return keys;}
         },

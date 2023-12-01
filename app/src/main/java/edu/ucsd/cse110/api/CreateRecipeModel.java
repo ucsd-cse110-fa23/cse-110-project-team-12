@@ -143,7 +143,7 @@ public class CreateRecipeModel implements ModelInterface {
                         );
                         controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StartRecipeDetailedView));
                         controller.receiveMessageFromModel(
-                            new Message(Message.CreateRecipeModel.SendTitleBody,
+                            new Message(Message.CreateRecipeModel.SendRecipe,
                             Map.ofEntries(Map.entry("Recipe", new Recipe(generatedRecipe.getName(), generatedRecipe.getInformation(), generatedRecipe.getMealType()))))
                         );
                     });
@@ -157,7 +157,7 @@ public class CreateRecipeModel implements ModelInterface {
                 );
                 controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StartRecipeDetailedView));
                 controller.receiveMessageFromModel(
-                    new Message(Message.CreateRecipeModel.SendTitleBody,
+                    new Message(Message.CreateRecipeModel.SendRecipe,
                     Map.ofEntries(Map.entry("Recipe", new Recipe(generatedRecipe.getName(), generatedRecipe.getInformation(), generatedRecipe.getMealType()))))
                 );
             }
