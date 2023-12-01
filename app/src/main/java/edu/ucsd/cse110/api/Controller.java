@@ -45,12 +45,12 @@ public class Controller {
         return root.getUI();
     }
 
-    public void makeModel(ModelFactory.Type type) {
+    public void makeOrReplaceModel(ModelFactory.Type type) {
         ModelInterface model = ModelFactory.make(type, this);
         models.put(type, model);
     }
 
-    public void makeUI(UIFactory.Type type) {
+    public void makeOrReplaceUI(UIFactory.Type type) {
         UIInterface ui = UIFactory.make(type, this);
         uis.put(type, ui);
     }
@@ -58,45 +58,53 @@ public class Controller {
     public void receiveMessageFromModel(Message m) {
         // Controller intercepts all message that update UI Types
         if (m.getMessageType() == Message.CreateAccountModel.StartLogInView || m.getMessageType() == Message.HomeModel.StartLogInView) {
-            makeUI(UIFactory.Type.LogIn);
+            makeOrReplaceUI(UIFactory.Type.LogIn);
             root.addChild(uis.get(UIFactory.Type.LogIn).getUI());
 
-            makeModel(ModelFactory.Type.LogIn);         
-        } else if(m.getMessageType() == Message.LogInModel.CloseLogInView) {
+            makeOrReplaceModel(ModelFactory.Type.LogIn);
+        }
+        else if(m.getMessageType() == Message.LogInModel.CloseLogInView) {
             root.removeChild(uis.get(UIFactory.Type.LogIn).getUI());
             models.remove(ModelFactory.Type.LogIn);
-        } else if(m.getMessageType() == Message.LogInModel.StartCreateAccountView) {
-            makeUI(UIFactory.Type.CreateAccount);
+        }
+        else if(m.getMessageType() == Message.LogInModel.StartCreateAccountView) {
+            makeOrReplaceUI(UIFactory.Type.CreateAccount);
             root.addChild(uis.get(UIFactory.Type.CreateAccount).getUI());
             
-            makeModel(ModelFactory.Type.CreateAccount);           
+            makeOrReplaceModel(ModelFactory.Type.CreateAccount);           
         }
         else if (m.getMessageType() == Message.CreateAccountModel.CloseCreateAccountView) {
             root.removeChild(uis.get(UIFactory.Type.CreateAccount).getUI());
             models.remove(ModelFactory.Type.CreateAccount);
-        } else if (m.getMessageType() == Message.LogInModel.StartHomeView || m.getMessageType() == Message.CreateAccountModel.StartHomeView) {
-            makeUI(UIFactory.Type.HomePage);
+        }
+        else if (m.getMessageType() == Message.LogInModel.StartHomeView || m.getMessageType() == Message.CreateAccountModel.StartHomeView) {
+            makeOrReplaceUI(UIFactory.Type.HomePage);
             root.addChild(uis.get(UIFactory.Type.HomePage).getUI());
             
-            makeModel(ModelFactory.Type.HomePage);
-        } else if (m.getMessageType() == Message.HomeModel.CloseHomeView) {
+            makeOrReplaceModel(ModelFactory.Type.HomePage);
+        }
+        else if (m.getMessageType() == Message.HomeModel.CloseHomeView) {
             System.out.println("Hello");
             root.removeChild(uis.get(UIFactory.Type.HomePage).getUI());
             models.remove(ModelFactory.Type.HomePage);
-        } else if (m.getMessageType() == Message.HomeModel.StartCreateRecipeView) {
-            makeUI(UIFactory.Type.CreateRecipe);
+        }
+        else if (m.getMessageType() == Message.HomeModel.StartCreateRecipeView) {
+            makeOrReplaceUI(UIFactory.Type.CreateRecipe);
             uis.get(UIFactory.Type.HomePage).addChild(uis.get(UIFactory.Type.CreateRecipe).getUI());
 
-            makeModel(ModelFactory.Type.CreateRecipe);
-        } else if (m.getMessageType() == Message.HomeModel.CloseCreateRecipeView) {
+            makeOrReplaceModel(ModelFactory.Type.CreateRecipe);
+        }
+        else if (m.getMessageType() == Message.HomeModel.CloseCreateRecipeView) {
             uis.get(UIFactory.Type.HomePage).removeChild(uis.get(UIFactory.Type.CreateRecipe).getUI());
             models.remove(ModelFactory.Type.CreateRecipe);
-        } else if (m.getMessageType() == Message.HomeModel.StartRecipeDetailedView) {
-            makeUI(UIFactory.Type.DetailedView);
+        }
+        else if (m.getMessageType() == Message.HomeModel.StartRecipeDetailedView) {
+            makeOrReplaceUI(UIFactory.Type.DetailedView);
             uis.get(UIFactory.Type.HomePage).addChild(uis.get(UIFactory.Type.DetailedView).getUI());
             
-            makeModel(ModelFactory.Type.DetailedView);
-        } else if (m.getMessageType() == Message.HomeModel.CloseRecipeDetailedView) {
+            makeOrReplaceModel(ModelFactory.Type.DetailedView);
+        }
+        else if (m.getMessageType() == Message.HomeModel.CloseRecipeDetailedView) {
             uis.get(UIFactory.Type.HomePage).removeChild(uis.get(UIFactory.Type.DetailedView).getUI());
             models.remove(ModelFactory.Type.DetailedView);
         }

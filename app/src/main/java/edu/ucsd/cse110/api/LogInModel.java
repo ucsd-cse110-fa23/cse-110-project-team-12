@@ -47,7 +47,8 @@ public class LogInModel implements ModelInterface {
                     }
                 }
             }
-        } else if(m.getMessageType() == Message.LogInView.SignUpButton) {
+        }
+        else if(m.getMessageType() == Message.LogInView.SignUpButton) {
             controller.receiveMessageFromModel(new Message(Message.LogInModel.CloseLogInView));
             controller.receiveMessageFromModel(new Message(Message.LogInModel.StartCreateAccountView));
         }

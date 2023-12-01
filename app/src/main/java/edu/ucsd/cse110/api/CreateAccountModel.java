@@ -14,7 +14,8 @@ public class CreateAccountModel implements ModelInterface {
         if(m.getMessageType() == Message.CreateAccountView.BackButton) {
             controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.CloseCreateAccountView));
             controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.StartLogInView));
-        }else if(m.getMessageType() == Message.CreateAccountView.SignUpButton) {
+        }
+        else if(m.getMessageType() == Message.CreateAccountView.SignUpButton) {
             String username = (String) m.getKey("Username");
             String password = (String) m.getKey("Password");
             boolean rememberMe = (boolean) m.getKey("AutomaticLogIn");
@@ -36,7 +37,8 @@ public class CreateAccountModel implements ModelInterface {
                         e.printStackTrace();
                     }
                 }
-            }else {
+            }
+            else {
                 controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.ErrorUsernameTaken));
             }
         }
