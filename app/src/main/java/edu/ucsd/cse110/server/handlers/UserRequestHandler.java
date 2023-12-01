@@ -11,6 +11,7 @@ import java.util.*;
 
 public class UserRequestHandler implements HttpHandler {
     private MongoDBInterface mongodb;
+
     public UserRequestHandler(MongoDBInterface db) {
         mongodb = db;
     }
@@ -20,8 +21,7 @@ public class UserRequestHandler implements HttpHandler {
         String method = httpExchange.getRequestMethod();
         if (method.equals("GET")) {
             handleGet(httpExchange);
-        }
-        else if (method.equals("POST")) {
+        } else if (method.equals("POST")) {
             handlePost(httpExchange);
         }
     }
@@ -38,8 +38,7 @@ public class UserRequestHandler implements HttpHandler {
             OutputStream outStream = httpExchange.getResponseBody();
             outStream.write("".getBytes());
             outStream.close();
-        }
-        else {
+        } else {
             String jsonString = Utils.marshalJson(user);
             httpExchange.sendResponseHeaders(200, jsonString.getBytes().length);
             OutputStream outStream = httpExchange.getResponseBody();
@@ -53,13 +52,14 @@ public class UserRequestHandler implements HttpHandler {
         String username = queryVals.get("username");
         String password = queryVals.get("password");
 
-        if (mongodb.createUser(username, password)) {
-            httpExchange.sendResponseHeaders(201, 0);
+        UserSchema createdUser = mongodb.createUser(username, password);
+        if (createdUser != null) {
+            String jsonString = Utils.marshalJson(createdUser);
+            httpExchange.sendResponseHeaders(201, jsonString.getBytes().length);
             OutputStream outStream = httpExchange.getResponseBody();
-            outStream.write("".getBytes());
+            outStream.write(jsonString.getBytes());
             outStream.close();
-        }
-        else {
+        } else {
             // 409 status code means duplicate resouce.
             httpExchange.sendResponseHeaders(409, 0);
             OutputStream outStream = httpExchange.getResponseBody();
@@ -67,5 +67,4 @@ public class UserRequestHandler implements HttpHandler {
             outStream.close();
         }
     }
-
 }

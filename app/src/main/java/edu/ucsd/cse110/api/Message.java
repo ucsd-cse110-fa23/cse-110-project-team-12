@@ -43,6 +43,10 @@ public class Message {
         StartLogInView,
         StartHomeView,
         ErrorUsernameTaken,
+        SetUser {
+            Set<String> keys = new HashSet<>(Arrays.asList("User"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        }
     }
     
     public enum HomeView implements Type {

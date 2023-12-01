@@ -8,6 +8,7 @@ import edu.ucsd.cse110.client.HomeView;
 import edu.ucsd.cse110.client.LogInView;
 import edu.ucsd.cse110.client.RecipeDetailedView;
 import edu.ucsd.cse110.client.Root;
+import edu.ucsd.cse110.server.schemas.UserSchema;
 import edu.ucsd.cse110.client.NoUI;
 import javafx.scene.Parent;
 
@@ -15,24 +16,21 @@ public class Controller {
     private Map<ModelFactory.Type, ModelInterface> models;
     private Map<UIFactory.Type, UIInterface> uis;
 	private UIInterface root;
-
+    private UserSchema currentUser;
     public boolean useUI;
-    
-    public static final String mongoURI = "mongodb+srv://akjain:92Tc0QE0BB1nCNTr@pantrypal.lzohxez.mongodb.net/?retryWrites=true&w=majority";
-   
+    public static final String serverUrl = "http://localhost:8100";
+
     // API Interfaces
     public VoicePromptInterface voicePrompt;
     public WhisperInterface whisper;
     public ChatGPTInterface chatGPT;
-    public MongoDBInterface mongoDB;
 
     public Controller(boolean useUI, VoicePromptInterface voicePrompt, WhisperInterface whisper,
-            ChatGPTInterface chatGPT, MongoDBInterface mongoDB) {
+            ChatGPTInterface chatGPT) {
         this.useUI = useUI;
         this.voicePrompt = voicePrompt;
         this.whisper = whisper;
         this.chatGPT = chatGPT;
-        this.mongoDB = mongoDB;
 
         models = new EnumMap<>(ModelFactory.Type.class);
         uis = new EnumMap<>(UIFactory.Type.class);
@@ -43,6 +41,10 @@ public class Controller {
 
     public Parent getUIRoot() {
         return root.getUI();
+    }
+
+    public UserSchema getCurrentUser() {
+        return currentUser;
     }
 
     public void makeOrReplaceModel(ModelFactory.Type type) {
@@ -77,6 +79,10 @@ public class Controller {
             root.removeChild(uis.get(UIFactory.Type.CreateAccount).getUI());
             models.remove(ModelFactory.Type.CreateAccount);
         }
+        else if (m.getMessageType() == Message.CreateAccountModel.SetUser) {
+            currentUser = (UserSchema) m.getKey("User");
+            System.out.println(currentUser._id + currentUser.username + currentUser.password);
+        }
         else if (m.getMessageType() == Message.LogInModel.StartHomeView || m.getMessageType() == Message.CreateAccountModel.StartHomeView) {
             makeOrReplaceUI(UIFactory.Type.HomePage);
             root.addChild(uis.get(UIFactory.Type.HomePage).getUI());
@@ -84,7 +90,6 @@ public class Controller {
             makeOrReplaceModel(ModelFactory.Type.HomePage);
         }
         else if (m.getMessageType() == Message.HomeModel.CloseHomeView) {
-            System.out.println("Hello");
             root.removeChild(uis.get(UIFactory.Type.HomePage).getUI());
             models.remove(ModelFactory.Type.HomePage);
         }
@@ -115,9 +120,6 @@ public class Controller {
     public void receiveMessageFromUI(Message m) {
         models.forEach((mType, model) -> model.receiveMessage(m));
     }
-
-    // Saving username and password for access
-    public String username, password;
    
     // Testing Use
     public Object getState(ModelFactory.Type type) {

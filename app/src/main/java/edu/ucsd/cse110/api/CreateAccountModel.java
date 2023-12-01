@@ -1,6 +1,12 @@
 package edu.ucsd.cse110.api;
 
 import java.io.*;
+import java.net.*;
+import java.util.*;
+
+import edu.ucsd.cse110.server.schemas.RecipeSchema;
+import edu.ucsd.cse110.server.schemas.UserSchema;
+import edu.ucsd.cse110.server.services.Utils;
 public class CreateAccountModel implements ModelInterface {
 
     private Controller controller;
@@ -19,10 +25,13 @@ public class CreateAccountModel implements ModelInterface {
             String username = (String) m.getKey("Username");
             String password = (String) m.getKey("Password");
             boolean rememberMe = (boolean) m.getKey("AutomaticLogIn");
-            if (controller.mongoDB.createUser(username, password)) {
-                controller.username = username;
-                controller.password = password;
 
+            UserSchema newUser = createUser(username, password);
+            if (newUser != null) {
+                // controller.username = username;
+                // controller.password = password;
+                controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.SetUser,
+                    Map.ofEntries(Map.entry("User", newUser))));
                 controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.CloseCreateAccountView));
                 controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.StartHomeView));
 
@@ -42,6 +51,37 @@ public class CreateAccountModel implements ModelInterface {
                 controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.ErrorUsernameTaken));
             }
         }
+    }
+
+    private UserSchema createUser(String username, String password) {
+        try {
+            String urlString = Controller.serverUrl + "/user?username=" + username + "&password=" + password;
+            URL url = new URI(urlString).toURL();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("POST");
+            conn.connect();
+
+            int responseCode = conn.getResponseCode();
+
+            if (responseCode == 201) {
+                // 201 code means created.
+                Scanner in = new Scanner(conn.getInputStream());
+                String jsonString = "";
+                while (in.hasNext())
+                    jsonString += in.nextLine();
+                in.close();
+                return Utils.unmarshalJson(jsonString, UserSchema.class);
+            }
+            else if (responseCode == 409) {
+                // 409 code means duplicate resource.
+                return null;
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

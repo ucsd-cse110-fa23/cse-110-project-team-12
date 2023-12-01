@@ -1,23 +1,28 @@
 package edu.ucsd.cse110.api;
 
-import java.util.List;
-import java.util.Map;
-
 import edu.ucsd.cse110.api.UIFactory;
 import edu.ucsd.cse110.client.Recipe;
+import edu.ucsd.cse110.server.schemas.RecipeSchema;
+import edu.ucsd.cse110.server.schemas.UserSchema;
+import edu.ucsd.cse110.server.services.Utils;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
 public class HomeModel implements ModelInterface {
     private Controller controller;
-    private List<Recipe> recipes;
+    private List<RecipeSchema> recipes;
     private UIFactory.Type currentView;
 
     public HomeModel(Controller c) {
         this.controller = c;
         currentView = UIFactory.Type.HomePage;
+        recipes = new ArrayList<>();
         updateRecipeList();
     }
 
@@ -50,8 +55,8 @@ public class HomeModel implements ModelInterface {
         }
         if (m.getMessageType() == Message.HomeView.LogOut) {
             currentView = UIFactory.Type.HomePage;
-            controller.username = null;
-            controller.password = null;
+            // controller.username = null;
+            // controller.password = null;
             deleteLogInFile();
 
             controller.receiveMessageFromModel(new Message(Message.HomeModel.CloseHomeView));
@@ -60,6 +65,7 @@ public class HomeModel implements ModelInterface {
     }
 
     private String storagePath = "./src/main/java/edu/ucsd/cse110/api/assets/";
+
     private void deleteLogInFile() {
         try {
             Path path = Paths.get(storagePath + "savelogin.txt");
@@ -74,13 +80,35 @@ public class HomeModel implements ModelInterface {
     }
 
     private void updateRecipeList() {
-        recipes = controller.mongoDB.getRecipeList(controller.username, controller.password);
+        try {
+            String userId = controller.getCurrentUser()._id;
+            String urlString = Controller.serverUrl + "/recipe?userId=" + userId;
+            URL url = new URI(urlString).toURL();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+    
+            conn.setRequestMethod("GET");
+            conn.connect();
+    
+            int responseCode = conn.getResponseCode();
+    
+            if (responseCode == 200) {
+                Scanner in = new Scanner(conn.getInputStream());
+                String jsonString = "";
+                while (in.hasNext())
+                    jsonString += in.nextLine();
+                in.close();
+                recipes = Utils.unmarshalJson(jsonString, ArrayList.class);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         controller.receiveMessageFromModel(
-                        new Message(Message.HomeModel.UpdateRecipeList,
-                                Map.ofEntries(Map.entry("Recipes", recipes))));
+                new Message(Message.HomeModel.UpdateRecipeList,
+                        Map.ofEntries(Map.entry("Recipes", recipes))));
     }
 
-    public List<Recipe> getRecipes() {
+    public List<RecipeSchema> getRecipes() {
         return recipes;
     }
 

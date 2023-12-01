@@ -37,8 +37,8 @@ public class MongoDB implements MongoDBInterface {
         MongoCollection<Document> collection = database.getCollection("users");
         
         Document query = new Document()
-        .append("username", username)
-        .append("password", password);
+            .append("username", username)
+            .append("password", password);
         Document foundDocument = collection.find(query).first();
         
         if (foundDocument == null)
@@ -52,12 +52,12 @@ public class MongoDB implements MongoDBInterface {
     }
 
     @Override
-    public boolean createUser(String username, String password) {
+    public UserSchema createUser(String username, String password) {
         MongoCollection<Document> users = database.getCollection("users");
 
         long count = users.countDocuments(Filters.eq("username", username));
         if (count > 0) {
-            return false;
+            return null;
         }
 
         Document newUser = new Document("_id", new ObjectId())
@@ -65,7 +65,7 @@ public class MongoDB implements MongoDBInterface {
                 .append("password", password);
         users.insertOne(newUser);
 
-        return true;
+        return getUser(username, password);
     }
 
     // recipes
