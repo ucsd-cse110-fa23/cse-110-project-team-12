@@ -11,12 +11,12 @@ public interface MongoDBInterface {
     public boolean createUser(String username, String password); //return false is username already exists
 
     //recipes schema
-    public List<Recipe> getRecipeList(String username, String password);
+    public List<RecipeSchema> getRecipeList(String userId);
     public RecipeSchema getRecipe(String recipeId);
     public void saveRecipe(RecipeSchema recipe);
     public void updateRecipe(String recipeTitle, String updatedRecipeBody, String updatedRecipeMealType, String username, String password);
-    public void deleteRecipe(String recipeTitle, String username, String password);
+    public void deleteRecipe(String recipeId);
 
     // testing use
-    public void clearDB();
+    public void dropCollection(String collectionName);
 }

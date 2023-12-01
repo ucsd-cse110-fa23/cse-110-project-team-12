@@ -1,7 +1,8 @@
 package edu.ucsd.cse110.server.schemas;
 
 public class UserSchema {
-    public String userId;
+    // Must be mongodb objectId format: 24 characters.
+    public String _id;
 
     public String username;
     public String password;

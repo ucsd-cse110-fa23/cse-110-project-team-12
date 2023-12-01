@@ -1,7 +1,9 @@
 package edu.ucsd.cse110.server.schemas;
 
 public class RecipeSchema {
-    public String recipeId;
+    // Must be mongodb objectId format: 24 characters.
+    public String _id;
+    // Must be mongodb objectId format: 24 characters. It is the "foreign key".
     public String userId;
 
     public String mealType;

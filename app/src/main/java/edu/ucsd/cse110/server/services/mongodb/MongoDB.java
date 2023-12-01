@@ -92,23 +92,29 @@ public class MongoDB implements MongoDBInterface {
 
     // recipes
     @Override
-    public List<Recipe> getRecipeList(String username, String password) {
-        ObjectId userId = getUserId(username, password);
-
-        List<Recipe> recipes = new ArrayList<>();
+    public List<RecipeSchema> getRecipeList(String userId) {
+        List<RecipeSchema> recipes = new ArrayList<>();
+        if (ObjectId.isValid(userId) == false)
+            return recipes;
+        
         MongoCollection<Document> recipesCollection = database.getCollection("recipes");
 
         Document query = new Document()
-                .append("userId", userId);
+                .append("userId", new ObjectId(userId));
         FindIterable<Document> iterable = recipesCollection.find(query);
         MongoCursor<Document> cursor = iterable.iterator();
 
         while (cursor.hasNext()) {
             Document recipeDocument = cursor.next();
-            String name = recipeDocument.getString("name");
-            String description = recipeDocument.getString("description");
-            String mealType = recipeDocument.getString("mealType");
-            recipes.add(new Recipe(name, description, mealType));
+            RecipeSchema recipe = new RecipeSchema();
+            recipe._id = recipeDocument.getObjectId("_id").toString();
+            recipe.userId = recipeDocument.getObjectId("userId").toString();
+            recipe.title = recipeDocument.getString("name");
+            recipe.description = recipeDocument.getString("description");
+            recipe.mealType = recipeDocument.getString("mealType");
+            recipe.ingredients = recipeDocument.getString("ingredients");
+            recipe.timeCreated = recipeDocument.getString("timeCreated");
+            recipes.add(recipe);
         }
         Collections.reverse(recipes);
         return recipes;
@@ -117,24 +123,30 @@ public class MongoDB implements MongoDBInterface {
     @Override
     public RecipeSchema getRecipe(String recipeId) {
         RecipeSchema recipe = null;
-        if (ObjectId.isValid(recipeId) == false)
-            return recipe;
+        try {
 
-        MongoCollection<Document> recipes = database.getCollection("recipes");
-
-        Document query = new Document()
-                .append("_id", new ObjectId(recipeId));
-        Document recipeDocument = recipes.find(query).first();
-
-        if (recipeDocument != null) {
-            recipe = new RecipeSchema();
-            recipe.recipeId = recipeId;
-            recipe.userId = recipeDocument.getString("userId");
-            recipe.title = recipeDocument.getString("name");
-            recipe.description = recipeDocument.getString("description");
-            recipe.mealType = recipeDocument.getString("mealType");
-            recipe.ingredients = recipeDocument.getString("ingredients");
-            recipe.timeCreated = recipeDocument.getString("timeCreated");
+            if (ObjectId.isValid(recipeId) == false)
+                return recipe;
+    
+            MongoCollection<Document> recipes = database.getCollection("recipes");
+    
+            Document query = new Document()
+                    .append("_id", new ObjectId(recipeId));
+            Document recipeDocument = recipes.find(query).first();
+    
+            if (recipeDocument != null) {
+                recipe = new RecipeSchema();
+                recipe._id = recipeId;
+                recipe.userId = recipeDocument.getObjectId("userId").toString();
+                recipe.title = recipeDocument.getString("name");
+                recipe.description = recipeDocument.getString("description");
+                recipe.mealType = recipeDocument.getString("mealType");
+                recipe.ingredients = recipeDocument.getString("ingredients");
+                recipe.timeCreated = recipeDocument.getString("timeCreated");
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
         }
         return recipe;
     }
@@ -149,7 +161,7 @@ public class MongoDB implements MongoDBInterface {
                 .append("mealType", rs.mealType)
                 .append("ingredients", rs.ingredients)
                 .append("timeCreated", LocalDateTime.now().toString())
-                .append("userId", rs.userId);
+                .append("userId", new ObjectId(rs.userId));
 
         recipes.insertOne(recipe);
     }
@@ -174,20 +186,16 @@ public class MongoDB implements MongoDBInterface {
     }
 
     @Override
-    public void deleteRecipe(String recipeTitle, String username, String password) {
-        ObjectId userId = getUserId(username, password);
-
+    public void deleteRecipe(String recipeId) {
         MongoCollection<Document> recipes = database.getCollection("recipes");
 
         Document query = new Document()
-                .append("name", recipeTitle)
-                .append("userId", userId);
+                .append("_id", new ObjectId(recipeId));
         recipes.deleteOne(query);
-
     }
 
     @Override
-    public void clearDB() {
-        throw new UnsupportedOperationException("Unimplemented method 'clearDB'");
+    public void dropCollection(String collectionName) {
+        database.getCollection(collectionName).drop();
     }
 }

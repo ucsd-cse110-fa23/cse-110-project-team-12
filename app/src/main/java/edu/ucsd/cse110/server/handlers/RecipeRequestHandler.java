@@ -38,40 +38,35 @@ public class RecipeRequestHandler implements HttpHandler {
         // else if (method.equals("PATCH")) {
 
         // }
-        // else if (method.equals("DELETE")) {
-        //     handleDelete(httpExchange);
-        // }
+        else if (method.equals("DELETE")) {
+            handleDelete(httpExchange);
+        }
     }
 
     public void handleGet(HttpExchange httpExchange) throws IOException {
         Map<String, String> queryVals = Utils.getQueryPairs(httpExchange);
 
-        // If no query specified, then return all the
-        if (queryVals.size() == 0) {
-            // List<Recipe> recipes = mongodb.getRecipeList();
-            // List<RecipeSchema> recipeSchemas = new ArrayList<>();
-            // for (Recipe r : recipes) {
-            //     RecipeSchema rs = new RecipeSchema();
-            //     rs.title = r.getName();
-            //     rs.description = r.getInformation();
-            //     rs.mealType = r.getMealType();
-            //     recipeSchemas.add(rs);
-            // }
-            // Gson gson = new Gson();
-            // String json = "";
-            // if (recipeSchemas.size() > 0)
-            //     json = gson.toJson(recipeSchemas);
-            // httpExchange.sendResponseHeaders(200, json.getBytes().length);
-            // OutputStream outStream = httpExchange.getResponseBody();
-            // outStream.write(json.getBytes());
-            // outStream.close();
+        // If no query for userId specified, then return all the recipes for user.
+        if (queryVals.containsKey("userId")) {
+            String userId = queryVals.get("userId");
+            List<RecipeSchema> recipes = mongodb.getRecipeList(userId);
+
+            if (recipes.size() == 0) {
+                send404(httpExchange);
+            }
+            else {
+                String jsonString = Utils.marshalJson(recipes);
+                httpExchange.sendResponseHeaders(200, jsonString.getBytes().length);
+                OutputStream outStream = httpExchange.getResponseBody();
+                outStream.write(jsonString.getBytes());
+                outStream.close();
+            }
         }
-        else {
+        else if (queryVals.containsKey("recipeId")) {
             String recipeId = queryVals.get("recipeId");
             RecipeSchema recipe = mongodb.getRecipe(recipeId);
 
             if (recipe == null) {
-                System.out.println("HIHIHHIHI");
                 send404(httpExchange);
             }
             else {
@@ -100,15 +95,15 @@ public class RecipeRequestHandler implements HttpHandler {
         outStream.close();
     }
 
-    // public void handleDelete(HttpExchange httpExchange) throws IOException {
-    //     Map<String, String> queryVals = Utils.getQueryPairs(httpExchange);
-    //     String title = queryVals.get("title");
+    public void handleDelete(HttpExchange httpExchange) throws IOException {
+        Map<String, String> queryVals = Utils.getQueryPairs(httpExchange);
+        String recipeId = queryVals.get("recipeId");
 
-    //     mongodb.deleteRecipe(title);
+        mongodb.deleteRecipe(recipeId);
 
-    //     httpExchange.sendResponseHeaders(201, 0);
-    //     OutputStream outStream = httpExchange.getResponseBody();
-    //     outStream.write("".getBytes());
-    //     outStream.close();
-    // }
+        httpExchange.sendResponseHeaders(200, 0);
+        OutputStream outStream = httpExchange.getResponseBody();
+        outStream.write("".getBytes());
+        outStream.close();
+    }
 }
