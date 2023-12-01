@@ -6,10 +6,8 @@ import java.util.List;
 import java.time.LocalDateTime;
 
 import org.bson.Document;
-import org.bson.types.BSONTimestamp;
 import org.bson.types.ObjectId;
 
-import com.mongodb.MongoException;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -19,11 +17,8 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 
-import com.mongodb.client.result.DeleteResult;
-import com.mongodb.client.result.UpdateResult;
-import edu.ucsd.cse110.client.Recipe;
 import edu.ucsd.cse110.server.schemas.RecipeSchema;
-import edu.ucsd.cse110.server.services.Utils;
+import edu.ucsd.cse110.server.schemas.UserSchema;
 
 public class MongoDB implements MongoDBInterface {
     private MongoDatabase database;
@@ -37,44 +32,27 @@ public class MongoDB implements MongoDBInterface {
         }
     }
 
-    // users
-    private ObjectId getUserId(String username, String password) {
-        ObjectId id = null;
-
-        MongoCollection<Document> collection = database.getCollection("users");
-
-        Document query = new Document()
-                .append("username", username)
-                .append("password", password);
-        Document foundDocument = collection.find(query).first();
-
-        if (foundDocument != null) {
-            id = foundDocument.getObjectId("_id");
-        }
-
-        return id;
-    }
-
     @Override
-    public boolean isValidUser(String username, String password) {
+    public UserSchema getUser(String username, String password) {
         MongoCollection<Document> collection = database.getCollection("users");
-
+        
         Document query = new Document()
-                .append("username", username)
-                .append("password", password);
+        .append("username", username)
+        .append("password", password);
         Document foundDocument = collection.find(query).first();
-
-        if (foundDocument != null) {
-            return true;
-        }
-        return false;
+        
+        if (foundDocument == null)
+            return null;
+        
+        UserSchema user = new UserSchema();
+        user.username = username;
+        user.password = password;
+        user._id = foundDocument.getObjectId("_id").toString();
+        return user;
     }
 
     @Override
     public boolean createUser(String username, String password) {
-        if (username.replace(" ", "").equals("") || password.replace(" ", "").equals(""))
-            return false;
-        
         MongoCollection<Document> users = database.getCollection("users");
 
         long count = users.countDocuments(Filters.eq("username", username));
@@ -124,13 +102,13 @@ public class MongoDB implements MongoDBInterface {
 
             if (ObjectId.isValid(recipeId) == false)
                 return recipe;
-    
+
             MongoCollection<Document> recipes = database.getCollection("recipes");
-    
+
             Document query = new Document()
                     .append("_id", new ObjectId(recipeId));
             Document recipeDocument = recipes.find(query).first();
-    
+
             if (recipeDocument != null) {
                 recipe = new RecipeSchema();
                 recipe._id = recipeId;
@@ -141,8 +119,7 @@ public class MongoDB implements MongoDBInterface {
                 recipe.ingredients = recipeDocument.getString("ingredients");
                 recipe.timeCreated = recipeDocument.getString("timeCreated");
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return recipe;
@@ -167,18 +144,17 @@ public class MongoDB implements MongoDBInterface {
     public void updateRecipe(String recipeId, String newTitle, String newDescription) {
         try {
             MongoCollection<Document> recipes = database.getCollection("recipes");
-    
+
             Document query = new Document()
                     .append("_id", new ObjectId(recipeId));
             Document update = new Document("$set", new Document("description", newDescription)
                     .append("title", newTitle)
                     .append("timeCreated", LocalDateTime.now().toString()));
-    
+
             UpdateOptions options = new UpdateOptions().upsert(false);
             recipes.updateOne(query, update, options);
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

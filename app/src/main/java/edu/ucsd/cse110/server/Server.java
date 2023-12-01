@@ -7,6 +7,7 @@ import edu.ucsd.cse110.server.handlers.GenerateRequestHandler;
 import edu.ucsd.cse110.server.handlers.RecipeRequestHandler;
 import edu.ucsd.cse110.server.handlers.UserRequestHandler;
 import edu.ucsd.cse110.server.services.mongodb.MongoDB;
+import edu.ucsd.cse110.server.services.mongodb.MongoDBInterface;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -19,9 +20,10 @@ public class Server {
 
     public static void main(String[] args) throws IOException {
         try {
+            MongoDBInterface mongodb = new MongoDB(mongoURI);
             HttpServer server = HttpServer.create(new InetSocketAddress(SERVER_HOSTNAME, SERVER_PORT), 0);
-            server.createContext("/recipe", new RecipeRequestHandler(new MongoDB(mongoURI)));
-            server.createContext("/user", new UserRequestHandler());
+            server.createContext("/recipe", new RecipeRequestHandler(mongodb));
+            server.createContext("/user", new UserRequestHandler(mongodb));
             server.createContext("/generate", new GenerateRequestHandler(new ChatGPT()));
     
             ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);

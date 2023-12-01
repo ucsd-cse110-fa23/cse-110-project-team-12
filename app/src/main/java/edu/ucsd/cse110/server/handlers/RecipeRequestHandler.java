@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.server.handlers;
 
 import com.sun.net.httpserver.*;
-import com.google.gson.Gson;
 
 import edu.ucsd.cse110.server.schemas.RecipeSchema;
 import edu.ucsd.cse110.server.services.Utils;
@@ -41,7 +40,7 @@ public class RecipeRequestHandler implements HttpHandler {
         }
     }
 
-    public void handleGet(HttpExchange httpExchange) throws IOException {
+    private void handleGet(HttpExchange httpExchange) throws IOException {
         Map<String, String> queryVals = Utils.getQueryPairs(httpExchange);
 
         // If no query for userId specified, then return all the recipes for user.
@@ -77,7 +76,7 @@ public class RecipeRequestHandler implements HttpHandler {
         }
     }
 
-    public void handlePost(HttpExchange httpExchange) throws IOException {
+    private void handlePost(HttpExchange httpExchange) throws IOException {
         Scanner scanner = new Scanner(httpExchange.getRequestBody());
         String data = "";
         while (scanner.hasNext()) {
@@ -92,7 +91,7 @@ public class RecipeRequestHandler implements HttpHandler {
         outStream.close();
     }
 
-    public void handleUpdate(HttpExchange httpExchange) throws IOException {
+    private void handleUpdate(HttpExchange httpExchange) throws IOException {
         Map<String, String> queryVals = Utils.getQueryPairs(httpExchange);
         String recipeId = queryVals.get("recipeId");
         String newTitle = queryVals.get("newTitle");
@@ -106,7 +105,7 @@ public class RecipeRequestHandler implements HttpHandler {
         outStream.close();
     }
 
-    public void handleDelete(HttpExchange httpExchange) throws IOException {
+    private void handleDelete(HttpExchange httpExchange) throws IOException {
         Map<String, String> queryVals = Utils.getQueryPairs(httpExchange);
         String recipeId = queryVals.get("recipeId");
 
