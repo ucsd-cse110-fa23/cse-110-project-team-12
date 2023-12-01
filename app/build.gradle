@@ -57,7 +57,7 @@ test {
 
 application {
     // Define the main class for the application.
-    mainClass = 'edu.ucsd.cse110.App'
+    mainClass = project.hasProperty("main") ? project.getProperty("main") : 'edu.ucsd.cse110.App'
 }
 
 sourceSets {
