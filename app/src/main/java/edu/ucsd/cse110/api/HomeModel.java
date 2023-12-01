@@ -3,7 +3,6 @@ package edu.ucsd.cse110.api;
 import java.util.List;
 import java.util.Map;
 
-import edu.ucsd.cse110.api.Controller.UIType;
 import edu.ucsd.cse110.client.Recipe;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,43 +12,43 @@ import java.nio.file.Paths;
 public class HomeModel implements ModelInterface {
     private Controller controller;
     private List<Recipe> recipes;
-    private UIType currentView;
+    private UIFactory.Type currentView;
 
     public HomeModel(Controller c) {
         this.controller = c;
-        currentView = UIType.HomePage;
+        currentView = UIFactory.Type.HomePage;
         updateRecipeList();
     }
 
     public void receiveMessage(Message m) {
         if (m.getMessageType() == Message.HomeView.CreateRecipeButton) {
-            currentView = UIType.CreateRecipe;
+            currentView = UIFactory.Type.CreateRecipe;
             controller.receiveMessageFromModel(new Message(Message.HomeModel.StartCreateRecipeView));
         }
         if (m.getMessageType() == Message.CreateRecipeModel.CloseCreateRecipeView) {
-            currentView = UIType.HomePage;
+            currentView = UIFactory.Type.HomePage;
             controller.receiveMessageFromModel(new Message(Message.HomeModel.CloseCreateRecipeView));
         }
         if (m.getMessageType() == Message.CreateRecipeModel.StartRecipeDetailedView) {
-            currentView = UIType.DetailedView;
+            currentView = UIFactory.Type.DetailedView;
             controller.receiveMessageFromModel(new Message(Message.HomeModel.StartRecipeDetailedView));
         }
         if (m.getMessageType() == Message.RecipeDetailedModel.CloseRecipeDetailedView) {
-            currentView = UIType.HomePage;
+            currentView = UIFactory.Type.HomePage;
             controller.receiveMessageFromModel(new Message(Message.HomeModel.CloseRecipeDetailedView));
         }
         if (m.getMessageType() == Message.HomeView.UpdateRecipeList) {
             updateRecipeList();
         }
         if (m.getMessageType() == Message.HomeView.OpenRecipe) {
-            currentView = UIType.DetailedView;
+            currentView = UIFactory.Type.DetailedView;
             controller.receiveMessageFromModel(new Message(Message.HomeModel.StartRecipeDetailedView));
             Recipe openRecipe = (Recipe) m.getKey("Recipe");
             controller.receiveMessageFromModel(new Message(Message.HomeModel.SendTitleBody,
                     Map.ofEntries(Map.entry("Recipe", openRecipe))));
         }
         if (m.getMessageType() == Message.HomeView.LogOut) {
-            currentView = UIType.HomePage;
+            currentView = UIFactory.Type.HomePage;
             controller.username = null;
             controller.password = null;
             deleteLogInFile();
@@ -69,7 +68,7 @@ public class HomeModel implements ModelInterface {
         }
     }
 
-    public UIType getCurrentView() {
+    public UIFactory.Type getCurrentView() {
         return currentView;
     }
 
