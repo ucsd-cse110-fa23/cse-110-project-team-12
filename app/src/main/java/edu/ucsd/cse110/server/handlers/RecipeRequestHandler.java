@@ -3,8 +3,6 @@ package edu.ucsd.cse110.server.handlers;
 import com.sun.net.httpserver.*;
 import com.google.gson.Gson;
 
-// TODO(eth003): move this to services in server
-import edu.ucsd.cse110.client.Recipe;
 import edu.ucsd.cse110.server.schemas.RecipeSchema;
 import edu.ucsd.cse110.server.services.Utils;
 import edu.ucsd.cse110.server.services.mongodb.MongoDBInterface;
@@ -35,9 +33,9 @@ public class RecipeRequestHandler implements HttpHandler {
         else if (method.equals("POST")) {
             handlePost(httpExchange);
         }
-        // else if (method.equals("PATCH")) {
-
-        // }
+        else if (method.equals("PATCH")) {
+            handleUpdate(httpExchange);
+        }
         else if (method.equals("DELETE")) {
             handleDelete(httpExchange);
         }
@@ -85,11 +83,24 @@ public class RecipeRequestHandler implements HttpHandler {
         while (scanner.hasNext()) {
             data += scanner.nextLine() + "\n";
         }
-        System.out.println(data);
         RecipeSchema recipe = Utils.unmarshalJson(data, RecipeSchema.class);
         
         mongodb.saveRecipe(recipe);
         httpExchange.sendResponseHeaders(201, 0);
+        OutputStream outStream = httpExchange.getResponseBody();
+        outStream.write("".getBytes());
+        outStream.close();
+    }
+
+    public void handleUpdate(HttpExchange httpExchange) throws IOException {
+        Map<String, String> queryVals = Utils.getQueryPairs(httpExchange);
+        String recipeId = queryVals.get("recipeId");
+        String newTitle = queryVals.get("newTitle");
+        String newDescription = queryVals.get("newDescription");
+
+        mongodb.updateRecipe(recipeId, newTitle, newDescription);
+
+        httpExchange.sendResponseHeaders(200, 0);
         OutputStream outStream = httpExchange.getResponseBody();
         outStream.write("".getBytes());
         outStream.close();

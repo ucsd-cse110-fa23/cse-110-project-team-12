@@ -94,9 +94,6 @@ public class MongoDB implements MongoDBInterface {
     @Override
     public List<RecipeSchema> getRecipeList(String userId) {
         List<RecipeSchema> recipes = new ArrayList<>();
-        if (ObjectId.isValid(userId) == false)
-            return recipes;
-        
         MongoCollection<Document> recipesCollection = database.getCollection("recipes");
 
         Document query = new Document()
@@ -109,7 +106,7 @@ public class MongoDB implements MongoDBInterface {
             RecipeSchema recipe = new RecipeSchema();
             recipe._id = recipeDocument.getObjectId("_id").toString();
             recipe.userId = recipeDocument.getObjectId("userId").toString();
-            recipe.title = recipeDocument.getString("name");
+            recipe.title = recipeDocument.getString("title");
             recipe.description = recipeDocument.getString("description");
             recipe.mealType = recipeDocument.getString("mealType");
             recipe.ingredients = recipeDocument.getString("ingredients");
@@ -138,7 +135,7 @@ public class MongoDB implements MongoDBInterface {
                 recipe = new RecipeSchema();
                 recipe._id = recipeId;
                 recipe.userId = recipeDocument.getObjectId("userId").toString();
-                recipe.title = recipeDocument.getString("name");
+                recipe.title = recipeDocument.getString("title");
                 recipe.description = recipeDocument.getString("description");
                 recipe.mealType = recipeDocument.getString("mealType");
                 recipe.ingredients = recipeDocument.getString("ingredients");
@@ -167,21 +164,23 @@ public class MongoDB implements MongoDBInterface {
     }
 
     @Override
-    public void updateRecipe(String recipeTitle, String updatedRecipeBody, String updatedRecipeMealType,
-            String username, String password) {
-        ObjectId userId = getUserId(username, password);
+    public void updateRecipe(String recipeId, String newTitle, String newDescription) {
+        try {
+            MongoCollection<Document> recipes = database.getCollection("recipes");
+    
+            Document query = new Document()
+                    .append("_id", new ObjectId(recipeId));
+            Document update = new Document("$set", new Document("description", newDescription)
+                    .append("title", newTitle)
+                    .append("timeCreated", LocalDateTime.now().toString()));
+    
+            UpdateOptions options = new UpdateOptions().upsert(false);
+            recipes.updateOne(query, update, options);
 
-        MongoCollection<Document> recipes = database.getCollection("recipes");
-
-        Document query = new Document()
-                .append("name", recipeTitle)
-                .append("userId", userId);
-        Document update = new Document("$set", new Document("description", updatedRecipeBody)
-                .append("mealType", updatedRecipeMealType)
-                .append("timestamp", new BSONTimestamp()));
-
-        UpdateOptions options = new UpdateOptions().upsert(false);
-        recipes.updateOne(query, update, options);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
