@@ -231,7 +231,8 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
             informationEdit.setText(((String) m.getKey("RecipeBody")).trim());
             addChild(informationEdit);
         }
-        if (m.getMessageType() == Message.RecipeDetailedModel.RemoveEditRecipe) {
+        if (m.getMessageType() == Message.RecipeDetailedModel.ExitEditRecipe) {
+            removeChild(unsavedButtonBox);
             removeChild(informationEdit);
             this.getChildren().removeAll(backArrowBox, backButton);
         }

@@ -121,7 +121,7 @@ public class Message {
             Set<String> keys = new HashSet<>(Arrays.asList("RecipeBody"));
             @Override public Set<String> allowedKeys() {return keys;}
         },
-        RemoveEditRecipe,
+        ExitEditRecipe,
         GoToDeleteConfirmationPage,
         RemoveDeleteConfirmation, 
         AddBackButton, 

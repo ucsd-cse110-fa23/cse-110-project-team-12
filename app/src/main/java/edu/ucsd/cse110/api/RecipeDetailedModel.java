@@ -41,8 +41,7 @@ public class RecipeDetailedModel implements ModelInterface {
             if (currentPage == PageType.UnsavedLayout) {
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.CloseRecipeDetailedView));
             } else if (currentPage == PageType.EditLayout) {
-                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveEditRecipe));
-                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveUnsavedLayout));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.ExitEditRecipe));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetRecipe,
                         Map.ofEntries(Map.entry("Recipe", recipe))));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.AddBackButton));
@@ -77,8 +76,7 @@ public class RecipeDetailedModel implements ModelInterface {
                 controller.receiveMessageFromModel(new Message(Message.HomeView.UpdateRecipeList));
                 currentPage = PageType.SavedLayout;
             } else if (currentPage == PageType.EditLayout) {
-                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveEditRecipe));
-                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveUnsavedLayout));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.ExitEditRecipe));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetRecipe,
                         Map.ofEntries(Map.entry("Recipe", recipe))));
                 // if (updatedRecipeBody != "")
