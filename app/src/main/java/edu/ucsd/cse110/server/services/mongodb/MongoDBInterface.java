@@ -12,7 +12,7 @@ public interface MongoDBInterface {
 
     //recipes schema
     public List<Recipe> getRecipeList(String username, String password);
-    public Recipe getRecipe(String recipeTitle, String username, String password);
+    public RecipeSchema getRecipe(String recipeId);
     public void saveRecipe(RecipeSchema recipe);
     public void updateRecipe(String recipeTitle, String updatedRecipeBody, String updatedRecipeMealType, String username, String password);
     public void deleteRecipe(String recipeTitle, String username, String password);

@@ -18,6 +18,14 @@ public class RecipeRequestHandler implements HttpHandler {
         mongodb = db;
     }
 
+    private void send404(HttpExchange httpExchange) throws IOException {
+        final byte[] msg = "Resource not found.".getBytes();
+        httpExchange.sendResponseHeaders(404, msg.length);
+        OutputStream outStream = httpExchange.getResponseBody();
+        outStream.write(msg);
+        outStream.close();
+    }
+
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         String method = httpExchange.getRequestMethod();
@@ -36,48 +44,44 @@ public class RecipeRequestHandler implements HttpHandler {
     }
 
     public void handleGet(HttpExchange httpExchange) throws IOException {
-        // Map<String, String> queryVals = Utils.getQueryPairs(httpExchange);
+        Map<String, String> queryVals = Utils.getQueryPairs(httpExchange);
 
-        // // If no query specified, then return all the
-        // if (queryVals.size() == 0) {
-        //     List<Recipe> recipes = mongodb.getRecipeList();
-        //     List<RecipeSchema> recipeSchemas = new ArrayList<>();
-        //     for (Recipe r : recipes) {
-        //         RecipeSchema rs = new RecipeSchema();
-        //         rs.title = r.getName();
-        //         rs.description = r.getInformation();
-        //         rs.mealType = r.getMealType();
-        //         recipeSchemas.add(rs);
-        //     }
-        //     Gson gson = new Gson();
-        //     String json = "";
-        //     if (recipeSchemas.size() > 0)
-        //         json = gson.toJson(recipeSchemas);
-        //     httpExchange.sendResponseHeaders(200, json.getBytes().length);
-        //     OutputStream outStream = httpExchange.getResponseBody();
-        //     outStream.write(json.getBytes());
-        //     outStream.close();
-        // }
-        // else {
-        //     String title = queryVals.get("title");
+        // If no query specified, then return all the
+        if (queryVals.size() == 0) {
+            // List<Recipe> recipes = mongodb.getRecipeList();
+            // List<RecipeSchema> recipeSchemas = new ArrayList<>();
+            // for (Recipe r : recipes) {
+            //     RecipeSchema rs = new RecipeSchema();
+            //     rs.title = r.getName();
+            //     rs.description = r.getInformation();
+            //     rs.mealType = r.getMealType();
+            //     recipeSchemas.add(rs);
+            // }
+            // Gson gson = new Gson();
+            // String json = "";
+            // if (recipeSchemas.size() > 0)
+            //     json = gson.toJson(recipeSchemas);
+            // httpExchange.sendResponseHeaders(200, json.getBytes().length);
+            // OutputStream outStream = httpExchange.getResponseBody();
+            // outStream.write(json.getBytes());
+            // outStream.close();
+        }
+        else {
+            String recipeId = queryVals.get("recipeId");
+            RecipeSchema recipe = mongodb.getRecipe(recipeId);
 
-        //     Recipe r = mongodb.getRecipe(title);
-        //     System.out.println(title);
-        //     RecipeSchema rs = new RecipeSchema();
-        //     String json = "nothign found";
-        //     Gson gson = new Gson();
-        //     if (r != null) {
-        //         rs.title = r.getName();
-        //         rs.description = r.getInformation();
-        //         rs.mealType = r.getMealType();
-        //         json = gson.toJson(rs);
-        //     }
-
-        //     httpExchange.sendResponseHeaders(200, json.getBytes().length);
-        //     OutputStream outStream = httpExchange.getResponseBody();
-        //     outStream.write(json.getBytes());
-        //     outStream.close();
-        // }
+            if (recipe == null) {
+                System.out.println("HIHIHHIHI");
+                send404(httpExchange);
+            }
+            else {
+                String jsonString = Utils.marshalJson(recipe);
+                httpExchange.sendResponseHeaders(200, jsonString.getBytes().length);
+                OutputStream outStream = httpExchange.getResponseBody();
+                outStream.write(jsonString.getBytes());
+                outStream.close();
+            }
+        }
     }
 
     public void handlePost(HttpExchange httpExchange) throws IOException {

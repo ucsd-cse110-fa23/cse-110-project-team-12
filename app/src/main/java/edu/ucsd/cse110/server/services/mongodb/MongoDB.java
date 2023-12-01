@@ -23,6 +23,7 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import edu.ucsd.cse110.client.Recipe;
 import edu.ucsd.cse110.server.schemas.RecipeSchema;
+import edu.ucsd.cse110.server.services.Utils;
 
 public class MongoDB implements MongoDBInterface {
     private MongoDatabase database;
@@ -114,23 +115,26 @@ public class MongoDB implements MongoDBInterface {
     }
 
     @Override
-    public Recipe getRecipe(String recipeTitle, String username, String password) {
-        ObjectId userId = getUserId(username, password);
+    public RecipeSchema getRecipe(String recipeId) {
+        RecipeSchema recipe = null;
+        if (ObjectId.isValid(recipeId) == false)
+            return recipe;
 
-        Recipe recipe = null;
         MongoCollection<Document> recipes = database.getCollection("recipes");
 
         Document query = new Document()
-                .append("name", recipeTitle)
-                .append("userId", userId);
+                .append("_id", new ObjectId(recipeId));
         Document recipeDocument = recipes.find(query).first();
 
         if (recipeDocument != null) {
-            String name = recipeDocument.getString("name");
-            String description = recipeDocument.getString("description");
-            String mealType = recipeDocument.getString("mealType");
-            // You may also want to retrieve other fields, if available
-            recipe = new Recipe(name, description, mealType);
+            recipe = new RecipeSchema();
+            recipe.recipeId = recipeId;
+            recipe.userId = recipeDocument.getString("userId");
+            recipe.title = recipeDocument.getString("name");
+            recipe.description = recipeDocument.getString("description");
+            recipe.mealType = recipeDocument.getString("mealType");
+            recipe.ingredients = recipeDocument.getString("ingredients");
+            recipe.timeCreated = recipeDocument.getString("timeCreated");
         }
         return recipe;
     }
@@ -143,6 +147,7 @@ public class MongoDB implements MongoDBInterface {
                 .append("title", rs.title)
                 .append("description", rs.description)
                 .append("mealType", rs.mealType)
+                .append("ingredients", rs.ingredients)
                 .append("timeCreated", LocalDateTime.now().toString())
                 .append("userId", rs.userId);
 

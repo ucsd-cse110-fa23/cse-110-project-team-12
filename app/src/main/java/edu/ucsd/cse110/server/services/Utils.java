@@ -36,4 +36,15 @@ public class Utils {
         }
         return null;
     }
+
+    public static String marshalJson(Object obj) {
+        try {
+            Gson gson = new Gson();
+            return gson.toJson(obj);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
