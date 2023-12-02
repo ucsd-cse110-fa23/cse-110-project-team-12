@@ -147,13 +147,134 @@
 	-fx-pref-height: 68;
 }
 
-#create-button {
-	-fx-shape: 'M-40,0a40,40 0 1,0 80,0a40,40 0 1,0 -80,0';
-	-fx-background-color: -green;
+#home-button-box {
+	-fx-pref-width: 325;
+	-fx-pref-height: 382;
+	-fx-alignment: bottom-left;
+	-fx-padding: 0 10 10 10;
+	-fx-spacing: 9;
+}
+
+#open-button {
+	-fx-background-color: transparent;
 	-fx-border-width: 0;
-	-fx-min-width: 40;
-	-fx-min-height: 40;
-	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.1, 0, 0);
+	-fx-min-width: 47;
+	-fx-max-width: 47;
+	-fx-min-height: 13;
+	-fx-max-height: 13;
+	-fx-background-radius: 17;
+}
+
+#close-button,
+#moon-button,
+#cloud-button,
+#sun-button {
+	-fx-background-color: transparent;
+	-fx-border-width: 0;
+	-fx-min-width: 47;
+	-fx-max-width: 47;
+	-fx-min-height: 14;
+	-fx-max-height: 14;
+	-fx-background-radius: 17;
+}
+
+#filter-content {
+	-fx-alignment: bottom-center;
+	-fx-background-color: transparent;
+	-fx-padding: 0 213 0 0;
+	-fx-max-width: 0;
+	-fx-min-height: 0;
+	-fx-max-height: 0;
+}
+
+#up-arrow-box,
+#moon-box,
+#cloud-box,
+#sun-box {
+	-fx-alignment: center;
+}
+
+#filter {
+	-fx-text-fill: white;
+	-fx-font-family: 'Helvetica';
+	-fx-font-weight: bold;
+	-fx-font-size: 10;
+	-fx-padding: 0 0 0 4;
+}
+
+#moon-check,
+#cloud-check,
+#sun-check {
+	-fx-min-width: 7;
+	-fx-max-width: 7;
+	-fx-alignment: center;
+}
+
+#button-backing-closed {
+	-fx-min-width: 47;
+	-fx-max-width: 47;
+	-fx-min-height: 13;
+	-fx-max-height: 13;
+	-fx-background-color: -green;
+	-fx-background-radius: 17;
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 6, 0.1, 0, 4);
+	-fx-alignment: center;
+}
+
+#text-label {
+	-fx-min-width: 47;
+	-fx-max-width: 47;
+	-fx-min-height: 13;
+	-fx-max-height: 13;
+	-fx-background-color: transparent;
+	-fx-background-radius: 17;
+	-fx-alignment: center;
+}
+
+#moon-label,
+#cloud-label,
+#sun-label {
+	-fx-min-width: 47;
+	-fx-max-width: 47;
+	-fx-min-height: 14;
+	-fx-max-height: 14;
+	-fx-background-color: transparent;
+	-fx-background-radius: 17;
+	-fx-alignment: center-left;
+	-fx-padding: 0 0 0 5;
+	-fx-spacing: 6;
+}
+
+#label-box,
+#open-button-box {
+	-fx-min-width: 47;
+	-fx-max-width: 47;
+	-fx-min-height: 57;
+	-fx-max-height: 57;
+	-fx-background-color: transparent;
+	-fx-background-radius: 7;
+	-fx-alignment: bottom-center;
+}
+
+#button-backing-open {
+	-fx-min-width: 47;
+	-fx-max-width: 47;
+	-fx-min-height: 57;
+	-fx-max-height: 57;
+	-fx-background-color: transparent;
+	-fx-background-radius: 7;
+	-fx-alignment: center;
+}
+
+#button-backing-open {
+	-fx-min-width: 47;
+	-fx-max-width: 47;
+	-fx-min-height: 57;
+	-fx-max-height: 57;
+	-fx-background-color: -green;
+	-fx-background-radius: 7;
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 6, 0.1, 0, 4);
+	-fx-alignment: center;
 }
 
 #create-plus {
@@ -163,6 +284,15 @@
 	-fx-font-size: 36;
 	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 2, 4);
 	-fx-padding: -15 0 -8 0;
+}
+
+#create-button {
+	-fx-shape: 'M-40,0a40,40 0 1,0 80,0a40,40 0 1,0 -80,0';
+	-fx-background-color: -green;
+	-fx-border-width: 0;
+	-fx-min-width: 40;
+	-fx-min-height: 40;
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 10, 0.1, 0, 0);
 }
 
 #record-background {
