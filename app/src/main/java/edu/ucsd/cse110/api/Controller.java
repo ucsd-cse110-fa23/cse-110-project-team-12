@@ -79,7 +79,7 @@ public class Controller {
             root.removeChild(uis.get(UIFactory.Type.CreateAccount).getUI());
             models.remove(ModelFactory.Type.CreateAccount);
         }
-        else if (m.getMessageType() == Message.CreateAccountModel.SetUser) {
+        else if (m.getMessageType() == Message.CreateAccountModel.SetUser || m.getMessageType() == Message.LogInModel.SetUser) {
             currentUser = (UserSchema) m.getKey("User");
             System.out.println(currentUser._id + currentUser.username + currentUser.password);
         }

@@ -27,7 +27,11 @@ public class Message {
     public enum LogInModel implements Type {
         CloseLogInView,
         StartCreateAccountView,
-        StartHomeView;
+        StartHomeView,
+        SetUser {
+            Set<String> keys = new HashSet<>(Arrays.asList("User"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        };
     }
 
     public enum CreateAccountView implements Type {

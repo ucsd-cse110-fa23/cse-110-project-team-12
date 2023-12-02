@@ -4,7 +4,6 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-import edu.ucsd.cse110.server.schemas.RecipeSchema;
 import edu.ucsd.cse110.server.schemas.UserSchema;
 import edu.ucsd.cse110.server.services.Utils;
 public class CreateAccountModel implements ModelInterface {
@@ -28,8 +27,6 @@ public class CreateAccountModel implements ModelInterface {
 
             UserSchema newUser = createUser(username, password);
             if (newUser != null) {
-                // controller.username = username;
-                // controller.password = password;
                 controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.SetUser,
                     Map.ofEntries(Map.entry("User", newUser))));
                 controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.CloseCreateAccountView));
