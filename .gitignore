@@ -14,7 +14,7 @@ app/bin
 
 *.csv
 
-app/src/main/java/edu/ucsd/cse110/server/services/mongodb/assets/*
+app/src/main/java/edu/ucsd/cse110/server/services/mongodb/*.json
 
 app/src/main/java/edu/ucsd/cse110/api/assets/savelogin.txt
 
