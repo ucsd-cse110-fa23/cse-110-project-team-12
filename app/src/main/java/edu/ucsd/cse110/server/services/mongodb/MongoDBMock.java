@@ -18,7 +18,7 @@ import edu.ucsd.cse110.server.schemas.RecipeSchema;
 import edu.ucsd.cse110.server.schemas.UserSchema;
 
 public class MongoDBMock implements MongoDBInterface{
-    public static final String storagePath = "./src/main/java/edu/ucsd/cse110/server/services/mongodb/testAssets/";
+    public static final String storagePath = "./src/main/java/edu/ucsd/cse110/server/services/mongodb/assets/";
     
     @Override
     public UserSchema getUser(String username, String password) {
