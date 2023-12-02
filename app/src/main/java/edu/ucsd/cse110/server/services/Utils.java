@@ -4,8 +4,6 @@ import java.util.*;
 
 import com.google.gson.Gson;
 import com.sun.net.httpserver.*;
-import java.nio.charset.StandardCharsets;
-import java.net.URI;
 
 public class Utils {
     public static Map<String, String> getQueryPairs(HttpExchange httpExchange) {

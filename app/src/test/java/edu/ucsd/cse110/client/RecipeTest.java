@@ -5,40 +5,36 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
+import edu.ucsd.cse110.server.schemas.RecipeSchema;
+
 public class RecipeTest {
-    private Recipe recipe;
+    private RecipeSchema recipe;
 
     @Test
     public void testRecipeConstructor() {
-        recipe = new Recipe("Banana Bread", "Bananas, Bread", "Breakfast");
+        recipe = new RecipeSchema();
+        recipe.title = "Banana Bread";
+        recipe.description = "Bananas, Bread";
+        recipe.mealType = "Breakfast";
 
         assertNotNull(recipe);
-        assertEquals("Banana Bread", recipe.getName());
-        assertEquals("Bananas, Bread", recipe.getInformation());
+        assertEquals("Banana Bread", recipe.title);
+        assertEquals("Bananas, Bread", recipe.description);
     }
 
     @Test
-    public void thisRecipeSetMethods() {
-        recipe = new Recipe();
+    public void testRecipeChangeWithNonDefaultConstructor() {
+        recipe = new RecipeSchema();
+        recipe.title = "Banana Bread";
+        recipe.description = "Bananas, Bread";
         assertNotNull(recipe);
 
-        recipe.setName("Icecream Sandwich");
-        recipe.setInformation("Ice Cream, Sandwich");
+        recipe.title = "Icecream Sandwich";
+        recipe.description = "Ice Cream, Sandwich";
+        recipe.mealType = "Breakfast";
 
-        assertEquals("Icecream Sandwich", recipe.getName());
-        assertEquals("Ice Cream, Sandwich", recipe.getInformation());
-    }
-
-    @Test
-    public void testRecipeSetMethodsWithNonDefaultConstructor() {
-        recipe = new Recipe("Banana Bread", "Bananas, Bread", "Breakfast");
-        assertNotNull(recipe);
-
-        recipe.setName("Icecream Sandwich");
-        recipe.setInformation("Ice Cream, Sandwich");
-
-        assertEquals("Icecream Sandwich", recipe.getName());
-        assertEquals("Ice Cream, Sandwich", recipe.getInformation());
+        assertEquals("Icecream Sandwich", recipe.title);
+        assertEquals("Ice Cream, Sandwich", recipe.description);
     }
 
 }

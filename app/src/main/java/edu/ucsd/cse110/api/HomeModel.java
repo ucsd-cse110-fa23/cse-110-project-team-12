@@ -1,19 +1,14 @@
 package edu.ucsd.cse110.api;
 
-import edu.ucsd.cse110.api.UIFactory;
 import edu.ucsd.cse110.server.schemas.RecipeSchema;
-import edu.ucsd.cse110.server.schemas.UserSchema;
 import edu.ucsd.cse110.server.services.Utils;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.io.*;
 import java.net.*;
 import java.util.*;
-
-import com.google.common.reflect.TypeToken;
 
 public class HomeModel implements ModelInterface {
     private Controller controller;
