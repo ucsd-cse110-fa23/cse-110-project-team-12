@@ -99,8 +99,7 @@ public class RecipeDetailedModel implements ModelInterface {
         }
         if (m.getMessageType() == Message.RecipeDetailedView.ConfirmDeleteButton) {
             if (currentPage == PageType.DeleteConfirmation) {
-                // controller.mongoDB.deleteRecipe(recipe.getName(), controller.username,
-                // controller.password);
+                deleteRecipe(recipe._id);
                 controller.receiveMessageFromModel(new Message(Message.HomeView.UpdateRecipeList));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.CloseRecipeDetailedView));
             }
@@ -158,6 +157,22 @@ public class RecipeDetailedModel implements ModelInterface {
 
             if (conn.getResponseCode() != 201)
                 throw new Exception("Save Recipe Failed");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteRecipe(String recipeId) {
+        try {
+            String urlString = Controller.serverUrl + "/recipe?recipeId=" + recipeId;
+            URL url = new URI(urlString).toURL();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("DELETE");
+            conn.connect();
+
+            if (conn.getResponseCode() != 200)
+                throw new Exception("Delete Recipe Failed");
         } catch (Exception e) {
             e.printStackTrace();
         }
