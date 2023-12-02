@@ -2,7 +2,14 @@ package edu.ucsd.cse110.api;
 
 import java.util.Map;
 
+import com.google.common.util.concurrent.ExecutionError;
+
 import edu.ucsd.cse110.client.Recipe;
+import edu.ucsd.cse110.server.schemas.RecipeSchema;
+import edu.ucsd.cse110.server.services.Utils;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
 public class RecipeDetailedModel implements ModelInterface {
     public enum PageType {
@@ -14,7 +21,7 @@ public class RecipeDetailedModel implements ModelInterface {
 
     private PageType currentPage;
     private Controller controller;
-    private Recipe recipe;
+    private RecipeSchema recipe;
 
     public RecipeDetailedModel(Controller c) {
         controller = c;
@@ -23,7 +30,7 @@ public class RecipeDetailedModel implements ModelInterface {
     @Override
     public void receiveMessage(Message m) {
         if (m.getMessageType() == Message.HomeModel.SendRecipe) {
-            recipe = (Recipe) m.getKey("Recipe");
+            recipe = (RecipeSchema) m.getKey("Recipe");
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetRecipe,
                     Map.ofEntries(Map.entry("Recipe", recipe))));
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
@@ -31,7 +38,7 @@ public class RecipeDetailedModel implements ModelInterface {
             currentPage = PageType.SavedLayout;
         }
         if (m.getMessageType() == Message.CreateRecipeModel.SendRecipe) {
-            recipe = (Recipe) m.getKey("Recipe");
+            recipe = (RecipeSchema) m.getKey("Recipe");
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetRecipe,
                     Map.ofEntries(Map.entry("Recipe", recipe))));
             controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseUnsavedLayout));
@@ -62,15 +69,14 @@ public class RecipeDetailedModel implements ModelInterface {
         }
         if (m.getMessageType() == Message.RecipeDetailedView.UpdateInformation) {
             String updatedRecipeBody = (String) m.getKey("RecipeBody");
-            recipe.setInformation(updatedRecipeBody);
-            controller.mongoDB.updateRecipe(recipe.getName(), recipe.getInformation(), recipe.getMealType(), controller.username, controller.password);
+            recipe.description = updatedRecipeBody;
+            updateRecipe(recipe._id, recipe.title, updatedRecipeBody);
         }
         if (m.getMessageType() == Message.RecipeDetailedView.SaveButton) {
             if (currentPage == PageType.UnsavedLayout) {
-                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveUnsavedLayout));   
-                controller.mongoDB.saveRecipe(recipe.getName(), recipe.getInformation(), recipe.getMealType(), controller.username, controller.password);
-                // controller.receiveMessageFromModel(new
-                // Message(Message.RecipeDetailedModel.SaveConfirmation));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveUnsavedLayout));
+                saveRecipe(recipe);
+                // recipe.getMealType(), controller.username, controller.password);
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.AddBackButton));
                 controller.receiveMessageFromModel(new Message(Message.HomeView.UpdateRecipeList));
@@ -79,9 +85,6 @@ public class RecipeDetailedModel implements ModelInterface {
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.ExitEditRecipe));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetRecipe,
                         Map.ofEntries(Map.entry("Recipe", recipe))));
-                // if (updatedRecipeBody != "")
-                // controller.receiveMessageFromModel(new
-                // Message(Message.RecipeDetailedModel.SaveConfirmation));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.AddBackButton));
                 controller.receiveMessageFromModel(new Message(Message.HomeView.UpdateRecipeList));
@@ -96,15 +99,15 @@ public class RecipeDetailedModel implements ModelInterface {
         }
         if (m.getMessageType() == Message.RecipeDetailedView.ConfirmDeleteButton) {
             if (currentPage == PageType.DeleteConfirmation) {
-                controller.mongoDB.deleteRecipe(recipe.getName(), controller.username, controller.password);
+                // controller.mongoDB.deleteRecipe(recipe.getName(), controller.username,
+                // controller.password);
                 controller.receiveMessageFromModel(new Message(Message.HomeView.UpdateRecipeList));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.CloseRecipeDetailedView));
             }
         }
         if (m.getMessageType() == Message.RecipeDetailedView.EditButton) {
             if (currentPage == PageType.SavedLayout) {
-                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.EditRecipe,
-                        Map.ofEntries(Map.entry("RecipeBody", recipe.getInformation()))));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.EditRecipe));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveBackButton));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseUnsavedLayout));
                 currentPage = PageType.EditLayout;
@@ -112,19 +115,54 @@ public class RecipeDetailedModel implements ModelInterface {
         }
     }
 
-    
+    private void updateRecipe(String recipeId, String newTitle, String newDescription) {
+        try {
+            String userId = controller.getCurrentUser()._id;
+            String urlString = Controller.serverUrl + "/recipe?userId=" + userId + "&newTitle=newTitle" + newTitle
+                    + "&newDescription=" + newDescription;
+            URL url = new URI(urlString).toURL();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("PATCH");
+            conn.connect();
+
+            if (conn.getResponseCode() != 200)
+                throw new Exception("Update Recipe Failed");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveRecipe(RecipeSchema recipe) {
+        try {
+            recipe.userId = controller.getCurrentUser()._id;
+
+            String urlString = Controller.serverUrl + "/recipe";
+            URL url = new URI(urlString).toURL();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+
+            OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+            out.write(Utils.marshalJson(recipe));
+            out.flush();
+            out.close();
+
+            if (conn.getResponseCode() != 201)
+                throw new Exception("Save Recipe Failed");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public Object getState() {
         return this;
     }
 
-    public String getRecipeTitle() {
-        return recipe.getName();
-    }
-
-    public String getRecipeBody() {
-        return recipe.getInformation();
+    public RecipeSchema getRecipeSchema() {
+        return recipe;
     }
 
     public PageType getCurrentPage() {

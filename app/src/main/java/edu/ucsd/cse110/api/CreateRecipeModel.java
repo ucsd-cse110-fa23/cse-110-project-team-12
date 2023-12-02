@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Map;
 
 import edu.ucsd.cse110.client.Recipe;
+import edu.ucsd.cse110.server.schemas.RecipeSchema;
 import javafx.application.Platform;
 
 public class CreateRecipeModel implements ModelInterface {
@@ -26,7 +27,7 @@ public class CreateRecipeModel implements ModelInterface {
 
     private MealType selectedMealType;
     private String selectedIngredients;
-    private Recipe generatedRecipe;
+    private RecipeSchema generatedRecipe;
 
     public CreateRecipeModel(Controller c) {
         controller = c;
@@ -34,7 +35,7 @@ public class CreateRecipeModel implements ModelInterface {
         currentPage = PageType.MealTypeInput;
         selectedMealType = MealType.None;
         isRecording = false;
-        generatedRecipe = new Recipe();
+        generatedRecipe = new RecipeSchema();
     }
 
     public void receiveMessage(Message m) {
@@ -70,7 +71,9 @@ public class CreateRecipeModel implements ModelInterface {
 
         try {
             String[] gptResult = controller.chatGPT.promptGPT(mealTypeString, selectedIngredients);
-            generatedRecipe = new Recipe(gptResult[0], gptResult[1], mealTypeString);
+            generatedRecipe.title = gptResult[0];
+            generatedRecipe.description = gptResult[1];
+            generatedRecipe.mealType = mealTypeString;
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -144,7 +147,7 @@ public class CreateRecipeModel implements ModelInterface {
                         controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StartRecipeDetailedView));
                         controller.receiveMessageFromModel(
                             new Message(Message.CreateRecipeModel.SendRecipe,
-                            Map.ofEntries(Map.entry("Recipe", new Recipe(generatedRecipe.getName(), generatedRecipe.getInformation(), generatedRecipe.getMealType()))))
+                            Map.ofEntries(Map.entry("Recipe", generatedRecipe)))
                         );
                     });
                 }).start();
@@ -158,7 +161,7 @@ public class CreateRecipeModel implements ModelInterface {
                 controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StartRecipeDetailedView));
                 controller.receiveMessageFromModel(
                     new Message(Message.CreateRecipeModel.SendRecipe,
-                    Map.ofEntries(Map.entry("Recipe", new Recipe(generatedRecipe.getName(), generatedRecipe.getInformation(), generatedRecipe.getMealType()))))
+                    Map.ofEntries(Map.entry("Recipe", generatedRecipe)))
                 );
             }
         }

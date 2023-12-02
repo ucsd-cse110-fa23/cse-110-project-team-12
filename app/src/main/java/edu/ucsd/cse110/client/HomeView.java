@@ -4,6 +4,7 @@ import java.util.*;
 import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.Message;
 import edu.ucsd.cse110.api.UIInterface;
+import edu.ucsd.cse110.server.schemas.RecipeSchema;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.BlurType;
@@ -21,8 +22,6 @@ public class HomeView extends BorderPane implements UIInterface {
 	private ScrollPane recipeList;
 	private VBox recipeInfo;
 	private Button createButton;
-
-	private List<Recipe> recipes;
 
     public HomeView(Controller c) {
 		this.controller = c;
@@ -69,7 +68,7 @@ public class HomeView extends BorderPane implements UIInterface {
 	@Override
 	public void receiveMessage(Message m) {
 		if (m.getMessageType() == Message.HomeModel.UpdateRecipeList) {
-			recipes = (List<Recipe>) m.getKey("Recipes");
+			List<RecipeSchema> recipes = (List<RecipeSchema>) m.getKey("Recipes");
 			populateRecipes(recipes);
 		}
 	}
@@ -89,9 +88,9 @@ public class HomeView extends BorderPane implements UIInterface {
 		return this;
 	}
 
-	private void populateRecipes(List<Recipe> recipes) {
+	private void populateRecipes(List<RecipeSchema> recipes) {
 		recipeInfo.getChildren().clear();
-		for (Recipe r : recipes) {
+		for (RecipeSchema r : recipes) {
 			recipeInfo.getChildren().add(new RecipeTitleView(controller, r));
 		}
 	}

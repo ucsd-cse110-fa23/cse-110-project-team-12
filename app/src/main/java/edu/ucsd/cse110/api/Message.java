@@ -125,10 +125,7 @@ public class Message {
         UseSavedLayout,
         SaveConfirmation,
         RemoveUnsavedLayout,
-        EditRecipe {
-            Set<String> keys = new HashSet<>(Arrays.asList("RecipeBody"));
-            @Override public Set<String> allowedKeys() {return keys;}
-        },
+        EditRecipe,
         ExitEditRecipe,
         GoToDeleteConfirmationPage,
         RemoveDeleteConfirmation, 

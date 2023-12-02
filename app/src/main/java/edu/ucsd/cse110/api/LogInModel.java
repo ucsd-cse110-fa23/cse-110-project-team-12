@@ -72,6 +72,8 @@ public class LogInModel implements ModelInterface {
     
     // Returns null if no user found with specified username and password.
     private UserSchema getUser(String username, String password) {
+        if (username == null || password == null)
+            return null;
         try {
             String urlString = Controller.serverUrl + "/user?username=" + username + "&password=" + password;
             URL url = new URI(urlString).toURL();

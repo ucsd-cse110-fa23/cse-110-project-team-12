@@ -14,6 +14,8 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+import com.google.common.reflect.TypeToken;
+
 public class HomeModel implements ModelInterface {
     private Controller controller;
     private List<RecipeSchema> recipes;
@@ -49,7 +51,7 @@ public class HomeModel implements ModelInterface {
         if (m.getMessageType() == Message.HomeView.OpenRecipe) {
             currentView = UIFactory.Type.DetailedView;
             controller.receiveMessageFromModel(new Message(Message.HomeModel.StartRecipeDetailedView));
-            Recipe openRecipe = (Recipe) m.getKey("Recipe");
+            RecipeSchema openRecipe = (RecipeSchema) m.getKey("Recipe");
             controller.receiveMessageFromModel(new Message(Message.HomeModel.SendRecipe,
                     Map.ofEntries(Map.entry("Recipe", openRecipe))));
         }
@@ -97,15 +99,15 @@ public class HomeModel implements ModelInterface {
                 while (in.hasNext())
                     jsonString += in.nextLine();
                 in.close();
-                recipes = Utils.unmarshalJson(jsonString, ArrayList.class);
+                recipes = Arrays.asList(Utils.unmarshalJson(jsonString, RecipeSchema[].class));
             }
         }
         catch (Exception e) {
             e.printStackTrace();
         }
         controller.receiveMessageFromModel(
-                new Message(Message.HomeModel.UpdateRecipeList,
-                        Map.ofEntries(Map.entry("Recipes", recipes))));
+            new Message(Message.HomeModel.UpdateRecipeList,
+                    Map.ofEntries(Map.entry("Recipes", recipes))));
     }
 
     public List<RecipeSchema> getRecipes() {
