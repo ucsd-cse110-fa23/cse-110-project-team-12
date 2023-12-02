@@ -8,68 +8,32 @@ import edu.ucsd.cse110.client.HomeView;
 import edu.ucsd.cse110.client.LogInView;
 import edu.ucsd.cse110.client.RecipeDetailedView;
 import edu.ucsd.cse110.client.Root;
+import edu.ucsd.cse110.server.schemas.UserSchema;
 import edu.ucsd.cse110.client.NoUI;
 import javafx.scene.Parent;
 
 public class Controller {
-    public enum ModelType {
-        CreateRecipe,
-        HomePage,
-        DetailedView,
-        CreateAccount,
-        LogIn,
-    }
-
-    public enum UIType {
-        CreateRecipe,
-        HomePage,
-        DetailedView,
-		CreateAccount,
-		LogIn,
-    }
-
-    private UIInterface make(UIType type) {
-        if (useUI) {
-            if (type == UIType.CreateRecipe)
-                return new CreateRecipeView(this);
-            else if (type == UIType.HomePage)
-                return new HomeView(this);
-            else if (type == UIType.DetailedView)
-				return new RecipeDetailedView(this);
-			else if (type == UIType.CreateAccount)
-				return new CreateAccountView(this);
-			else if (type == UIType.LogIn)
-				return new LogInView(this);
-            else
-                return new NoUI();
-        } else
-            return new NoUI();
-    }
-
-    private Map<ModelType, ModelInterface> models;
-    private Map<UIType, UIInterface> uis;
+    private Map<ModelFactory.Type, ModelInterface> models;
+    private Map<UIFactory.Type, UIInterface> uis;
 	private UIInterface root;
-
+    private UserSchema currentUser;
     public boolean useUI;
-    
-    public static final String mongoURI = "mongodb+srv://akjain:92Tc0QE0BB1nCNTr@pantrypal.lzohxez.mongodb.net/?retryWrites=true&w=majority";
-   
+    public static final String serverUrl = "http://localhost:8100";
+
     // API Interfaces
     public VoicePromptInterface voicePrompt;
     public WhisperInterface whisper;
     public ChatGPTInterface chatGPT;
-    public MongoDBInterface mongoDB;
 
     public Controller(boolean useUI, VoicePromptInterface voicePrompt, WhisperInterface whisper,
-            ChatGPTInterface chatGPT, MongoDBInterface mongoDB) {
+            ChatGPTInterface chatGPT) {
         this.useUI = useUI;
         this.voicePrompt = voicePrompt;
         this.whisper = whisper;
         this.chatGPT = chatGPT;
-        this.mongoDB = mongoDB;
 
-        models = new EnumMap<>(ModelType.class);
-        uis = new EnumMap<>(UIType.class);
+        models = new EnumMap<>(ModelFactory.Type.class);
+        uis = new EnumMap<>(UIFactory.Type.class);
         root = new Root();
         
         this.receiveMessageFromModel(new Message(Message.HomeModel.StartLogInView));
@@ -79,68 +43,75 @@ public class Controller {
         return root.getUI();
     }
 
-    public void addModel(ModelType type, ModelInterface model) {
+    public UserSchema getCurrentUser() {
+        return currentUser;
+    }
+
+    public void makeOrReplaceModel(ModelFactory.Type type) {
+        ModelInterface model = ModelFactory.make(type, this);
         models.put(type, model);
     }
 
-    public void addUI(UIType type, UIInterface ui) {
+    public void makeOrReplaceUI(UIFactory.Type type) {
+        UIInterface ui = UIFactory.make(type, this);
         uis.put(type, ui);
     }
 
     public void receiveMessageFromModel(Message m) {
         // Controller intercepts all message that update UI Types
         if (m.getMessageType() == Message.CreateAccountModel.StartLogInView || m.getMessageType() == Message.HomeModel.StartLogInView) {
-            UIInterface logInView = make(UIType.LogIn);
-            addUI(UIType.LogIn, logInView);
-            root.addChild(logInView.getUI());
+            makeOrReplaceUI(UIFactory.Type.LogIn);
+            root.addChild(uis.get(UIFactory.Type.LogIn).getUI());
+
+            makeOrReplaceModel(ModelFactory.Type.LogIn);
+        }
+        else if(m.getMessageType() == Message.LogInModel.CloseLogInView) {
+            root.removeChild(uis.get(UIFactory.Type.LogIn).getUI());
+            models.remove(ModelFactory.Type.LogIn);
+        }
+        else if(m.getMessageType() == Message.LogInModel.StartCreateAccountView) {
+            makeOrReplaceUI(UIFactory.Type.CreateAccount);
+            root.addChild(uis.get(UIFactory.Type.CreateAccount).getUI());
             
-            LogInModel logInModel = new LogInModel(this);
-            addModel(ModelType.LogIn, logInModel);            
-        } else if(m.getMessageType() == Message.LogInModel.CloseLogInView) {
-            root.removeChild(uis.get(UIType.LogIn).getUI());
-            models.remove(ModelType.LogIn);
-        } else if(m.getMessageType() == Message.LogInModel.StartCreateAccountView) {
-            UIInterface createAccountView = make(UIType.CreateAccount);
-            addUI(UIType.CreateAccount, createAccountView);
-            root.addChild(createAccountView.getUI());
-            
-            CreateAccountModel createAccountModel = new CreateAccountModel(this);
-            addModel(ModelType.CreateAccount, createAccountModel);            
+            makeOrReplaceModel(ModelFactory.Type.CreateAccount);           
         }
         else if (m.getMessageType() == Message.CreateAccountModel.CloseCreateAccountView) {
-            root.removeChild(uis.get(UIType.CreateAccount).getUI());
-            models.remove(ModelType.CreateAccount);
-        }else if (m.getMessageType() == Message.LogInModel.StartHomeView || m.getMessageType() == Message.CreateAccountModel.StartHomeView) {
-            UIInterface homeView = make(UIType.HomePage);
-            addUI(UIType.HomePage, homeView);
-            root.addChild(homeView.getUI());
+            root.removeChild(uis.get(UIFactory.Type.CreateAccount).getUI());
+            models.remove(ModelFactory.Type.CreateAccount);
+        }
+        else if (m.getMessageType() == Message.CreateAccountModel.SetUser || m.getMessageType() == Message.LogInModel.SetUser) {
+            currentUser = (UserSchema) m.getKey("User");
+            System.out.println(currentUser._id + currentUser.username + currentUser.password);
+        }
+        else if (m.getMessageType() == Message.LogInModel.StartHomeView || m.getMessageType() == Message.CreateAccountModel.StartHomeView) {
+            makeOrReplaceUI(UIFactory.Type.HomePage);
+            root.addChild(uis.get(UIFactory.Type.HomePage).getUI());
             
-            HomeModel homeModel = new HomeModel(this);
-            addModel(ModelType.HomePage, homeModel);
-        } else if (m.getMessageType() == Message.HomeModel.CloseHomeView) {
-            System.out.println("Hello");
-            root.removeChild(uis.get(UIType.HomePage).getUI());
-            models.remove(ModelType.HomePage);
-        } else if (m.getMessageType() == Message.HomeModel.StartCreateRecipeView) {
-            UIInterface createRecipeView = make(UIType.CreateRecipe);
-            addUI(UIType.CreateRecipe, createRecipeView);
-            uis.get(UIType.HomePage).addChild(createRecipeView.getUI());
+            makeOrReplaceModel(ModelFactory.Type.HomePage);
+        }
+        else if (m.getMessageType() == Message.HomeModel.CloseHomeView) {
+            root.removeChild(uis.get(UIFactory.Type.HomePage).getUI());
+            models.remove(ModelFactory.Type.HomePage);
+        }
+        else if (m.getMessageType() == Message.HomeModel.StartCreateRecipeView) {
+            makeOrReplaceUI(UIFactory.Type.CreateRecipe);
+            uis.get(UIFactory.Type.HomePage).addChild(uis.get(UIFactory.Type.CreateRecipe).getUI());
 
-            CreateRecipeModel createRecipeModel = new CreateRecipeModel(this);
-            addModel(ModelType.CreateRecipe, createRecipeModel);
-        }else if (m.getMessageType() == Message.HomeModel.CloseCreateRecipeView) {
-            uis.get(UIType.HomePage).removeChild(uis.get(UIType.CreateRecipe).getUI());
-            models.remove(ModelType.CreateRecipe);
-        } else if (m.getMessageType() == Message.HomeModel.StartRecipeDetailedView) {
-            UIInterface detailedView = make(UIType.DetailedView);
-            addUI(UIType.DetailedView, detailedView);
-            uis.get(UIType.HomePage).addChild(detailedView.getUI());
+            makeOrReplaceModel(ModelFactory.Type.CreateRecipe);
+        }
+        else if (m.getMessageType() == Message.HomeModel.CloseCreateRecipeView) {
+            uis.get(UIFactory.Type.HomePage).removeChild(uis.get(UIFactory.Type.CreateRecipe).getUI());
+            models.remove(ModelFactory.Type.CreateRecipe);
+        }
+        else if (m.getMessageType() == Message.HomeModel.StartRecipeDetailedView) {
+            makeOrReplaceUI(UIFactory.Type.DetailedView);
+            uis.get(UIFactory.Type.HomePage).addChild(uis.get(UIFactory.Type.DetailedView).getUI());
             
-            RecipeDetailedModel detailedModel = new RecipeDetailedModel(this);
-            addModel(ModelType.DetailedView, detailedModel);
-        } else if (m.getMessageType() == Message.HomeModel.CloseRecipeDetailedView) {
-            uis.get(UIType.HomePage).removeChild(uis.get(UIType.DetailedView).getUI());
-            models.remove(ModelType.DetailedView);
+            makeOrReplaceModel(ModelFactory.Type.DetailedView);
+        }
+        else if (m.getMessageType() == Message.HomeModel.CloseRecipeDetailedView) {
+            uis.get(UIFactory.Type.HomePage).removeChild(uis.get(UIFactory.Type.DetailedView).getUI());
+            models.remove(ModelFactory.Type.DetailedView);
         }
         uis.forEach((uiType, ui) -> ui.receiveMessage(m));
         models.forEach((mType, model) -> model.receiveMessage(m));
@@ -149,20 +120,68 @@ public class Controller {
     public void receiveMessageFromUI(Message m) {
         models.forEach((mType, model) -> model.receiveMessage(m));
     }
-
-    // Saving username and password for access
-    public String username, password;
    
     // Testing Use
-    public Object getState(ModelType type) {
+    public Object getState(ModelFactory.Type type) {
         return models.get(type).getState();
     }
 
-    public boolean existsModel(ModelType type) {
+    public boolean existsModel(ModelFactory.Type type) {
         return models.containsKey(type);
     }
 
-    public boolean existsUI(UIType type) {
+    public boolean existsUI(UIFactory.Type type) {
         return uis.containsKey(type);
+    }
+}
+
+class ModelFactory {
+    public enum Type {
+        CreateRecipe,
+        HomePage,
+        DetailedView,
+        CreateAccount,
+        LogIn,
+    }
+
+    public static ModelInterface make(Type type, Controller c) {
+        if (type == Type.CreateRecipe)
+            return new CreateRecipeModel(c);
+        else if (type == Type.HomePage)
+            return new HomeModel(c);
+        else if (type == Type.DetailedView)
+            return new RecipeDetailedModel(c);
+        else if (type == Type.CreateAccount)
+            return new CreateAccountModel(c);
+        else if (type == Type.LogIn)
+            return new LogInModel(c);
+        return null;
+    }
+}
+
+class UIFactory {
+    public enum Type {
+        CreateRecipe,
+        HomePage,
+        DetailedView,
+		CreateAccount,
+		LogIn,
+        NoUI,
+    }
+
+    public static UIInterface make(Type type, Controller c) {
+        if (type == Type.CreateRecipe)
+            return new CreateRecipeView(c);
+        else if (type == Type.HomePage)
+            return new HomeView(c);
+        else if (type == Type.DetailedView)
+            return new RecipeDetailedView(c);
+        else if (type == Type.CreateAccount)
+            return new CreateAccountView(c);
+        else if (type == Type.LogIn)
+            return new LogInView(c);
+        else if (type == Type.NoUI)
+            return new NoUI();
+        return null;
     }
 }

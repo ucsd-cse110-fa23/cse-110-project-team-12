@@ -27,7 +27,11 @@ public class Message {
     public enum LogInModel implements Type {
         CloseLogInView,
         StartCreateAccountView,
-        StartHomeView;
+        StartHomeView,
+        SetUser {
+            Set<String> keys = new HashSet<>(Arrays.asList("User"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        };
     }
 
     public enum CreateAccountView implements Type {
@@ -43,6 +47,10 @@ public class Message {
         StartLogInView,
         StartHomeView,
         ErrorUsernameTaken,
+        SetUser {
+            Set<String> keys = new HashSet<>(Arrays.asList("User"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        }
     }
     
     public enum HomeView implements Type {
@@ -63,7 +71,7 @@ public class Message {
             Set<String> keys = new HashSet<>(Arrays.asList("Recipes"));
             @Override public Set<String> allowedKeys() {return keys;}
         }, 
-        SendTitleBody {
+        SendRecipe {
             Set<String> keys = new HashSet<>(Arrays.asList("Recipe"));
             @Override public Set<String> allowedKeys() {return keys;}
         },
@@ -78,7 +86,7 @@ public class Message {
         CloseCreateRecipeView,
         StartRecording,
         StopRecording,
-        SendTitleBody {
+        SendRecipe {
             Set<String> keys = new HashSet<>(Arrays.asList("Recipe"));
             @Override public Set<String> allowedKeys() {return keys;}
         },
@@ -109,11 +117,7 @@ public class Message {
     }
     public enum RecipeDetailedModel implements Type {
         CloseRecipeDetailedView,
-        SetTitle {
-            Set<String> keys = new HashSet<>(Arrays.asList("Recipe"));
-            @Override public Set<String> allowedKeys() {return keys;}
-        },
-        SetBody {
+        SetRecipe {
             Set<String> keys = new HashSet<>(Arrays.asList("Recipe"));
             @Override public Set<String> allowedKeys() {return keys;}
         },
@@ -121,11 +125,8 @@ public class Message {
         UseSavedLayout,
         SaveConfirmation,
         RemoveUnsavedLayout,
-        EditRecipe {
-            Set<String> keys = new HashSet<>(Arrays.asList("RecipeBody"));
-            @Override public Set<String> allowedKeys() {return keys;}
-        },
-        RemoveEditRecipe,
+        EditRecipe,
+        ExitEditRecipe,
         GoToDeleteConfirmationPage,
         RemoveDeleteConfirmation, 
         AddBackButton, 

@@ -1,6 +1,12 @@
 package edu.ucsd.cse110.api;
 
 import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.nio.charset.StandardCharsets;
+
+import edu.ucsd.cse110.server.schemas.UserSchema;
+import edu.ucsd.cse110.server.services.Utils;
 public class CreateAccountModel implements ModelInterface {
 
     private Controller controller;
@@ -14,14 +20,16 @@ public class CreateAccountModel implements ModelInterface {
         if(m.getMessageType() == Message.CreateAccountView.BackButton) {
             controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.CloseCreateAccountView));
             controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.StartLogInView));
-        }else if(m.getMessageType() == Message.CreateAccountView.SignUpButton) {
+        }
+        else if(m.getMessageType() == Message.CreateAccountView.SignUpButton) {
             String username = (String) m.getKey("Username");
             String password = (String) m.getKey("Password");
             boolean rememberMe = (boolean) m.getKey("AutomaticLogIn");
-            if (controller.mongoDB.createUser(username, password)) {
-                controller.username = username;
-                controller.password = password;
 
+            UserSchema newUser = createUser(username, password);
+            if (newUser != null) {
+                controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.SetUser,
+                    Map.ofEntries(Map.entry("User", newUser))));
                 controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.CloseCreateAccountView));
                 controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.StartHomeView));
 
@@ -36,10 +44,46 @@ public class CreateAccountModel implements ModelInterface {
                         e.printStackTrace();
                     }
                 }
-            }else {
+            }
+            else {
                 controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.ErrorUsernameTaken));
             }
         }
+    }
+
+    private UserSchema createUser(String username, String password) {
+        try {
+            // Needed here so special characters can be passed into the url.
+            String encodedUsername = URLEncoder.encode(username, StandardCharsets.UTF_8);
+            String encodedPassword = URLEncoder.encode(password, StandardCharsets.UTF_8);
+
+            String urlString = Controller.serverUrl + "/user?username=" + encodedUsername + "&password=" + encodedPassword;
+            URL url = new URI(urlString).toURL();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("POST");
+            conn.connect();
+
+            int responseCode = conn.getResponseCode();
+
+            if (responseCode == 201) {
+                // 201 code means created.
+                Scanner in = new Scanner(conn.getInputStream());
+                String jsonString = "";
+                while (in.hasNext())
+                    jsonString += in.nextLine();
+                in.close();
+                return Utils.unmarshalJson(jsonString, UserSchema.class);
+            }
+            else if (responseCode == 409) {
+                // 409 code means duplicate resource.
+                return null;
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

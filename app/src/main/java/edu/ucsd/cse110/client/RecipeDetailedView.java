@@ -6,6 +6,7 @@ import java.util.Map;
 import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.Message;
 import edu.ucsd.cse110.api.UIInterface;
+import edu.ucsd.cse110.server.schemas.RecipeSchema;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -32,7 +33,7 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
     private Spacer spacer;
 	private VBox content;
 
-    private Recipe recipe;
+    private RecipeSchema recipe;
 
     private Text recipeTitle;
     private double titleDefaultSize;
@@ -184,17 +185,16 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
 
     @Override
     public void receiveMessage(Message m) {
-        if (m.getMessageType() == Message.RecipeDetailedModel.SetTitle) {
-            recipe = (Recipe) m.getKey("Recipe");
-            recipeTitle.setText(recipe.getName());
+        if (m.getMessageType() == Message.RecipeDetailedModel.SetRecipe) {
+            recipe = (RecipeSchema) m.getKey("Recipe");
+            recipeTitle.setText(recipe.title);
             setTitleFont(recipeTitle, titleDefaultSize, titleWidthLimit);
 
+            removeChild(recipeTitleSpacer);
             addChild(recipeTitleSpacer);
-        }
-        if (m.getMessageType() == Message.RecipeDetailedModel.SetBody) {
             information.setEditable(true);
 			information.setFocusTraversable(true);
-			information.setText(recipe.getInformation().trim());
+			information.setText(recipe.description.trim());
 			information.setEditable(false);
 			information.setFocusTraversable(false);
             addChild(information);
@@ -229,10 +229,11 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
             removeChild(information);
             removeChild(savedButtonBox);
 
-            informationEdit.setText(((String) m.getKey("RecipeBody")).trim());
+            informationEdit.setText(recipe.description);
             addChild(informationEdit);
         }
-        if (m.getMessageType() == Message.RecipeDetailedModel.RemoveEditRecipe) {
+        if (m.getMessageType() == Message.RecipeDetailedModel.ExitEditRecipe) {
+            removeChild(unsavedButtonBox);
             removeChild(informationEdit);
             this.getChildren().removeAll(backArrowBox, backButton);
         }

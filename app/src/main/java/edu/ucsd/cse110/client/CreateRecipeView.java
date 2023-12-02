@@ -148,7 +148,8 @@ public class CreateRecipeView extends StackPane implements UIInterface {
 
 			recordButtonModule.setTopPadding(13);
 			content.getChildren().addAll(mealTypeHeading, mealTypeContainer, pantryPrompt, recordButtonModule);
-		}else if (pagetype == "Waiting") {
+		} 
+		else if (pagetype == "Waiting") {
 			this.getChildren().removeAll(backArrowBox, backButton);
 			addChild(waitingPage);
 		}

@@ -13,8 +13,6 @@ import edu.ucsd.cse110.api.ChatGPTMock;
 import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.VoicePromptMock;
 import edu.ucsd.cse110.api.WhisperMock;
-import edu.ucsd.cse110.api.Controller.ModelType;
-import edu.ucsd.cse110.api.Controller.UIType;
 
 public class US5Test {
     Controller controller;

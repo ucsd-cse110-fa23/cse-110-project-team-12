@@ -31,6 +31,9 @@ dependencies {
     implementation group: 'org.json', name: 'json', version: '20230227'
 
     implementation 'org.mongodb:mongodb-driver-sync:4.11.0'
+
+    // For serialization.
+    implementation "com.google.code.gson:gson:2.10.1"
 }
 
 javafx {
@@ -54,7 +57,7 @@ test {
 
 application {
     // Define the main class for the application.
-    mainClass = 'edu.ucsd.cse110.App'
+    mainClass = project.hasProperty("main") ? project.getProperty("main") : 'edu.ucsd.cse110.App'
 }
 
 sourceSets {

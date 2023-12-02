@@ -3,6 +3,7 @@ package edu.ucsd.cse110.client;
 import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.Message;
 import edu.ucsd.cse110.api.UIInterface;
+import edu.ucsd.cse110.server.schemas.RecipeSchema;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -20,30 +21,30 @@ public class RecipeTitleView extends StackPane implements UIInterface {
     private Controller controller;
     private Button titleButton;
 	private Text titleText;
-    private Recipe recipe;
+    private RecipeSchema recipe;
 
 	private double titleDefaultSize;
     private double titleWidthLimit;
 
-    public RecipeTitleView(Controller c, Recipe r) {
+    public RecipeTitleView(Controller c, RecipeSchema r) {
         controller = c;
         this.recipe = r;
 
         titleButton = new Button();
-		titleText = new Text(r.getName());
+		titleText = new Text(r.title);
 		titleDefaultSize = 20;
         titleWidthLimit = 257;
         setTitleFont(titleText, titleDefaultSize, titleWidthLimit);		
 		
 		Image icon = null;
 		try {
-			if (r.getMealType().equals("Breakfast")) {
+			if (r.mealType.equals("Breakfast")) {
 				icon = new Image(new FileInputStream("./src/main/java/edu/ucsd/cse110/client/resources/sun.png"));
 			}
-			else if (r.getMealType().equals("Lunch")) {
+			else if (r.mealType.equals("Lunch")) {
 				icon = new Image(new FileInputStream("./src/main/java/edu/ucsd/cse110/client/resources/cloud.png"));
 			}
-			else if (r.getMealType().equals("Dinner")) {
+			else if (r.mealType.equals("Dinner")) {
 				icon = new Image(new FileInputStream("./src/main/java/edu/ucsd/cse110/client/resources/moon.png"));
 			}
 		}
@@ -65,7 +66,6 @@ public class RecipeTitleView extends StackPane implements UIInterface {
         titleButton.setOnAction(e -> {
             controller.receiveMessageFromUI(new Message(Message.HomeView.OpenRecipe,
                                                         Map.ofEntries(Map.entry("Recipe", recipe))));
-            
         });
     }
 

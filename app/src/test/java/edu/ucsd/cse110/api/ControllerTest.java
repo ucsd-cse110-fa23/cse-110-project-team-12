@@ -18,7 +18,7 @@ public class ControllerTest {
 
 class UI implements UIInterface {
     UI(Controller c) {
-        c.receiveMessageFromUI(new Message(Message.HomeModel.CloseCreateRecipeView));
+        c.receiveMessageFromUI(new Message(Message.CreateRecipeModel.CloseCreateRecipeView));
     }
 
     @Override
@@ -48,7 +48,7 @@ class Model implements ModelInterface {
 
     @Override
     public void receiveMessage(Message m) {
-        if (m.getMessageType() == Message.HomeModel.CloseCreateRecipeView)
+        if (m.getMessageType() == Message.CreateRecipeModel.CloseCreateRecipeView)
             value = 12;
     }
 
