@@ -3,6 +3,7 @@ package edu.ucsd.cse110.api;
 import java.io.*;
 import java.util.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 
 import edu.ucsd.cse110.server.schemas.UserSchema;
 import edu.ucsd.cse110.server.services.Utils;
@@ -75,7 +76,11 @@ public class LogInModel implements ModelInterface {
         if (username == null || password == null)
             return null;
         try {
-            String urlString = Controller.serverUrl + "/user?username=" + username + "&password=" + password;
+            // Needed here so special characters can be passed into the url.
+            String encodedUsername = URLEncoder.encode(username, StandardCharsets.UTF_8);
+            String encodedPassword = URLEncoder.encode(password, StandardCharsets.UTF_8);
+            
+            String urlString = Controller.serverUrl + "/user?username=" + encodedUsername + "&password=" + encodedPassword;
             URL url = new URI(urlString).toURL();
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
