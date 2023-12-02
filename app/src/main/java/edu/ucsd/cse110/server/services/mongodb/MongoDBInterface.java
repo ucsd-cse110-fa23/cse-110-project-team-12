@@ -13,7 +13,7 @@ public interface MongoDBInterface {
     //recipes schema
     public List<RecipeSchema> getRecipeList(String userId);
     public RecipeSchema getRecipe(String recipeId);
-    public void saveRecipe(RecipeSchema recipe);
+    public RecipeSchema saveRecipe(RecipeSchema recipe);
     public void updateRecipe(String userId, String newTitle, String newDescription);
     public void deleteRecipe(String recipeId);
 

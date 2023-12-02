@@ -3,7 +3,6 @@ package edu.ucsd.cse110.api;
 import java.io.File;
 import java.util.Map;
 
-import edu.ucsd.cse110.client.Recipe;
 import edu.ucsd.cse110.server.schemas.RecipeSchema;
 import javafx.application.Platform;
 

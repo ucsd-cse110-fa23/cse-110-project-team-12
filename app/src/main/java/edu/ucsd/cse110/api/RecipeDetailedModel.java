@@ -1,10 +1,7 @@
 package edu.ucsd.cse110.api;
 
-import java.util.Map;
-
 import com.google.common.util.concurrent.ExecutionError;
 
-import edu.ucsd.cse110.client.Recipe;
 import edu.ucsd.cse110.server.schemas.RecipeSchema;
 import edu.ucsd.cse110.server.services.Utils;
 import java.io.*;
@@ -75,8 +72,7 @@ public class RecipeDetailedModel implements ModelInterface {
         if (m.getMessageType() == Message.RecipeDetailedView.SaveButton) {
             if (currentPage == PageType.UnsavedLayout) {
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.RemoveUnsavedLayout));
-                saveRecipe(recipe);
-                // recipe.getMealType(), controller.username, controller.password);
+                recipe = saveRecipe(recipe);
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.UseSavedLayout));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.AddBackButton));
                 controller.receiveMessageFromModel(new Message(Message.HomeView.UpdateRecipeList));
@@ -139,7 +135,8 @@ public class RecipeDetailedModel implements ModelInterface {
         }
     }
 
-    private void saveRecipe(RecipeSchema recipe) {
+    // Returns new recipe with recipe id added.
+    private RecipeSchema saveRecipe(RecipeSchema recipe) {
         try {
             recipe.userId = controller.getCurrentUser()._id;
 
@@ -155,11 +152,21 @@ public class RecipeDetailedModel implements ModelInterface {
             out.flush();
             out.close();
 
-            if (conn.getResponseCode() != 201)
+            if (conn.getResponseCode() == 201) {
+                Scanner in = new Scanner(conn.getInputStream());
+                String jsonString = "";
+                while (in.hasNext())
+                    jsonString += in.nextLine();
+                in.close();
+                return Utils.unmarshalJson(jsonString, RecipeSchema.class);
+            }
+            else {
                 throw new Exception("Save Recipe Failed");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     private void deleteRecipe(String recipeId) {

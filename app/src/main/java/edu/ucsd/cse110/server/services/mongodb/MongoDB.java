@@ -126,10 +126,12 @@ public class MongoDB implements MongoDBInterface {
     }
 
     @Override
-    public void saveRecipe(RecipeSchema rs) {
+    public RecipeSchema saveRecipe(RecipeSchema rs) {
         MongoCollection<Document> recipes = database.getCollection("recipes");
 
-        Document recipe = new Document("_id", new ObjectId())
+        ObjectId objId = new ObjectId();
+        String timeCreated = LocalDateTime.now().toString();
+        Document recipe = new Document("_id", objId)
                 .append("title", rs.title)
                 .append("description", rs.description)
                 .append("mealType", rs.mealType)
@@ -138,6 +140,10 @@ public class MongoDB implements MongoDBInterface {
                 .append("userId", new ObjectId(rs.userId));
 
         recipes.insertOne(recipe);
+
+        rs._id = objId.toString();
+        rs.timeCreated = timeCreated;
+        return rs;
     }
 
     @Override

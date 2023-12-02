@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.api;
 
 import edu.ucsd.cse110.api.UIFactory;
-import edu.ucsd.cse110.client.Recipe;
 import edu.ucsd.cse110.server.schemas.RecipeSchema;
 import edu.ucsd.cse110.server.schemas.UserSchema;
 import edu.ucsd.cse110.server.services.Utils;
