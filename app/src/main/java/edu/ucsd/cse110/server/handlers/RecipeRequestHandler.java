@@ -47,17 +47,12 @@ public class RecipeRequestHandler implements HttpHandler {
         if (queryVals.containsKey("userId")) {
             String userId = queryVals.get("userId");
             List<RecipeSchema> recipes = mongodb.getRecipeList(userId);
-
-            if (recipes.size() == 0) {
-                send404(httpExchange);
-            }
-            else {
-                String jsonString = Utils.marshalJson(recipes);
-                httpExchange.sendResponseHeaders(200, jsonString.getBytes().length);
-                OutputStream outStream = httpExchange.getResponseBody();
-                outStream.write(jsonString.getBytes());
-                outStream.close();
-            }
+            
+            String jsonString = Utils.marshalJson(recipes);
+            httpExchange.sendResponseHeaders(200, jsonString.getBytes().length);
+            OutputStream outStream = httpExchange.getResponseBody();
+            outStream.write(jsonString.getBytes());
+            outStream.close();
         }
         else if (queryVals.containsKey("recipeId")) {
             String recipeId = queryVals.get("recipeId");
