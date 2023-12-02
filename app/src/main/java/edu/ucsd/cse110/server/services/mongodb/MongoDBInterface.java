@@ -8,7 +8,7 @@ import edu.ucsd.cse110.server.schemas.UserSchema;
 public interface MongoDBInterface {
     //users schema
     public UserSchema getUser(String username, String password);
-    public boolean createUser(String username, String password); //return false is username already exists
+    public UserSchema createUser(String username, String password); //return false is username already exists
 
     //recipes schema
     public List<RecipeSchema> getRecipeList(String userId);

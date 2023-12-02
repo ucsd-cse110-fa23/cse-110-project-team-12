@@ -117,14 +117,21 @@ public class RecipeDetailedModel implements ModelInterface {
 
     private void updateRecipe(String recipeId, String newTitle, String newDescription) {
         try {
-            String userId = controller.getCurrentUser()._id;
-            String urlString = Controller.serverUrl + "/recipe?userId=" + userId + "&newTitle=newTitle" + newTitle
-                    + "&newDescription=" + newDescription;
+            String urlString = Controller.serverUrl + "/recipe";
             URL url = new URI(urlString).toURL();
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-            conn.setRequestMethod("PATCH");
-            conn.connect();
+            conn.setRequestMethod("PUT");
+            conn.setDoOutput(true);
+
+            OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+            RecipeSchema changes = new RecipeSchema();
+            changes._id = recipeId;
+            changes.title = newTitle;
+            changes.description = newDescription;
+            out.write(Utils.marshalJson(changes));
+            out.flush();
+            out.close();
 
             if (conn.getResponseCode() != 200)
                 throw new Exception("Update Recipe Failed");

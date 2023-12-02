@@ -32,7 +32,7 @@ public class RecipeRequestHandler implements HttpHandler {
         else if (method.equals("POST")) {
             handlePost(httpExchange);
         }
-        else if (method.equals("PATCH")) {
+        else if (method.equals("PUT")) {
             handleUpdate(httpExchange);
         }
         else if (method.equals("DELETE")) {
@@ -92,12 +92,13 @@ public class RecipeRequestHandler implements HttpHandler {
     }
 
     private void handleUpdate(HttpExchange httpExchange) throws IOException {
-        Map<String, String> queryVals = Utils.getQueryPairs(httpExchange);
-        String recipeId = queryVals.get("recipeId");
-        String newTitle = queryVals.get("newTitle");
-        String newDescription = queryVals.get("newDescription");
+        Scanner scanner = new Scanner(httpExchange.getRequestBody());
+        String data = "";
+        while (scanner.hasNext())
+            data += scanner.nextLine() + "\n";
+        RecipeSchema recipe = Utils.unmarshalJson(data, RecipeSchema.class);
 
-        mongodb.updateRecipe(recipeId, newTitle, newDescription);
+        mongodb.updateRecipe(recipe._id, recipe.title, recipe.description);
 
         httpExchange.sendResponseHeaders(200, 0);
         OutputStream outStream = httpExchange.getResponseBody();

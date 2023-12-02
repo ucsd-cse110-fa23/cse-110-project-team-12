@@ -74,6 +74,7 @@ public class CreateRecipeModel implements ModelInterface {
             generatedRecipe.title = gptResult[0];
             generatedRecipe.description = gptResult[1];
             generatedRecipe.mealType = mealTypeString;
+            generatedRecipe.ingredients = selectedIngredients;
         }
         catch (Exception e) {
             e.printStackTrace();
