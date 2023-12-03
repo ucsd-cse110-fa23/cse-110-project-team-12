@@ -75,33 +75,17 @@ public class LogInModel implements ModelInterface {
     private UserSchema getUser(String username, String password) {
         if (username == null || password == null)
             return null;
-        try {
-            // Needed here so special characters can be passed into the url.
-            String encodedUsername = URLEncoder.encode(username, StandardCharsets.UTF_8);
-            String encodedPassword = URLEncoder.encode(password, StandardCharsets.UTF_8);
-            
-            String urlString = Controller.serverUrl + "/user?username=" + encodedUsername + "&password=" + encodedPassword;
-            URL url = new URI(urlString).toURL();
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-            conn.setRequestMethod("GET");
-            conn.connect();
-
-            int responseCode = conn.getResponseCode();
-
-            if (responseCode == 200) {
-                Scanner in = new Scanner(conn.getInputStream());
-                String jsonString = "";
-                while (in.hasNext())
-                    jsonString += in.nextLine();
-                in.close();
-                return Utils.unmarshalJson(jsonString, UserSchema.class);
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        // Needed here so special characters can be passed into the url.
+        String encodedUsername = URLEncoder.encode(username, StandardCharsets.UTF_8);
+        String encodedPassword = URLEncoder.encode(password, StandardCharsets.UTF_8);
+        String urlString = Controller.serverUrl + "/user?username=" + encodedUsername + "&password=" + encodedPassword;
+        ServerResponse response = HttpUtils.makeHttpRequest(urlString, "GET", "");
+        
+        if (response.getStatusCode() == 200)
+            return Utils.unmarshalJson(response.getResponseBody(), UserSchema.class);
+        else
+            return null;
     }
     
     public Object getState() {

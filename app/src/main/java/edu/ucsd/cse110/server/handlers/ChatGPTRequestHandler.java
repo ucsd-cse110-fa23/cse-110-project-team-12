@@ -5,53 +5,44 @@ import com.sun.net.httpserver.*;
 
 import edu.ucsd.cse110.api.ChatGPT;
 import edu.ucsd.cse110.server.schemas.RecipeSchema;
+import edu.ucsd.cse110.server.services.Utils;
 
 import java.io.*;
 import java.util.*;
 import java.time.*;
 
 
-public class GenerateRequestHandler implements HttpHandler {
+public class ChatGPTRequestHandler implements HttpHandler {
     private ChatGPT chatgpt;
 
-    public GenerateRequestHandler(ChatGPT gpt) {
+    public ChatGPTRequestHandler(ChatGPT gpt) {
         chatgpt = gpt;
     }
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         String method = httpExchange.getRequestMethod();
-        if (method.equals("POST")) {
+        if (method.equals("GET")) {
             Scanner scanner = new Scanner(httpExchange.getRequestBody());
             String data = "";
             while (scanner.hasNext()) {
                 data += scanner.nextLine() + "\n";
             }
-            Gson gson = new Gson();
-            RecipeSchema rs = new RecipeSchema();
-            try {
-                rs = gson.fromJson(data, RecipeSchema.class);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            RecipeSchema recipe = Utils.unmarshalJson(data, RecipeSchema.class);
 
             try {
-                String[] r = chatgpt.promptGPT(rs.mealType, rs.ingredients);
-                rs.title = r[0];
-                rs.description = r[1];
-                rs.timeCreated = LocalDateTime.now().toString();
+                String[] r = chatgpt.promptGPT(recipe.mealType, recipe.ingredients);
+                recipe.title = r[0];
+                recipe.description = r[1];
             }
             catch (Exception e) {
                 e.printStackTrace();
             }
+            String genRecipe = Utils.marshalJson(recipe);
 
-            String json = "fale";
-            gson = new Gson();
-            json = gson.toJson(rs);
-
-            httpExchange.sendResponseHeaders(200, json.getBytes().length);
+            httpExchange.sendResponseHeaders(200, genRecipe.getBytes().length);
             OutputStream outStream = httpExchange.getResponseBody();
-            outStream.write(json.getBytes());
+            outStream.write(genRecipe.getBytes());
             outStream.close();
         }
     }
