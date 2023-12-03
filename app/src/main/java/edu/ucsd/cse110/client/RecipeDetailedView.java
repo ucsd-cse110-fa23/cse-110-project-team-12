@@ -21,6 +21,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.WritableImage;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
@@ -39,6 +41,7 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
     private double titleDefaultSize;
     private double titleWidthLimit;
     private HBox recipeTitleSpacer;
+	private HBox recipeImageBox;
     private TextArea information;
     private TextArea informationEdit;
 
@@ -79,11 +82,23 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         recipeTitleSpacer = new Spacer(recipeTitle, new Insets(0, 30, 0, 30), Pos.CENTER);
 		recipeTitleSpacer.setId("recipe-title-spacer");
 
+		Image recipeImage = null;
+		try {
+			recipeImage = new Image(new FileInputStream("test.png"), 132, 132, true, true);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		PixelReader pixelReader = recipeImage.getPixelReader();
+		Image recipeImageCrop = new WritableImage(pixelReader, 0, 29, 132, 74);
+		ImageView recipeImageView = new ImageView(recipeImageCrop);
+		recipeImageBox = new HBox(recipeImageView);
+		recipeImageBox.setId("recipe-image-box");
+
         information = new TextArea();
 		information.setWrapText(true);
 		information.setEditable(false);
 		information.setFocusTraversable(false);
-        information.setId("information");
 
         //  UnsavedLayout
         cancelButton = new Button("Cancel");
@@ -192,6 +207,10 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
 
             removeChild(recipeTitleSpacer);
             addChild(recipeTitleSpacer);
+
+			removeChild(recipeImageBox);
+			addChild(recipeImageBox);
+
             information.setEditable(true);
 			information.setFocusTraversable(true);
 			information.setText(recipe.description.trim());
@@ -229,7 +248,7 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
             removeChild(information);
             removeChild(savedButtonBox);
 
-            informationEdit.setText(recipe.description);
+            informationEdit.setText(recipe.description.trim());
             addChild(informationEdit);
         }
         if (m.getMessageType() == Message.RecipeDetailedModel.ExitEditRecipe) {

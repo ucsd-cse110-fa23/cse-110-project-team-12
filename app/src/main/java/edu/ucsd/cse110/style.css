@@ -530,6 +530,11 @@
 	-fx-min-height: 21;
 }
 
+#recipe-image-box {
+	-fx-alignment: center;
+	-fx-padding: 5 0 0 0;
+}
+
 #delete-button,
 #cancel-button {
 	-fx-background-color: -red;
@@ -587,8 +592,8 @@
 	-fx-font-family: 'Arial';
 	-fx-font-size: 11;
 	-fx-background-color: transparent;
-	-fx-min-height: 229;
-  	-fx-max-height: 229;
+	-fx-min-height: 150;
+  	-fx-max-height: 150;
 }
 
 .text-area .content,
@@ -604,8 +609,8 @@
 .scroll-pane {
 	-fx-background-color: transparent;
 	-fx-padding: 7 0 0 10;
-	-fx-min-height: 229;
-	-fx-max-height: 229;
+	-fx-min-height: 150;
+	-fx-max-height: 150;
 }
 
 .viewport {
