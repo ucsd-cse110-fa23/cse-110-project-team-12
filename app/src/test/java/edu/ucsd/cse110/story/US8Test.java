@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotEquals;
 import org.junit.Test;
 
 import edu.ucsd.cse110.api.HomeModel;
-import edu.ucsd.cse110.api.ChatGPTMock;
 import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.CreateRecipeModel;
 import edu.ucsd.cse110.api.Message;

@@ -2,12 +2,12 @@ package edu.ucsd.cse110.server;
 
 import com.sun.net.httpserver.*;
 
-import edu.ucsd.cse110.api.ChatGPT;
 import edu.ucsd.cse110.server.handlers.ChatGPTRequestHandler;
 import edu.ucsd.cse110.server.handlers.RecipeRequestHandler;
 import edu.ucsd.cse110.server.handlers.UserRequestHandler;
 import edu.ucsd.cse110.server.services.mongodb.MongoDB;
 import edu.ucsd.cse110.server.services.mongodb.MongoDBInterface;
+import edu.ucsd.cse110.server.services.chatgpt.ChatGPT;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

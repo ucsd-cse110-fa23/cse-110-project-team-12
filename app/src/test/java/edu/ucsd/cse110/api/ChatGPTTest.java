@@ -6,9 +6,11 @@ import static org.junit.Assert.assertNotNull;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import org.junit.Before;
+import edu.ucsd.cse110.server.services.chatgpt.*;
 
 
 import org.junit.Test;
+
 
 public class ChatGPTTest {
     private ChatGPTInterface mock;
