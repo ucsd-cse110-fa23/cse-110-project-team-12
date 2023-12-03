@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.api;
+package edu.ucsd.cse110.server.services.whisper;
 
 import java.io.*;
 import java.net.*;
@@ -23,22 +23,22 @@ public class Whisper implements WhisperInterface {
     
     private static void writeFileToOutputStream(
     OutputStream outputStream,
-    File file,
+    byte[] audio,
     String boundary) throws IOException {
         outputStream.write(("--" + boundary + "\r\n").getBytes());
         outputStream.write(
-        ("Content-Disposition: form-data; name=\"file\"; filename=\"" +
-        file.getName() +
+        ("Content-Disposition: form-data; name=\"file\"; filename=audio\"" +
         "\"\r\n").getBytes());
         outputStream.write(("Content-Type: audio/mpeg\r\n\r\n").getBytes());
         
-        FileInputStream fileInputStream = new FileInputStream(file);
-        byte[] buffer = new byte[1024];
-        int bytesRead;
-        while ((bytesRead = fileInputStream.read(buffer)) != -1) {
-            outputStream.write(buffer, 0, bytesRead);
-        }
-        fileInputStream.close();
+        // FileInputStream fileInputStream = new FileInputStream(file);
+        // byte[] buffer = new byte[1024];
+        // int bytesRead;
+        // while ((bytesRead = fileInputStream.read(buffer)) != -1) {
+        //     outputStream.write(buffer, 0, bytesRead);
+        // }
+        outputStream.write(audio);
+        // fileInputStream.close();
     }
     
     private static String handleSuccessResponse(HttpURLConnection connection)
@@ -74,7 +74,7 @@ public class Whisper implements WhisperInterface {
         return "!Error Result: " + errorResult;
     }
     
-    public String transcribe(File file) {
+    public String transcribe(byte[] audio) {
         // Set up HTTP connection
         try {
             URL url = new URI(API_ENDPOINT).toURL();
@@ -98,7 +98,7 @@ public class Whisper implements WhisperInterface {
             writeParameterToOutputStream(outputStream, "model", MODEL, boundary);
             
             // Write file parameter to request body
-            writeFileToOutputStream(outputStream, file, boundary);
+            writeFileToOutputStream(outputStream, audio, boundary);
             
             // Write closing boundary to request body
             outputStream.write(("\r\n--" + boundary + "--\r\n").getBytes());

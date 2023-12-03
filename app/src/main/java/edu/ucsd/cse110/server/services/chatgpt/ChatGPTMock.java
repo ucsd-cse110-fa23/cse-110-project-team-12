@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.api;
+package edu.ucsd.cse110.server.services.chatgpt;
 
 // Mock ChatGPT to use for testing, construced with integer to set the model response
 public class ChatGPTMock implements ChatGPTInterface {

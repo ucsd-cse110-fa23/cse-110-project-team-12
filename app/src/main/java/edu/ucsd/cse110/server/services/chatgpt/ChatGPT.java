@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.api;
+package edu.ucsd.cse110.server.services.chatgpt;
 
 import java.io.IOException;
 import java.net.URI;

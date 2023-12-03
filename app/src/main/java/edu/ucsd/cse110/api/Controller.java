@@ -22,15 +22,10 @@ public class Controller {
 
     // API Interfaces
     public VoicePromptInterface voicePrompt;
-    public WhisperInterface whisper;
-    public ChatGPTInterface chatGPT;
 
-    public Controller(boolean useUI, VoicePromptInterface voicePrompt, WhisperInterface whisper,
-            ChatGPTInterface chatGPT) {
+    public Controller(boolean useUI, VoicePromptInterface voicePrompt) {
         this.useUI = useUI;
         this.voicePrompt = voicePrompt;
-        this.whisper = whisper;
-        this.chatGPT = chatGPT;
 
         models = new EnumMap<>(ModelFactory.Type.class);
         uis = new EnumMap<>(UIFactory.Type.class);
@@ -81,7 +76,6 @@ public class Controller {
         }
         else if (m.getMessageType() == Message.CreateAccountModel.SetUser || m.getMessageType() == Message.LogInModel.SetUser) {
             currentUser = (UserSchema) m.getKey("User");
-            System.out.println(currentUser._id + currentUser.username + currentUser.password);
         }
         else if (m.getMessageType() == Message.LogInModel.StartHomeView || m.getMessageType() == Message.CreateAccountModel.StartHomeView) {
             makeOrReplaceUI(UIFactory.Type.HomePage);

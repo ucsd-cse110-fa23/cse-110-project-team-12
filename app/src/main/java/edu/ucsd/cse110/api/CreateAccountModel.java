@@ -52,38 +52,15 @@ public class CreateAccountModel implements ModelInterface {
     }
 
     private UserSchema createUser(String username, String password) {
-        try {
-            // Needed here so special characters can be passed into the url.
-            String encodedUsername = URLEncoder.encode(username, StandardCharsets.UTF_8);
-            String encodedPassword = URLEncoder.encode(password, StandardCharsets.UTF_8);
-
-            String urlString = Controller.serverUrl + "/user?username=" + encodedUsername + "&password=" + encodedPassword;
-            URL url = new URI(urlString).toURL();
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            conn.setRequestMethod("POST");
-            conn.connect();
-
-            int responseCode = conn.getResponseCode();
-
-            if (responseCode == 201) {
-                // 201 code means created.
-                Scanner in = new Scanner(conn.getInputStream());
-                String jsonString = "";
-                while (in.hasNext())
-                    jsonString += in.nextLine();
-                in.close();
-                return Utils.unmarshalJson(jsonString, UserSchema.class);
-            }
-            else if (responseCode == 409) {
-                // 409 code means duplicate resource.
-                return null;
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        String encodedUsername = URLEncoder.encode(username, StandardCharsets.UTF_8);
+        String encodedPassword = URLEncoder.encode(password, StandardCharsets.UTF_8);
+        String urlString = Controller.serverUrl + "/user?username=" + encodedUsername + "&password=" + encodedPassword;
+        ServerResponse response = HttpUtils.makeHttpRequest(urlString, "POST", "");
+        
+        if (response.getStatusCode() == 201)
+            return Utils.unmarshalJson(response.getResponseBody(), UserSchema.class);
+        else
+            return null;
     }
 
     @Override

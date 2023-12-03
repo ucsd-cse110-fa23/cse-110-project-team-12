@@ -9,10 +9,8 @@ import org.junit.Test;
 
 import edu.ucsd.cse110.api.HomeModel;
 import edu.ucsd.cse110.api.Message;
-import edu.ucsd.cse110.api.ChatGPTMock;
 import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.VoicePromptMock;
-import edu.ucsd.cse110.api.WhisperMock;
 
 public class MS2US2Test {
     Controller controller;

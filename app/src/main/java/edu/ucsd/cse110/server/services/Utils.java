@@ -45,4 +45,12 @@ public class Utils {
         }
         return null;
     }
+
+    public static String encodeBase64(byte[] bytes) {
+        return Base64.getEncoder().encodeToString(bytes);
+    }
+
+    public static byte[] decodeBase64(String str) {
+        return Base64.getDecoder().decode(str);
+    }
 }

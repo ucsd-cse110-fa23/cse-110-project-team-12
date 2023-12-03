@@ -103,30 +103,14 @@ public class HomeModel implements ModelInterface {
     }
 
     private void updateRecipeList() {
-        try {
-            String userId = controller.getCurrentUser()._id;
-            String urlString = Controller.serverUrl + "/recipe?userId=" + userId;
-            URL url = new URI(urlString).toURL();
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-    
-            conn.setRequestMethod("GET");
-            conn.connect();
-    
-            int responseCode = conn.getResponseCode();
-    
-            if (responseCode == 200) {
-                Scanner in = new Scanner(conn.getInputStream());
-                String jsonString = "";
-                while (in.hasNext())
-                    jsonString += in.nextLine();
-                in.close();
-                recipes = Arrays.asList(Utils.unmarshalJson(jsonString, RecipeSchema[].class));
-                recipes = filterRecipeList(recipes);
-                recipes = sortRecipeList(recipes);
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
+        String userId = controller.getCurrentUser()._id;
+        String urlString = Controller.serverUrl + "/recipe?userId=" + userId;
+        ServerResponse response = HttpUtils.makeHttpRequest(urlString, "GET", "");
+        
+        if (response.getStatusCode() == 200) {
+            recipes = Arrays.asList(Utils.unmarshalJson(response.getResponseBody(), RecipeSchema[].class));
+            recipes = filterRecipeList(recipes);
+            recipes = sortRecipeList(recipes);
         }
         controller.receiveMessageFromModel(
             new Message(Message.HomeModel.UpdateRecipeList,
