@@ -55,6 +55,14 @@ public class Message {
     
     public enum HomeView implements Type {
         CreateRecipeButton, // HomeView.CreateRecipeButton
+        FilterRecipeButton {
+            Set<String> keys = new HashSet<>(Arrays.asList("FilterOption"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        },
+        SortRecipeButton {
+            Set<String> keys = new HashSet<>(Arrays.asList("SortOption"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        },
         UpdateRecipeList, 
         OpenRecipe {
             Set<String> keys = new HashSet<>(Arrays.asList("Recipe"));

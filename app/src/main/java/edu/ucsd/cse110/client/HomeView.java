@@ -49,15 +49,22 @@ public class HomeView extends BorderPane implements UIInterface {
 
         this.setTop(topPane);
         this.setCenter(content);
-		CreateButtonModule createButtonModule = new CreateButtonModule();	
+
+		FilterButtonModule fbModule = new FilterButtonModule(controller);
+		SortButtonModule sbModule = new SortButtonModule(controller);
+		CreateButtonModule cbModule = new CreateButtonModule();	
 		
+		HBox homeButtonBox = new HBox(fbModule.getNode(), sbModule.getNode(), cbModule.getNode());
+		homeButtonBox.setPickOnBounds(false);
+		homeButtonBox.setId("home-button-box");
+
 		// Important that put in spacer before recipeList, or else button won't be clickale
 		addChild(recipeList);
-		addChild(createButtonModule.getSpacer());
+		addChild(homeButtonBox);
 		this.setId("app-frame");
 
 		// adds functionality to the createRecipeButton
-		this.createButton = createButtonModule.getCreateButton();
+		this.createButton = cbModule.getCreateButton();
 		createButton.setOnAction(
             e -> {
 				controller.receiveMessageFromUI(new Message(Message.HomeView.CreateRecipeButton));

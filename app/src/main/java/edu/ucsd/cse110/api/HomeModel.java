@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.net.*;
 import java.util.*;
 
@@ -15,10 +16,28 @@ public class HomeModel implements ModelInterface {
     private List<RecipeSchema> recipes;
     private UIFactory.Type currentView;
 
+    public enum FilterOption{
+        Breakfast,
+        Lunch,
+        Dinner,
+        All,
+    }
+    private FilterOption filterOption;
+
+    public enum SortOption{
+        TitleAsc, // Ascending Title
+        TitleDes, // Descending Title
+        DateDes, // Descending DateCreated
+        DateAsc // Ascending DateCreated
+    }
+
+    private SortOption sortOption;
+
     public HomeModel(Controller c) {
         this.controller = c;
         currentView = UIFactory.Type.HomePage;
-        recipes = new ArrayList<>();
+        filterOption = FilterOption.All;
+        sortOption = SortOption.DateDes;
         updateRecipeList();
     }
 
@@ -26,6 +45,16 @@ public class HomeModel implements ModelInterface {
         if (m.getMessageType() == Message.HomeView.CreateRecipeButton) {
             currentView = UIFactory.Type.CreateRecipe;
             controller.receiveMessageFromModel(new Message(Message.HomeModel.StartCreateRecipeView));
+        }
+        if (m.getMessageType() == Message.HomeView.FilterRecipeButton) {
+            FilterOption filterOption = (FilterOption) m.getKey("FilterOption");
+            updateFilterOption(filterOption);
+            updateRecipeList();
+        }
+        if (m.getMessageType() == Message.HomeView.SortRecipeButton) {
+            SortOption sortOption = (SortOption) m.getKey("SortOption");
+            updateSortOption(sortOption);
+            updateRecipeList();
         }
         if (m.getMessageType() == Message.CreateRecipeModel.CloseCreateRecipeView) {
             currentView = UIFactory.Type.HomePage;
@@ -51,8 +80,6 @@ public class HomeModel implements ModelInterface {
         }
         if (m.getMessageType() == Message.HomeView.LogOut) {
             currentView = UIFactory.Type.HomePage;
-            // controller.username = null;
-            // controller.password = null;
             deleteLogInFile();
 
             controller.receiveMessageFromModel(new Message(Message.HomeModel.CloseHomeView));
@@ -94,6 +121,8 @@ public class HomeModel implements ModelInterface {
                     jsonString += in.nextLine();
                 in.close();
                 recipes = Arrays.asList(Utils.unmarshalJson(jsonString, RecipeSchema[].class));
+                recipes = filterRecipeList(recipes);
+                recipes = sortRecipeList(recipes);
             }
         }
         catch (Exception e) {
@@ -102,6 +131,59 @@ public class HomeModel implements ModelInterface {
         controller.receiveMessageFromModel(
             new Message(Message.HomeModel.UpdateRecipeList,
                     Map.ofEntries(Map.entry("Recipes", recipes))));
+    }
+
+    public void updateFilterOption(FilterOption filterOption) {
+        if(this.filterOption == filterOption) this.filterOption = FilterOption.All;
+        else this.filterOption = filterOption;
+    }
+
+    private List<RecipeSchema> filterRecipeList(List<RecipeSchema> recipes) {
+        if(filterOption == FilterOption.Breakfast) {
+            List<RecipeSchema> filteredRecipes = new ArrayList<>();
+            for(RecipeSchema rs : recipes) {
+                if(rs.mealType.equals("Breakfast"))
+                    filteredRecipes.add(rs);
+            }
+            return filteredRecipes;
+        } else if(filterOption == FilterOption.Lunch) {
+            List<RecipeSchema> filteredRecipes = new ArrayList<>();
+            for(RecipeSchema rs : recipes) {
+                if(rs.mealType.equals("Lunch"))
+                    filteredRecipes.add(rs);
+            }
+            return filteredRecipes;
+        } else if(filterOption == FilterOption.Dinner) {
+            List<RecipeSchema> filteredRecipes = new ArrayList<>();
+            for(RecipeSchema rs : recipes) {
+                if(rs.mealType.equals("Dinner"))
+                    filteredRecipes.add(rs);
+            }
+            return filteredRecipes;
+        }else{
+            return recipes;
+        }
+    }
+
+    public void updateSortOption(SortOption sortOption) {
+        this.sortOption = sortOption;
+    }
+
+    private List<RecipeSchema> sortRecipeList(List<RecipeSchema> recipes) {
+        if(sortOption == SortOption.DateDes) {
+            Collections.sort(recipes, (recipe1, recipe2) -> LocalDateTime.parse(recipe2.timeCreated)
+                                                            .compareTo(LocalDateTime.parse(recipe1.timeCreated)));
+        } else if(sortOption == SortOption.DateAsc) {
+            Collections.sort(recipes, (recipe1, recipe2) -> LocalDateTime.parse(recipe1.timeCreated)
+                                                            .compareTo(LocalDateTime.parse(recipe2.timeCreated)));
+        } else if(sortOption == SortOption.TitleAsc) {
+            Collections.sort(recipes, (recipe1, recipe2) -> recipe1.title
+                                                            .compareTo(recipe2.title));
+        } else if(sortOption == SortOption.TitleDes) {
+            Collections.sort(recipes, (recipe1, recipe2) -> recipe2.title
+                                                            .compareTo(recipe1.title));
+        }
+        return recipes;
     }
 
     public List<RecipeSchema> getRecipes() {
