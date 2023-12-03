@@ -2,6 +2,8 @@ package edu.ucsd.cse110.client;
 
 import java.io.FileInputStream;
 
+import edu.ucsd.cse110.api.Controller;
+import edu.ucsd.cse110.api.HomeModel.SortOption;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,15 +14,17 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class SortButtonModule {
+	Controller controller;
 	HBox content;
 	StackPane buttonBackingClosed;
 	StackPane buttonBackingOpen;
 
 	boolean isOpen;
-	int sortVal;
+	SortOption sortOption;
 	
-	public SortButtonModule() {
-		sortVal = 0;
+	public SortButtonModule(Controller controller) {
+		this.controller = controller;
+		sortOption = SortOption.DateDes;
 
 		content = new HBox();
 		content.setPickOnBounds(false);
@@ -100,7 +104,7 @@ public class SortButtonModule {
 		upTriangleView.setFitHeight(6);
 		HBox upTriangleBox = new HBox(upTriangleView);
 		
-		HBox dateUpCheck = sortVal == 1 ? new HBox(checkView) : new HBox();
+		HBox dateUpCheck = sortOption == SortOption.DateAsc ? new HBox(checkView) : new HBox();
 		Label dateUpText = new Label("Date");
 		HBox dateUpLabel = new HBox(dateUpCheck, dateUpText, upTriangleBox);
 
@@ -117,17 +121,17 @@ public class SortButtonModule {
 		downTriangleView.setFitHeight(6);
 		HBox downTriangleBox = new HBox(downTriangleView);
 		
-		HBox dateDownCheck = sortVal == 2 ? new HBox(checkView) : new HBox();
+		HBox dateDownCheck = sortOption == SortOption.DateDes ? new HBox(checkView) : new HBox();
 		Label dateDownText = new Label("Date");
 		HBox dateDownLabel = new HBox(dateDownCheck, dateDownText, downTriangleBox);
 
 
-		HBox zACheck = sortVal == 3 ? new HBox(checkView) : new HBox();
+		HBox zACheck = sortOption == SortOption.TitleDes ? new HBox(checkView) : new HBox();
 		Label zAText = new Label("Z – A");
 		HBox zALabel = new HBox(zACheck, zAText);
 
 
-		HBox aZCheck = sortVal == 4 ? new HBox(checkView) : new HBox();
+		HBox aZCheck = sortOption == SortOption.TitleAsc ? new HBox(checkView) : new HBox();
 		Label aZText = new Label("A – Z");
 		HBox aZLabel = new HBox(aZCheck, aZText);
 
@@ -142,28 +146,28 @@ public class SortButtonModule {
 		closeButton.setOnAction(e -> { close(); });
 		dateUpButton.setOnAction(
 			e -> { 
-				sortVal = sortVal == 1 ? 0 : 1; 
+				sortOption = SortOption.DateAsc;
 				openSetup(); 
 				open(); 
 			}
 		);
 		dateDownButton.setOnAction(
 			e -> { 
-				sortVal = sortVal == 2 ? 0 : 2; 
+				sortOption = SortOption.DateDes;
 				openSetup(); 
 				open(); 
 			}
 		);
 		zAButton.setOnAction(
 			e -> { 
-				sortVal = sortVal == 3 ? 0 : 3; 
+				sortOption = SortOption.TitleDes;
 				openSetup(); 
 				open(); 
 			}
 		);
 		aZButton.setOnAction(
 			e -> { 
-				sortVal = sortVal == 4 ? 0 : 4; 
+				sortOption = SortOption.TitleAsc;
 				openSetup(); 
 				open(); 
 			}

@@ -50,8 +50,8 @@ public class HomeView extends BorderPane implements UIInterface {
         this.setTop(topPane);
         this.setCenter(content);
 
-		FilterButtonModule fbModule = new FilterButtonModule();
-		SortButtonModule sbModule = new SortButtonModule();
+		FilterButtonModule fbModule = new FilterButtonModule(controller);
+		SortButtonModule sbModule = new SortButtonModule(controller);
 		CreateButtonModule cbModule = new CreateButtonModule();	
 		
 		HBox homeButtonBox = new HBox(fbModule.getNode(), sbModule.getNode(), cbModule.getNode());

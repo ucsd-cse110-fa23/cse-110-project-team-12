@@ -1,7 +1,11 @@
 package edu.ucsd.cse110.client;
 
 import java.io.FileInputStream;
+import java.util.Map;
 
+import edu.ucsd.cse110.api.HomeModel.FilterOption;
+import edu.ucsd.cse110.api.Controller;
+import edu.ucsd.cse110.api.Message;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,10 +21,13 @@ public class FilterButtonModule {
 	StackPane buttonBackingOpen;
 
 	boolean isOpen;
-	int filterVal;
+	FilterOption filterOption;
+
+	Controller controller;
 	
-	public FilterButtonModule() {
-		filterVal = 0;
+	public FilterButtonModule(Controller controller) {
+		this.controller = controller;
+		filterOption = FilterOption.All;
 
 		content = new HBox();
 		content.setPickOnBounds(false);
@@ -100,7 +107,7 @@ public class FilterButtonModule {
 		moonView.setFitHeight(12);
 		HBox moonBox = new HBox(moonView);
 		
-		HBox moonCheck = filterVal == 1 ? new HBox(checkView) : new HBox();
+		HBox moonCheck = filterOption == FilterOption.Dinner ? new HBox(checkView) : new HBox();
 		HBox moonLabel = new HBox(moonCheck, moonBox);
 
 		Image cloud = null;
@@ -115,7 +122,7 @@ public class FilterButtonModule {
 		cloudView.setFitHeight(12);
 		HBox cloudBox = new HBox(cloudView);
 		
-		HBox cloudCheck = filterVal == 2 ? new HBox(checkView) : new HBox();
+		HBox cloudCheck = filterOption == FilterOption.Lunch ? new HBox(checkView) : new HBox();
 		HBox cloudLabel = new HBox(cloudCheck, cloudBox);
 
 
@@ -131,7 +138,7 @@ public class FilterButtonModule {
 		sunView.setFitHeight(12);
 		HBox sunBox = new HBox(sunView);
 		
-		HBox sunCheck = filterVal == 3 ? new HBox(checkView) : new HBox();
+		HBox sunCheck = filterOption == FilterOption.Breakfast ? new HBox(checkView) : new HBox();
 		HBox sunLabel = new HBox(sunCheck, sunBox);
 
 		VBox labelBox = new VBox(sunLabel, cloudLabel, moonLabel, textLabel);
@@ -144,23 +151,29 @@ public class FilterButtonModule {
 		closeButton.setOnAction(e -> { close(); });
 		moonButton.setOnAction(
 			e -> { 
-				filterVal = filterVal == 1 ? 0 : 1; 
+				filterOption = filterOption == FilterOption.Dinner ? FilterOption.All : FilterOption.Dinner; 
 				openSetup(); 
 				open(); 
+				controller.receiveMessageFromModel(new Message(Message.HomeView.FilterRecipeButton,
+                        Map.ofEntries(Map.entry("FilterOption", filterOption))));
 			}
 		);
 		cloudButton.setOnAction(
 			e -> { 
-				filterVal = filterVal == 2 ? 0 : 2; 
+				filterOption = filterOption == FilterOption.Lunch ? FilterOption.All : FilterOption.Lunch; 
 				openSetup(); 
 				open(); 
+				controller.receiveMessageFromModel(new Message(Message.HomeView.FilterRecipeButton,
+                        Map.ofEntries(Map.entry("FilterOption", filterOption))));
 			}
 		);
 		sunButton.setOnAction(
 			e -> { 
-				filterVal = filterVal == 3 ? 0 : 3; 
+				filterOption = filterOption == FilterOption.Breakfast ? FilterOption.All : FilterOption.Breakfast;
 				openSetup(); 
 				open(); 
+				controller.receiveMessageFromModel(new Message(Message.HomeView.FilterRecipeButton,
+                        Map.ofEntries(Map.entry("FilterOption", filterOption))));
 			}
 		);
 

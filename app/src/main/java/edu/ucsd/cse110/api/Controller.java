@@ -90,6 +90,7 @@ public class Controller {
             makeOrReplaceModel(ModelFactory.Type.HomePage);
         }
         else if (m.getMessageType() == Message.HomeModel.CloseHomeView) {
+            currentUser = null; // remove account info
             root.removeChild(uis.get(UIFactory.Type.HomePage).getUI());
             models.remove(ModelFactory.Type.HomePage);
         }
