@@ -142,9 +142,27 @@ public class FilterButtonModule {
 		Button sunButton = new Button();
 
 		closeButton.setOnAction(e -> { close(); });
-		moonButton.setOnAction(e -> { filterVal = 1; openSetup(); open(); });
-		cloudButton.setOnAction(e -> { filterVal = 2; openSetup(); open(); });
-		sunButton.setOnAction(e -> { filterVal = 3; openSetup(); open(); });
+		moonButton.setOnAction(
+			e -> { 
+				filterVal = filterVal == 1 ? 0 : 1; 
+				openSetup(); 
+				open(); 
+			}
+		);
+		cloudButton.setOnAction(
+			e -> { 
+				filterVal = filterVal == 2 ? 0 : 2; 
+				openSetup(); 
+				open(); 
+			}
+		);
+		sunButton.setOnAction(
+			e -> { 
+				filterVal = filterVal == 3 ? 0 : 3; 
+				openSetup(); 
+				open(); 
+			}
+		);
 
 		VBox openButtonBox = new VBox(sunButton, cloudButton, moonButton, closeButton);
 		buttonBackingOpen = new StackPane(labelBox, openButtonBox);
