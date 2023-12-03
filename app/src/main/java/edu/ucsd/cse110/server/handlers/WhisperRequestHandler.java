@@ -2,7 +2,7 @@ package edu.ucsd.cse110.server.handlers;
 
 import com.sun.net.httpserver.*;
 
-import edu.ucsd.cse110.api.WhisperInterface;
+import edu.ucsd.cse110.server.services.whisper.*;
 import edu.ucsd.cse110.server.services.Utils;
 
 import java.io.*;

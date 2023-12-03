@@ -6,13 +6,11 @@ import javafx.stage.Stage;
 
 import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.VoicePrompt;
-import edu.ucsd.cse110.api.Whisper;
-
 // Main class that starts the application
 public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Controller controller = new Controller(true, new VoicePrompt("voice.wav"), new Whisper());
+        Controller controller = new Controller(true, new VoicePrompt("voice.wav"));
 
         Scene scene = new Scene(controller.getUIRoot(), 325, 450);
         

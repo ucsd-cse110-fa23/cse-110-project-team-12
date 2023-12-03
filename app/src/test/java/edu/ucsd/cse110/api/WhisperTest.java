@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import edu.ucsd.cse110.server.services.whisper.*;
+
 public class WhisperTest {
     @Test
     public void testWhisperConstructor() {

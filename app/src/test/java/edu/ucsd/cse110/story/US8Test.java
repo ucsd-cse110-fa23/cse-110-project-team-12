@@ -12,7 +12,6 @@ import edu.ucsd.cse110.api.Message;
 import edu.ucsd.cse110.api.RecipeDetailedModel;
 import edu.ucsd.cse110.api.VoicePromptInterface;
 import edu.ucsd.cse110.api.VoicePromptMock;
-import edu.ucsd.cse110.api.WhisperMock;
 
 import java.util.List;
 import java.util.ArrayList;

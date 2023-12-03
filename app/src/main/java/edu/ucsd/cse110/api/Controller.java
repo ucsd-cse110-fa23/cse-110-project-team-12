@@ -22,12 +22,10 @@ public class Controller {
 
     // API Interfaces
     public VoicePromptInterface voicePrompt;
-    public WhisperInterface whisper;
 
-    public Controller(boolean useUI, VoicePromptInterface voicePrompt, WhisperInterface whisper) {
+    public Controller(boolean useUI, VoicePromptInterface voicePrompt) {
         this.useUI = useUI;
         this.voicePrompt = voicePrompt;
-        this.whisper = whisper;
 
         models = new EnumMap<>(ModelFactory.Type.class);
         uis = new EnumMap<>(UIFactory.Type.class);

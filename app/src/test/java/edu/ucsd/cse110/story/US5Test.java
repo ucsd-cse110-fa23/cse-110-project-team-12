@@ -11,7 +11,6 @@ import edu.ucsd.cse110.api.HomeModel;
 import edu.ucsd.cse110.api.Message;
 import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.VoicePromptMock;
-import edu.ucsd.cse110.api.WhisperMock;
 
 public class US5Test {
     Controller controller;
