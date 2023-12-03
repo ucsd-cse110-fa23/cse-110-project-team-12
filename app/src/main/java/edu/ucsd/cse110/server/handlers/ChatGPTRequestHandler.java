@@ -37,6 +37,10 @@ public class ChatGPTRequestHandler implements HttpHandler {
             recipe.description = r[1];
         } catch (Exception e) {
             e.printStackTrace();
+            httpExchange.sendResponseHeaders(500, "".getBytes().length);
+            OutputStream outStream = httpExchange.getResponseBody();
+            outStream.write("".getBytes());
+            outStream.close();
         }
         String generatedRecipe = Utils.marshalJson(recipe);
 

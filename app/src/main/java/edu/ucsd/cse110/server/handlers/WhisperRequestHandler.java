@@ -37,6 +37,10 @@ public class WhisperRequestHandler implements HttpHandler {
         }
         catch (Exception e) {
             e.printStackTrace();
+            httpExchange.sendResponseHeaders(500, "".getBytes().length);
+            OutputStream outStream = httpExchange.getResponseBody();
+            outStream.write("".getBytes());
+            outStream.close();
         }
 
         httpExchange.sendResponseHeaders(200, audioTranscription.getBytes().length);
