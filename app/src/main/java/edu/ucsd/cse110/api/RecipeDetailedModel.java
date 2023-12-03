@@ -109,78 +109,35 @@ public class RecipeDetailedModel implements ModelInterface {
     }
 
     private void updateRecipe(String recipeId, String newTitle, String newDescription) {
-        try {
-            String urlString = Controller.serverUrl + "/recipe";
-            URL url = new URI(urlString).toURL();
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        String urlString = Controller.serverUrl + "/recipe";
+        RecipeSchema changes = new RecipeSchema();
+        changes._id = recipeId;
+        changes.title = newTitle;
+        changes.description = newDescription;
+        ServerResponse response = HttpUtils.makeHttpRequest(urlString, "PUT", Utils.marshalJson(changes));
 
-            conn.setRequestMethod("PUT");
-            conn.setDoOutput(true);
-
-            OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-            RecipeSchema changes = new RecipeSchema();
-            changes._id = recipeId;
-            changes.title = newTitle;
-            changes.description = newDescription;
-            out.write(Utils.marshalJson(changes));
-            out.flush();
-            out.close();
-
-            if (conn.getResponseCode() != 200)
-                throw new Exception("Update Recipe Failed");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        if (response.getStatusCode() != 200)
+            System.out.println("Update recipe failed. 😭😭😭😭😭😭😭");
     }
 
     // Returns new recipe with recipe id added.
     private RecipeSchema saveRecipe(RecipeSchema recipe) {
-        try {
-            recipe.userId = controller.getCurrentUser()._id;
+        recipe.userId = controller.getCurrentUser()._id;
+        String urlString = Controller.serverUrl + "/recipe";
+        ServerResponse response = HttpUtils.makeHttpRequest(urlString, "POST", Utils.marshalJson(recipe));
 
-            String urlString = Controller.serverUrl + "/recipe";
-            URL url = new URI(urlString).toURL();
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-
-            OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-            out.write(Utils.marshalJson(recipe));
-            out.flush();
-            out.close();
-
-            if (conn.getResponseCode() == 201) {
-                Scanner in = new Scanner(conn.getInputStream());
-                String jsonString = "";
-                while (in.hasNext())
-                    jsonString += in.nextLine();
-                in.close();
-                return Utils.unmarshalJson(jsonString, RecipeSchema.class);
-            }
-            else {
-                throw new Exception("Save Recipe Failed");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        if (response.getStatusCode() == 201)
+            return Utils.unmarshalJson(response.getResponseBody(), RecipeSchema.class);
+        else
+            return null;
     }
 
     private void deleteRecipe(String recipeId) {
-        try {
-            String urlString = Controller.serverUrl + "/recipe?recipeId=" + recipeId;
-            URL url = new URI(urlString).toURL();
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        String urlString = Controller.serverUrl + "/recipe?recipeId=" + recipeId;
 
-            conn.setRequestMethod("DELETE");
-            conn.connect();
-
-            if (conn.getResponseCode() != 200)
-                throw new Exception("Delete Recipe Failed");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ServerResponse response = HttpUtils.makeHttpRequest(urlString, "DELETE", "");
+        if (response.getStatusCode() != 200)
+            System.out.println("Error delete recipe 😭😭😭😭😭😭😭😭😭😭.");
     }
 
     @Override

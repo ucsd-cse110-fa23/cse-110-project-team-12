@@ -81,7 +81,6 @@ public class Controller {
         }
         else if (m.getMessageType() == Message.CreateAccountModel.SetUser || m.getMessageType() == Message.LogInModel.SetUser) {
             currentUser = (UserSchema) m.getKey("User");
-            System.out.println(currentUser._id + currentUser.username + currentUser.password);
         }
         else if (m.getMessageType() == Message.LogInModel.StartHomeView || m.getMessageType() == Message.CreateAccountModel.StartHomeView) {
             makeOrReplaceUI(UIFactory.Type.HomePage);
