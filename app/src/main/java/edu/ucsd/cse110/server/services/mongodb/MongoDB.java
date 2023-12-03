@@ -154,8 +154,8 @@ public class MongoDB implements MongoDBInterface {
             Document query = new Document()
                     .append("_id", new ObjectId(recipeId));
             Document update = new Document("$set", new Document("description", newDescription)
-                    .append("title", newTitle)
-                    .append("timeCreated", LocalDateTime.now().toString()));
+                    .append("title", newTitle));
+                    //.append("timeCreated", LocalDateTime.now().toString()));
 
             UpdateOptions options = new UpdateOptions().upsert(false);
             recipes.updateOne(query, update, options);
