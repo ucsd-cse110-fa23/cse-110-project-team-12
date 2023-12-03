@@ -2,6 +2,7 @@ package edu.ucsd.cse110.api;
 
 import java.io.File;
 import java.util.Map;
+import java.nio.file.Files;
 
 import edu.ucsd.cse110.server.schemas.RecipeSchema;
 import edu.ucsd.cse110.server.services.Utils;
@@ -83,6 +84,27 @@ public class CreateRecipeModel implements ModelInterface {
         }
     }
 
+    private String getAudioTranscript(File audioFile) {
+        try {
+            byte[] fileBinary = Files.readAllBytes(audioFile.toPath());
+            String base64Encoding = Utils.encodeBase64(fileBinary);
+            
+            String urlString = Controller.serverUrl + "/whisper";
+            ServerResponse response = HttpUtils.makeHttpRequest(urlString, "POST", base64Encoding);
+            
+            if (response.getStatusCode() == 200) {
+                return response.getResponseBody();
+            }
+            else {
+                throw new Exception("Failed to transcribe audio file.");
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     private void handleRecord() {
         if (isRecording) {
             controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StopRecording));
@@ -90,7 +112,7 @@ public class CreateRecipeModel implements ModelInterface {
             if (controller.useUI) {
                 new Thread(() -> {
                     try {
-                        String transcript = controller.whisper.transcribe(recordingFile);
+                        String transcript = getAudioTranscript(recordingFile);
                         Platform.runLater(() -> {
                             processTranscript(transcript);
                         });
@@ -102,7 +124,7 @@ public class CreateRecipeModel implements ModelInterface {
                 isRecording = false;
             } else {
                 try {
-                    String transcript = controller.whisper.transcribe(recordingFile);
+                    String transcript = getAudioTranscript(recordingFile);
                     processTranscript(transcript);
                 } catch (Exception e) {
                     e.printStackTrace();

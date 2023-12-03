@@ -2,9 +2,11 @@ package edu.ucsd.cse110.server;
 
 import com.sun.net.httpserver.*;
 
+import edu.ucsd.cse110.api.Whisper;
 import edu.ucsd.cse110.server.handlers.ChatGPTRequestHandler;
 import edu.ucsd.cse110.server.handlers.RecipeRequestHandler;
 import edu.ucsd.cse110.server.handlers.UserRequestHandler;
+import edu.ucsd.cse110.server.handlers.WhisperRequestHandler;
 import edu.ucsd.cse110.server.services.mongodb.MongoDB;
 import edu.ucsd.cse110.server.services.mongodb.MongoDBInterface;
 import edu.ucsd.cse110.server.services.chatgpt.ChatGPT;
@@ -25,6 +27,7 @@ public class Server {
             server.createContext("/recipe", new RecipeRequestHandler(mongodb));
             server.createContext("/user", new UserRequestHandler(mongodb));
             server.createContext("/chatgpt", new ChatGPTRequestHandler(new ChatGPT()));
+            server.createContext("/whisper", new WhisperRequestHandler(new Whisper()));
     
             ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
             server.setExecutor(threadPoolExecutor);

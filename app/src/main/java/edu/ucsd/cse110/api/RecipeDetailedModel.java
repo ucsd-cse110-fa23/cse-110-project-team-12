@@ -2,8 +2,6 @@ package edu.ucsd.cse110.api;
 
 import edu.ucsd.cse110.server.schemas.RecipeSchema;
 import edu.ucsd.cse110.server.services.Utils;
-import java.io.*;
-import java.net.*;
 import java.util.*;
 
 public class RecipeDetailedModel implements ModelInterface {
