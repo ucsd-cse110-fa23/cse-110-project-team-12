@@ -5,7 +5,6 @@ import java.net.*;
 import java.util.*;
 import java.nio.charset.StandardCharsets;
 
-import edu.ucsd.cse110.server.Server;
 import edu.ucsd.cse110.server.schemas.UserSchema;
 import edu.ucsd.cse110.server.services.Utils;
 public class CreateAccountModel implements ModelInterface {
