@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.net.*;
 import java.util.*;
 
@@ -132,29 +133,29 @@ public class HomeModel implements ModelInterface {
                     Map.ofEntries(Map.entry("Recipes", recipes))));
     }
 
-    public void updateFilterOption(FilterOption filterOption){
+    public void updateFilterOption(FilterOption filterOption) {
         if(this.filterOption == filterOption) this.filterOption = FilterOption.All;
         else this.filterOption = filterOption;
     }
 
-    private List<RecipeSchema> filterRecipeList(List<RecipeSchema> recipes){
+    private List<RecipeSchema> filterRecipeList(List<RecipeSchema> recipes) {
         if(filterOption == FilterOption.Breakfast) {
             List<RecipeSchema> filteredRecipes = new ArrayList<>();
-            for(RecipeSchema rs : recipes){
+            for(RecipeSchema rs : recipes) {
                 if(rs.mealType.equals("Breakfast"))
                     filteredRecipes.add(rs);
             }
             return filteredRecipes;
-        } else if(filterOption == FilterOption.Lunch){
+        } else if(filterOption == FilterOption.Lunch) {
             List<RecipeSchema> filteredRecipes = new ArrayList<>();
-            for(RecipeSchema rs : recipes){
+            for(RecipeSchema rs : recipes) {
                 if(rs.mealType.equals("Lunch"))
                     filteredRecipes.add(rs);
             }
             return filteredRecipes;
-        } else if(filterOption == FilterOption.Dinner){
+        } else if(filterOption == FilterOption.Dinner) {
             List<RecipeSchema> filteredRecipes = new ArrayList<>();
-            for(RecipeSchema rs : recipes){
+            for(RecipeSchema rs : recipes) {
                 if(rs.mealType.equals("Dinner"))
                     filteredRecipes.add(rs);
             }
@@ -164,11 +165,24 @@ public class HomeModel implements ModelInterface {
         }
     }
 
-    public void updateSortOption(SortOption sortOption){
+    public void updateSortOption(SortOption sortOption) {
         this.sortOption = sortOption;
     }
 
-    private List<RecipeSchema> sortRecipeList(List<RecipeSchema> recipes){
+    private List<RecipeSchema> sortRecipeList(List<RecipeSchema> recipes) {
+        if(sortOption == SortOption.DateDes) {
+            Collections.sort(recipes, (recipe1, recipe2) -> LocalDateTime.parse(recipe2.timeCreated)
+                                                            .compareTo(LocalDateTime.parse(recipe1.timeCreated)));
+        } else if(sortOption == SortOption.DateAsc) {
+            Collections.sort(recipes, (recipe1, recipe2) -> LocalDateTime.parse(recipe1.timeCreated)
+                                                            .compareTo(LocalDateTime.parse(recipe2.timeCreated)));
+        } else if(sortOption == SortOption.TitleAsc) {
+            Collections.sort(recipes, (recipe1, recipe2) -> recipe1.title
+                                                            .compareTo(recipe2.title));
+        } else if(sortOption == SortOption.TitleDes) {
+            Collections.sort(recipes, (recipe1, recipe2) -> recipe2.title
+                                                            .compareTo(recipe1.title));
+        }
         return recipes;
     }
 

@@ -17,7 +17,7 @@ import edu.ucsd.cse110.server.schemas.UserSchema;
 public class MongoDBTest {
     MongoDBInterface mongoDB;
     @Before
-    public void init(){
+    public void init() {
         mongoDB = new MongoDBMock();
         mongoDB.dropCollection("users");
         mongoDB.dropCollection("recipes");

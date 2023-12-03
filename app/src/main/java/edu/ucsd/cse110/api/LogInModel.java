@@ -64,7 +64,7 @@ public class LogInModel implements ModelInterface {
         }
     }
 
-    private void logIn(UserSchema user){
+    private void logIn(UserSchema user) {
         controller.receiveMessageFromModel(new Message(Message.LogInModel.SetUser,
             Map.ofEntries(Map.entry("User", user))));
         controller.receiveMessageFromModel(new Message(Message.LogInModel.CloseLogInView));

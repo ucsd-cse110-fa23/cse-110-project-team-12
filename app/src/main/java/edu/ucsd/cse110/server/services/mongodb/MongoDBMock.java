@@ -186,7 +186,7 @@ public class MongoDBMock implements MongoDBInterface{
             
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject recipeObject = jsonArray.getJSONObject(i);
-                if(recipeObject.getString("_id").equals(recipeId)){
+                if(recipeObject.getString("_id").equals(recipeId)) {
                     recipeObject.put("title", newTitle);
                     recipeObject.put("description",newDescription);
                     break;
@@ -226,14 +226,14 @@ public class MongoDBMock implements MongoDBInterface{
     
     @Override
     public void dropCollection(String collectionName) {
-        if(collectionName.equals("users")){
+        if(collectionName.equals("users")) {
             try {
                 Path path = Paths.get(storagePath + "users.json");
                 Files.deleteIfExists(path);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else if(collectionName.equals("recipes")){
+        } else if(collectionName.equals("recipes")) {
             try {
                 Path path = Paths.get(storagePath + "recipes.json");
                 Files.deleteIfExists(path);
