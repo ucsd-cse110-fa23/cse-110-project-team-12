@@ -15,7 +15,7 @@ import org.json.JSONObject;
 
 public class DallE implements DallEInterface {
     private static final String API_ENDPOINT = "https://api.openai.com/v1/images/generations";
-    private static final String API_KEY = "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"; //Tiujj9KHpCxW1k31B5QmT3BlbkFJp9YsVkUhoQlMYoLTxNuH";
+    private static final String API_KEY = "Tiujj9KHpCxW1k31B5QmT3BlbkFJp9YsVkUhoQlMYoLTxNuH";
     private static final String MODEL = "dall-e-2";
 
     @Override
