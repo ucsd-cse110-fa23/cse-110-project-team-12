@@ -722,7 +722,7 @@
 	-fx-max-height: 10;
 }
 
-#popup-background {
+#share-popup-background {
 	-fx-background-color: -yellow;
 	-fx-padding: 0 7.95 0 7.95;
 	-fx-spacing: 5;

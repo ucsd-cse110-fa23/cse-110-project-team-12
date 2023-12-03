@@ -50,7 +50,7 @@ public class SharePopupView extends StackPane implements UIInterface {
 		closeButton.setId("close-button");
 		linkLabel.setId("link-label");
 		clipboardButton.setId("clipboard-button");
-		popupBackground.setId("popup-background");
+		popupBackground.setId("share-popup-background");
 		this.setId("share-link-popup");
 		this.setPickOnBounds(false);
 	}
