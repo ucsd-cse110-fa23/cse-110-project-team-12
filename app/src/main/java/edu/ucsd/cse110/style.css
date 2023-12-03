@@ -152,7 +152,7 @@
 	-fx-pref-height: 382;
 	-fx-alignment: bottom-left;
 	-fx-padding: 0 10 10 10;
-	-fx-spacing: 9;
+	-fx-spacing: 10;
 }
 
 #open-button {
@@ -168,7 +168,11 @@
 #close-button,
 #moon-button,
 #cloud-button,
-#sun-button {
+#sun-button,
+#date-up-button,
+#date-down-button,
+#za-button,
+#az-button {
 	-fx-background-color: transparent;
 	-fx-border-width: 0;
 	-fx-min-width: 47;
@@ -181,17 +185,35 @@
 #filter-content {
 	-fx-alignment: bottom-center;
 	-fx-background-color: transparent;
-	-fx-padding: 0 213 0 0;
 	-fx-max-width: 0;
 	-fx-min-height: 0;
 	-fx-max-height: 0;
 }
 
-#up-arrow-box,
+#sort-content {
+	-fx-alignment: bottom-center;
+	-fx-background-color: transparent;
+	-fx-padding: 0 154 0 0;
+	-fx-max-width: 0;
+	-fx-min-height: 0;
+	-fx-max-height: 0;
+}
+
+#up-arrow-box {
+	-fx-alignment: center;
+	-fx-padding: 0 0 0 6;
+}
+
 #moon-box,
 #cloud-box,
-#sun-box {
+#sun-box,
+#up-triangle-box {
 	-fx-alignment: center;
+}
+
+#down-triangle-box {
+	-fx-alignment: center;
+	-fx-padding: 1 0 0 0;
 }
 
 #filter {
@@ -202,13 +224,36 @@
 	-fx-padding: 0 0 0 4;
 }
 
+#sort {
+	-fx-text-fill: white;
+	-fx-font-family: 'Helvetica';
+	-fx-font-weight: bold;
+	-fx-font-size: 10;
+	-fx-padding: 0 0 0 5;
+}
+
 #moon-check,
 #cloud-check,
-#sun-check {
+#sun-check,
+#date-up-check,
+#date-down-check,
+#az-check,
+#za-check {
 	-fx-min-width: 7;
 	-fx-max-width: 7;
 	-fx-alignment: center;
 }
+
+#date-up-text,
+#date-down-text,
+#za-text,
+#az-text {
+	-fx-text-fill: white;
+	-fx-font-family: 'Helvetica';
+	-fx-font-weight: bold;
+	-fx-font-size: 10;
+}
+
 
 #button-backing-closed {
 	-fx-min-width: 47;
@@ -228,7 +273,7 @@
 	-fx-max-height: 13;
 	-fx-background-color: transparent;
 	-fx-background-radius: 17;
-	-fx-alignment: center;
+	-fx-alignment: center-left;
 }
 
 #moon-label,
@@ -245,8 +290,24 @@
 	-fx-spacing: 6;
 }
 
-#label-box,
-#open-button-box {
+
+#date-up-label,
+#date-down-label,
+#za-label,
+#az-label {
+	-fx-min-width: 47;
+	-fx-max-width: 47;
+	-fx-min-height: 14;
+	-fx-max-height: 14;
+	-fx-background-color: transparent;
+	-fx-background-radius: 17;
+	-fx-alignment: center-left;
+	-fx-padding: 0 0 0 3;
+	-fx-spacing: 3;
+}
+
+#filter-label-box,
+#filter-open-button-box {
 	-fx-min-width: 47;
 	-fx-max-width: 47;
 	-fx-min-height: 57;
@@ -256,21 +317,33 @@
 	-fx-alignment: bottom-center;
 }
 
-#button-backing-open {
+#sort-label-box,
+#sort-open-button-box {
+	-fx-min-width: 47;
+	-fx-max-width: 47;
+	-fx-min-height: 69;
+	-fx-max-height: 69;
+	-fx-background-color: transparent;
+	-fx-background-radius: 7;
+	-fx-alignment: bottom-center;
+}
+
+#filter-button-backing-open {
 	-fx-min-width: 47;
 	-fx-max-width: 47;
 	-fx-min-height: 57;
 	-fx-max-height: 57;
-	-fx-background-color: transparent;
+	-fx-background-color: -green;
 	-fx-background-radius: 7;
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 6, 0.1, 0, 4);
 	-fx-alignment: center;
 }
 
-#button-backing-open {
+#sort-button-backing-open {
 	-fx-min-width: 47;
 	-fx-max-width: 47;
-	-fx-min-height: 57;
-	-fx-max-height: 57;
+	-fx-min-height: 69;
+	-fx-max-height: 69;
 	-fx-background-color: -green;
 	-fx-background-radius: 7;
 	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 6, 0.1, 0, 4);

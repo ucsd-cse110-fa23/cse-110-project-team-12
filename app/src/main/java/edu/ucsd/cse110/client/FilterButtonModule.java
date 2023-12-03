@@ -188,9 +188,9 @@ public class FilterButtonModule {
 		cloudButton.setId("cloud-button");
 		sunButton.setId("sun-button");
 
-		labelBox.setId("label-box");
-		openButtonBox.setId("open-button-box");
-		buttonBackingOpen.setId("button-backing-open");
+		labelBox.setId("filter-label-box");
+		openButtonBox.setId("filter-open-button-box");
+		buttonBackingOpen.setId("filter-button-backing-open");
 	}
 	
 	public void close() {
