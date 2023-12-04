@@ -7,11 +7,13 @@ import edu.ucsd.cse110.server.handlers.DalleRequestHandler;
 import edu.ucsd.cse110.server.handlers.RecipeRequestHandler;
 import edu.ucsd.cse110.server.handlers.UserRequestHandler;
 import edu.ucsd.cse110.server.handlers.WhisperRequestHandler;
+import edu.ucsd.cse110.server.handlers.ShareRecipeHandler;
 import edu.ucsd.cse110.server.services.mongodb.MongoDB;
 import edu.ucsd.cse110.server.services.mongodb.MongoDBInterface;
 import edu.ucsd.cse110.server.services.whisper.Whisper;
 import edu.ucsd.cse110.server.services.chatgpt.ChatGPT;
 import edu.ucsd.cse110.server.services.dalle.DallE;
+
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -31,7 +33,8 @@ public class Server {
             server.createContext("/chatgpt", new ChatGPTRequestHandler(new ChatGPT()));
             server.createContext("/whisper", new WhisperRequestHandler(new Whisper()));
             server.createContext("/dalle", new DalleRequestHandler(new DallE()));
-            
+            server.createContext("/share", new ShareRecipeHandler(mongodb));
+
             ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
             server.setExecutor(threadPoolExecutor);
     
