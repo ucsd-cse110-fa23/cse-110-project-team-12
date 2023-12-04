@@ -47,12 +47,16 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
     private TextArea informationEdit;
 
     private Button cancelButton;
+    private Button refreshButton;
     private Button saveButton;
+	private HBox middleButton;
     private HBox unsavedButtonBox;
 
     private Button deleteButton;
+    private Button shareButton;
     private Button editButton;
     private HBox savedButtonBox;
+
 
     private HBox backArrowBox;
     private Button backButton;
@@ -95,18 +99,29 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         cancelButton = new Button("Cancel");
         cancelButton.setId("cancel-button");
 
+		refreshButton = new Button("Refresh");
+        refreshButton.setId("refresh-button");
+
+		middleButton = new HBox(refreshButton);
+		middleButton.setId("middle-button");
+
         saveButton = new Button("Save");
         saveButton.setId("save-button");
-        unsavedButtonBox = new HBox(cancelButton, saveButton);
+
+        unsavedButtonBox = new HBox(cancelButton, middleButton, saveButton);
         unsavedButtonBox.setId("unsaved-button-box");
 
         // SavedLayout
         deleteButton = new Button("Delete");	
         deleteButton.setId("cancel-button");
 
+		shareButton = new Button("Share");
+        shareButton.setId("share-button");
+
         editButton = new Button("Edit");
         editButton.setId("edit-button");
-        savedButtonBox = new HBox(deleteButton, editButton);
+
+        savedButtonBox = new HBox(deleteButton, shareButton, editButton);
         savedButtonBox.setId("saved-button-box");
 
         // Edit Layout
@@ -133,6 +148,8 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         backButton = new Button();
         backButton.setId("back-button");
 
+        // Delete Confirmation
+
         Label deleteConfirmationPrompt = new Label("Are you sure you \n want to delete \n this recipe?");
 		deleteConfirmationPrompt.setId("delete-confirmation-prompt");
 		deleteConfirmationPage = new Spacer(deleteConfirmationPrompt, new Insets(20, 0, 0, 0), Pos.TOP_CENTER);
@@ -142,6 +159,7 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
 
         this.getChildren().addAll(content);
         addListeners();
+
     }
 
     private void addListeners() {
@@ -149,6 +167,12 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
             e -> {
                 if (this.inEditMode) this.inEditMode = false;
                 controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.CancelButton));
+            }
+        );
+
+		refreshButton.setOnAction(
+            e -> {
+                // regenerate recipe
             }
         );
 
@@ -166,6 +190,12 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         deleteButton.setOnAction(
             e -> {
                 controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.DeleteButton));
+            }
+        );
+
+		shareButton.setOnAction(
+            e -> {
+                controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.ShareButton));
             }
         );
 
@@ -239,6 +269,7 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         if (m.getMessageType() == Message.RecipeDetailedModel.EditRecipe) {
             removeChild(information);
             removeChild(savedButtonBox);
+			removeRefreshButton();
 
             informationEdit.setText(recipe.description.trim());
             addChild(informationEdit);
@@ -246,6 +277,7 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         if (m.getMessageType() == Message.RecipeDetailedModel.ExitEditRecipe) {
             removeChild(unsavedButtonBox);
             removeChild(informationEdit);
+
             this.getChildren().removeAll(backArrowBox, backButton);
         }
     }
@@ -298,4 +330,8 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
             setTitleFont(title, size, widthLimit);
         }
     }
+
+	private void removeRefreshButton() {
+		middleButton.getChildren().remove(refreshButton);
+	}
 }

@@ -62,11 +62,5 @@ public class CreateAccountModel implements ModelInterface {
         else
             return null;
     }
-
-    @Override
-    public Object getState() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getState'");
-    }
     
 }

@@ -535,13 +535,28 @@
 	-fx-padding: 5 0 0 0;
 }
 
-#delete-button,
-#cancel-button {
+#cancel-button,
+#delete-button {
 	-fx-background-color: -red;
 	-fx-background-radius: 4px;
 	-fx-text-fill: white;
 	-fx-padding: 2 5 2 5;
-	-fx-min-width: 45;
+	-fx-min-width: 48;
+	-fx-max-width: 48;
+	-fx-font-family: 'Arial';
+	-fx-font-weight: bold;
+	-fx-font-size: 10;
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
+}
+
+#refresh-button,
+#share-button {
+	-fx-background-color: -yellow;
+	-fx-background-radius: 4px;
+	-fx-text-fill: white;
+	-fx-padding: 2 5 2 5;
+	-fx-min-width: 48;
+	-fx-max-width: 48;
 	-fx-font-family: 'Arial';
 	-fx-font-weight: bold;
 	-fx-font-size: 10;
@@ -553,7 +568,8 @@
 	-fx-background-radius: 4px;
 	-fx-text-fill: white;
 	-fx-padding: 2 5 2 5;
-	-fx-min-width: 40;
+	-fx-min-width: 48;
+	-fx-max-width: 48;
 	-fx-font-family: 'Arial';
 	-fx-font-weight: bold;
 	-fx-font-size: 10;
@@ -565,17 +581,25 @@
 	-fx-background-radius: 4px;
 	-fx-text-fill: white;
 	-fx-padding: 2 5 2 5;
-	-fx-min-width: 40;
+	-fx-min-width: 48;
+	-fx-max-width: 48;
 	-fx-font-family: 'Arial';
 	-fx-font-weight: bold;
 	-fx-font-size: 10;
 	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.1, 0, 4);
 }
 
+#middle-button {
+	-fx-background-radius: 4px;
+	-fx-min-width: 48;
+	-fx-max-width: 48;
+	-fx-alignment: center;
+}
+
 #saved-button-box,
 #unsaved-button-box {
 	-fx-padding: 7;
-	-fx-spacing: 181;
+	-fx-spacing: 61;
 }
 
 #delete-confirmation-button {
@@ -669,4 +693,51 @@
 
 .scroll-pane > .corner {
 	-fx-background-color: transparent;
+}
+
+#popup-close-button {
+	-fx-background-color: transparent;
+	-fx-border-width: 0;
+	-fx-min-width: 325;
+	-fx-max-width: 325;
+	-fx-min-height: 450;
+	-fx-max-height: 450;
+	-fx-background-radius: 0;
+}
+
+#link-label {
+	-fx-text-fill: -background;
+	-fx-font-family: 'Arial';
+	-fx-font-weight: bold;
+	-fx-font-size: 7.95;
+}
+
+#clipboard-button {
+	-fx-background-color: transparent;
+	-fx-border-width: 0;
+	-fx-background-radius: 0;
+	-fx-min-width: 10;
+	-fx-max-width: 10;
+	-fx-min-height: 10;
+	-fx-max-height: 10;
+}
+
+#share-popup-background {
+	-fx-background-color: -yellow;
+	-fx-padding: 0 7.95 0 7.95;
+	-fx-spacing: 5;
+	-fx-min-width: 281;
+	-fx-max-width: 281;
+	-fx-min-height: 33;
+	-fx-max-height: 33;
+	-fx-background-radius: 17;
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 6, 0.1, 0, 4);
+	-fx-alignment: center;
+}
+
+#share-link-popup {
+	-fx-pref-width: 325;
+	-fx-pref-height: 450;
+	-fx-alignment: bottom-center;
+	-fx-padding: 0 0 50 0;
 }

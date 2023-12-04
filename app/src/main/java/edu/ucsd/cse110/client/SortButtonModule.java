@@ -151,7 +151,7 @@ public class SortButtonModule {
 				sortOption = SortOption.DateDes;
 				openSetup(); 
 				open(); 
-				controller.receiveMessageFromModel(new Message(Message.HomeView.SortRecipeButton,
+				controller.receiveMessageFromUI(new Message(Message.HomeView.SortRecipeButton,
                         Map.ofEntries(Map.entry("SortOption", sortOption))));
 			}
 		);
@@ -160,7 +160,7 @@ public class SortButtonModule {
 				sortOption = SortOption.DateAsc;
 				openSetup(); 
 				open(); 
-				controller.receiveMessageFromModel(new Message(Message.HomeView.SortRecipeButton,
+				controller.receiveMessageFromUI(new Message(Message.HomeView.SortRecipeButton,
                         Map.ofEntries(Map.entry("SortOption", sortOption))));
 			}
 		);
@@ -169,7 +169,7 @@ public class SortButtonModule {
 				sortOption = SortOption.TitleDes;
 				openSetup(); 
 				open(); 
-				controller.receiveMessageFromModel(new Message(Message.HomeView.SortRecipeButton,
+				controller.receiveMessageFromUI(new Message(Message.HomeView.SortRecipeButton,
                         Map.ofEntries(Map.entry("SortOption", sortOption))));
 			}
 		);
@@ -178,7 +178,7 @@ public class SortButtonModule {
 				sortOption = SortOption.TitleAsc;
 				openSetup(); 
 				open(); 
-				controller.receiveMessageFromModel(new Message(Message.HomeView.SortRecipeButton,
+				controller.receiveMessageFromUI(new Message(Message.HomeView.SortRecipeButton,
                         Map.ofEntries(Map.entry("SortOption", sortOption))));
 			}
 		);

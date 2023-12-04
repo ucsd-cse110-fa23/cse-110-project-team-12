@@ -12,9 +12,9 @@ public class RecipeDetailedModel implements ModelInterface {
         DeleteConfirmation;
     }
 
-    private PageType currentPage;
-    private Controller controller;
-    private RecipeSchema recipe;
+    PageType currentPage;
+    Controller controller;
+    RecipeSchema recipe;
 
     public RecipeDetailedModel(Controller c) {
         controller = c;
@@ -104,6 +104,13 @@ public class RecipeDetailedModel implements ModelInterface {
                 currentPage = PageType.EditLayout;
             }
         }
+        if (m.getMessageType() == Message.RecipeDetailedView.ShareButton) {
+            if (currentPage == PageType.SavedLayout) {
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.StartSharePopupView));
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetRecipeShareLink,
+                                                    Map.ofEntries(Map.entry("RecipeShareLink", "localhost:8100/share?recipeId=" + recipe._id))));
+            }
+        }
     }
 
     private void updateRecipe(String recipeId, String newTitle, String newDescription, String newImageEncoding) {
@@ -137,19 +144,6 @@ public class RecipeDetailedModel implements ModelInterface {
         ServerResponse response = HttpUtils.makeHttpRequest(urlString, "DELETE", "");
         if (response.getStatusCode() != 200)
             System.out.println("Error delete recipe 😭😭😭😭😭😭😭😭😭😭.");
-    }
-
-    @Override
-    public Object getState() {
-        return this;
-    }
-
-    public RecipeSchema getRecipeSchema() {
-        return recipe;
-    }
-
-    public PageType getCurrentPage() {
-        return this.currentPage;
     }
 
     // private void saveToJSON(String recipeTitle, String recipeBody) {

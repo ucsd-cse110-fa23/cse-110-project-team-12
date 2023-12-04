@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{Title}}</title>
+    <style>
+        body {
+            font-family: "Helvetica Neue", sans-serif;
+            background-color: #5b5b5b;
+        }
+        h1 {
+            color: #fff;
+            font-size: 48px;
+        }
+        p {
+            color: #fff;
+            text-wrap: normal;
+        }
+        h3{
+            color: #fff;
+            display: inline;
+            font-size: 30px;
+        }
+        .logo{
+            display: inline;
+            width: 30px;
+            height: 30px;
+        }
+        .parent{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .left{
+            position: sticky;
+            width: 30%;
+            padding: 40px;
+        }
+        .right{
+            width: 70%;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+        .mealtype {
+            width: 3rem;
+            height: 3rem;
+            margin-right: 1rem;
+        }
+        .recipeTitle {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+        @media screen and (max-screen-size: 600px) {
+            .parent{
+                flex-direction: column;
+            }
+            .left{
+                width: 100%;
+            }
+            .right{
+                width: 100%;
+            }
+        }
+        .foodPhoto{
+            width: min(100%, 400px);
+            height: min(100%, 400px);
+            padding-bottom: 10px;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="parent">
+        <div class="left">
+            <img src="data:image/png;base64,{{RecipeImage}}" alt="Recipe Image" class="foodPhoto">
+            <h3>PantryPal</h3>
+            <img class="logo" src="data:image/png;base64,{{Logo}}" alt="PantryPal Logo"/>
+        </div>
+
+        <div class="right">
+            <div class="recipeTitle">
+                <img src="data:image/png;base64,{{MealTypeLogo}}" alt="Mealtype" class="mealtype">
+                <h1>{{Title}}</h1>
+            </div>
+            <p>{{Description}}</p>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -8,10 +8,9 @@ import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
 
 public class Root extends StackPane implements UIInterface {
-
 	@Override
 	public void receiveMessage(Message m) {
-		// do nothing	
+		// no messegaes to recieve yet
 	}
 
 	@Override

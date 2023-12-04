@@ -51,9 +51,4 @@ class Model implements ModelInterface {
         if (m.getMessageType() == Message.CreateRecipeModel.CloseCreateRecipeView)
             value = 12;
     }
-
-    @Override
-    public Object getState() {
-        return null;
-    }
 }

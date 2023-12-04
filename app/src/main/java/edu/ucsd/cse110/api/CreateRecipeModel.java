@@ -22,15 +22,15 @@ public class CreateRecipeModel implements ModelInterface {
         Dinner,
     };
 
-    private Controller controller;
+    Controller controller;
 
     // Which page we are on.
-    private PageType currentPage;
-    private boolean isRecording;
+    PageType currentPage;
+    boolean isRecording;
 
-    private MealType selectedMealType;
-    private String selectedIngredients;
-    private RecipeSchema generatedRecipe;
+    MealType selectedMealType;
+    String selectedIngredients;
+    RecipeSchema generatedRecipe;
 
     public CreateRecipeModel(Controller c) {
         controller = c;
@@ -189,24 +189,4 @@ public class CreateRecipeModel implements ModelInterface {
         }
     }
 
-    @Override
-    public Object getState() {
-        return this;
-    }
-
-    public PageType getCurrentPage() {
-        return currentPage;
-    }
-
-    public MealType getSelectedMealType() {
-        return selectedMealType;
-    }
-
-    public String getSelectedIngredients() {
-        return selectedIngredients;
-    }
-
-    public boolean getIsRecording() {
-        return isRecording;
-    }
 }

@@ -42,7 +42,7 @@ public class RecipeRequestHandler implements HttpHandler {
 
     private void handleGet(HttpExchange httpExchange) throws IOException {
         Map<String, String> queryVals = Utils.getQueryPairs(httpExchange);
-
+    
         // If no query for userId specified, then return all the recipes for user.
         if (queryVals.containsKey("userId")) {
             String userId = queryVals.get("userId");
@@ -68,7 +68,7 @@ public class RecipeRequestHandler implements HttpHandler {
                 outStream.write(jsonString.getBytes());
                 outStream.close();
             }
-        }
+        } 
     }
 
     private void handlePost(HttpExchange httpExchange) throws IOException {
