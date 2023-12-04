@@ -60,6 +60,20 @@ public class HttpUtils {
             System.out.println("HTTP Request Exception: " + methodType + " - " + urlString);
             e.printStackTrace();
         }
-        return new ServerResponse(404, "");
+        return new ServerResponse(500, "");
+    }
+
+    public static boolean isServerAvailable(String urlString) {
+        try {
+            URL url = new URI(urlString).toURL();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("GET");
+            conn.connect();
+            return conn.getResponseCode() == 200;
+        }
+        catch (Exception e) {
+            return false;
+        }
     }
 }

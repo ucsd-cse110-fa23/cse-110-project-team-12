@@ -2,12 +2,7 @@ package edu.ucsd.cse110.server;
 
 import com.sun.net.httpserver.*;
 
-import edu.ucsd.cse110.server.handlers.ChatGPTRequestHandler;
-import edu.ucsd.cse110.server.handlers.DalleRequestHandler;
-import edu.ucsd.cse110.server.handlers.RecipeRequestHandler;
-import edu.ucsd.cse110.server.handlers.UserRequestHandler;
-import edu.ucsd.cse110.server.handlers.WhisperRequestHandler;
-import edu.ucsd.cse110.server.handlers.ShareRequestHandler;
+import edu.ucsd.cse110.server.handlers.*;
 import edu.ucsd.cse110.server.services.mongodb.MongoDB;
 import edu.ucsd.cse110.server.services.mongodb.MongoDBInterface;
 import edu.ucsd.cse110.server.services.whisper.Whisper;
@@ -28,6 +23,7 @@ public class Server {
         try {
             MongoDBInterface mongodb = new MongoDB(mongoURI);
             HttpServer server = HttpServer.create(new InetSocketAddress(SERVER_HOSTNAME, SERVER_PORT), 0);
+            server.createContext("/healthcheck", new HealthcheckRequestHandler());
             server.createContext("/recipe", new RecipeRequestHandler(mongodb));
             server.createContext("/user", new UserRequestHandler(mongodb));
             server.createContext("/chatgpt", new ChatGPTRequestHandler(new ChatGPT()));
