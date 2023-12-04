@@ -19,7 +19,7 @@ public class Message {
     public enum LogInView implements Type {
         SignUpButton,
         LogInButton {
-            Set<String> keys = new HashSet<>(Arrays.asList("Username", "Password","AutomaticLogIn"));
+            Set<String> keys = new HashSet<>(Arrays.asList("Username", "Password", "AutomaticLogIn"));
             @Override public Set<String> allowedKeys() {return keys;}
         },
     }
@@ -169,9 +169,16 @@ public class Message {
     private Type type;
     private Map<String, Object> payload;
 
-    public Message(Type type, Map<String, Object> payload) {
+    public Message(Type type, Object... kvs) {
         this.type = type;
-        this.payload = payload;
+        payload = new HashMap<>();
+        if (kvs.length % 2 != 0)
+            throw new IllegalArgumentException("Need even number of key-values.");
+        for (int i=0; i<kvs.length; i+=2) {
+            String key = (String) kvs[i];
+            Object value = kvs[i+1];
+            payload.put(key, value);
+        }
         type.checkPayload(payload);
     }
 
@@ -194,9 +201,9 @@ public class Message {
         return type.allowedKeys().contains(key);
     }
 
-    public Object getKey(String key) {
+    public <T> T getKey(String key) {
         if (!keyValid(key))
             throw new IllegalArgumentException("Can't use key " + key + " for message type " + type);
-        return payload.get(key);
+        return (T) payload.get(key);
     }
 }

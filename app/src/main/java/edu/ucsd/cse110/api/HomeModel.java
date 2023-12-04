@@ -46,12 +46,12 @@ public class HomeModel implements ModelInterface {
             controller.receiveMessageFromModel(new Message(Message.HomeModel.StartCreateRecipeView));
         }
         if (m.getMessageType() == Message.HomeView.FilterRecipeButton) {
-            FilterOption filterOption = (FilterOption) m.getKey("FilterOption");
+            FilterOption filterOption = m.getKey("FilterOption");
             updateFilterOption(filterOption);
             updateRecipeList();
         }
         if (m.getMessageType() == Message.HomeView.SortRecipeButton) {
-            SortOption sortOption = (SortOption) m.getKey("SortOption");
+            SortOption sortOption = m.getKey("SortOption");
             updateSortOption(sortOption);
             updateRecipeList();
         }
@@ -73,9 +73,8 @@ public class HomeModel implements ModelInterface {
         if (m.getMessageType() == Message.HomeView.OpenRecipe) {
             currentView = UIFactory.Type.DetailedView;
             controller.receiveMessageFromModel(new Message(Message.HomeModel.StartRecipeDetailedView));
-            RecipeSchema openRecipe = (RecipeSchema) m.getKey("Recipe");
-            controller.receiveMessageFromModel(new Message(Message.HomeModel.SendRecipe,
-                    Map.ofEntries(Map.entry("Recipe", openRecipe))));
+            RecipeSchema openRecipe = m.getKey("Recipe");
+            controller.receiveMessageFromModel(new Message(Message.HomeModel.SendRecipe, "Recipe", openRecipe));
         }
         if (m.getMessageType() == Message.HomeView.LogOut) {
             currentView = UIFactory.Type.HomePage;
@@ -112,8 +111,7 @@ public class HomeModel implements ModelInterface {
             recipes = sortRecipeList(recipes);
         }
         controller.receiveMessageFromModel(
-            new Message(Message.HomeModel.UpdateRecipeList,
-                    Map.ofEntries(Map.entry("Recipes", recipes))));
+            new Message(Message.HomeModel.UpdateRecipeList, "Recipes", recipes));
     }
 
     public void updateFilterOption(FilterOption filterOption) {

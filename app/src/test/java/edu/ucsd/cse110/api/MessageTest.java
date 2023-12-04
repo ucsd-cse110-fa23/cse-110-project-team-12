@@ -11,8 +11,8 @@ public class MessageTest {
     public void TestCreateValidMessage() {
         Message m = new Message(Message.HomeView.UpdateRecipeList);  
         Message m1 = new Message(Message.CreateRecipeModel.CreateRecipeGotoPage,
-                    Map.ofEntries(Map.entry("PageType", ""),
-                    Map.entry("MealType", "FFF")));
+            "PageType", "",
+            "MealType", "FFF");
         assertNotNull(m);
         assertNotNull(m1);
     }
@@ -33,8 +33,7 @@ public class MessageTest {
     public void TestExistExceptionArgs() {
         int count = 0;
         try {
-            new Message(Message.CreateRecipeModel.CreateRecipeGotoPage,
-                Map.ofEntries(Map.entry("BAD KEY", "")));
+            new Message(Message.CreateRecipeModel.CreateRecipeGotoPage, "BAD KEY", "");
         }
         catch (Exception e) {
             count++;

@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.client;
 
 import java.io.FileInputStream;
-import java.util.Map;
 
 import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.Message;
@@ -180,7 +179,7 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
             e -> {
                 if (this.inEditMode) {
                     controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.UpdateInformation,
-                        Map.ofEntries(Map.entry("RecipeBody", this.informationEdit.getText()))));
+                        "RecipeBody", this.informationEdit.getText()));
                     this.inEditMode = false;
                 }
                 controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.SaveButton));
@@ -222,7 +221,7 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
     @Override
     public void receiveMessage(Message m) {
         if (m.getMessageType() == Message.RecipeDetailedModel.SetRecipe) {
-            recipe = (RecipeSchema) m.getKey("Recipe");
+            recipe = m.getKey("Recipe");
             recipeTitle.setText(recipe.title);
             setTitleFont(recipeTitle, titleDefaultSize, titleWidthLimit);
 

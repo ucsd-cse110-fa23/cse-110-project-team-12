@@ -15,7 +15,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.io.FileInputStream;
-import java.util.*;
 
 public class RecipeTitleView extends StackPane implements UIInterface {
     private Controller controller;
@@ -64,8 +63,7 @@ public class RecipeTitleView extends StackPane implements UIInterface {
         this.getChildren().addAll(iconAndTitle, titleButton);
 
         titleButton.setOnAction(e -> {
-            controller.receiveMessageFromUI(new Message(Message.HomeView.OpenRecipe,
-                                                        Map.ofEntries(Map.entry("Recipe", recipe))));
+            controller.receiveMessageFromUI(new Message(Message.HomeView.OpenRecipe, "Recipe", recipe));
         });
     }
 
