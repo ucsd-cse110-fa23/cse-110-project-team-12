@@ -69,19 +69,25 @@ public class CreateRecipeModel implements ModelInterface {
         if (selectedMealType == MealType.Dinner)
             mealTypeString = "Dinner";
 
-        try {
-            generatedRecipe.mealType = mealTypeString;
-            generatedRecipe.ingredients = selectedIngredients;
-            String urlString = Controller.serverUrl + "/chatgpt";
-            ServerResponse response = HttpUtils.makeHttpRequest(urlString, "POST", Utils.marshalJson(generatedRecipe));
-            
-            if (response.getStatusCode() == 200)
-                generatedRecipe = Utils.unmarshalJson(response.getResponseBody(), RecipeSchema.class);
-            else
-                System.out.println("Failed to generate chatgpt recipe");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        generatedRecipe.mealType = mealTypeString;
+        generatedRecipe.ingredients = selectedIngredients;
+        String urlString = Controller.serverUrl + "/chatgpt";
+        ServerResponse response = HttpUtils.makeHttpRequest(urlString, "POST", Utils.marshalJson(generatedRecipe));
+        
+        if (response.getStatusCode() == 200)
+            generatedRecipe = Utils.unmarshalJson(response.getResponseBody(), RecipeSchema.class);
+        else
+            System.out.println("Failed to generate chatgpt recipe");
+    }
+
+    public void generateDalleImage() {
+        String urlString = Controller.serverUrl + "/dalle";
+        ServerResponse response = HttpUtils.makeHttpRequest(urlString, "POST", Utils.marshalJson(generatedRecipe));
+
+        if (response.getStatusCode() == 200)
+            generatedRecipe = Utils.unmarshalJson(response.getResponseBody(), RecipeSchema.class);
+        else
+            System.out.println("Failed to generate chatgpt recipe");
     }
 
     private String getAudioTranscript(File audioFile) {
@@ -159,6 +165,7 @@ public class CreateRecipeModel implements ModelInterface {
             if (controller.useUI) {
                 new Thread(() -> {
                     createNewChatGPTRecipe();
+                    generateDalleImage();
                     Platform.runLater(() -> {
                         controller.receiveMessageFromModel(
                                 new Message(Message.CreateRecipeModel.CloseCreateRecipeView));
@@ -171,6 +178,7 @@ public class CreateRecipeModel implements ModelInterface {
                 }).start();
             } else {
                 createNewChatGPTRecipe();
+                generateDalleImage();
                 controller.receiveMessageFromModel(
                         new Message(Message.CreateRecipeModel.CloseCreateRecipeView));
                 controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StartRecipeDetailedView));

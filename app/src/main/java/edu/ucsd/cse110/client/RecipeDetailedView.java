@@ -7,6 +7,7 @@ import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.Message;
 import edu.ucsd.cse110.api.UIInterface;
 import edu.ucsd.cse110.server.schemas.RecipeSchema;
+import edu.ucsd.cse110.server.services.Utils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -21,11 +22,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.WritableImage;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.embed.swing.SwingFXUtils;
 
+import java.awt.image.BufferedImage;
 
 public class RecipeDetailedView extends StackPane implements UIInterface {
     private Controller controller;
@@ -82,17 +83,7 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         recipeTitleSpacer = new Spacer(recipeTitle, new Insets(0, 30, 0, 30), Pos.CENTER);
 		recipeTitleSpacer.setId("recipe-title-spacer");
 
-		Image recipeImage = null;
-		try {
-			recipeImage = new Image(new FileInputStream("test.png"), 132, 132, true, true);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		PixelReader pixelReader = recipeImage.getPixelReader();
-		Image recipeImageCrop = new WritableImage(pixelReader, 0, 29, 132, 74);
-		ImageView recipeImageView = new ImageView(recipeImageCrop);
-		recipeImageBox = new HBox(recipeImageView);
+		recipeImageBox = new HBox();
 		recipeImageBox.setId("recipe-image-box");
 
         information = new TextArea();
@@ -216,6 +207,7 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
 			information.setText(recipe.description.trim());
 			information.setEditable(false);
 			information.setFocusTraversable(false);
+            setImage(recipe.base64ImageEncoding);
             addChild(information);
         }
         if (m.getMessageType() == Message.RecipeDetailedModel.UseUnsavedLayout) {
@@ -255,6 +247,23 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
             removeChild(unsavedButtonBox);
             removeChild(informationEdit);
             this.getChildren().removeAll(backArrowBox, backButton);
+        }
+    }
+
+    private void setImage(String base64ImageEncoding) {
+        try {
+            BufferedImage bufImg = Utils.decodeBase64ToBufferedImage(base64ImageEncoding);
+            Image recipeImage = SwingFXUtils.toFXImage(bufImg, null);
+    
+            ImageView recipeImageView = new ImageView(recipeImage);
+            recipeImageView.setFitWidth(132);
+            recipeImageView.setFitHeight(74);
+    
+            recipeImageBox.getChildren().clear();
+            recipeImageBox.getChildren().add(recipeImageView);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
         }
     }
     

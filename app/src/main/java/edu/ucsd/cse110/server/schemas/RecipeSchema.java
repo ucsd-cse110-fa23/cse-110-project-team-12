@@ -12,6 +12,7 @@ public class RecipeSchema {
 
     public String title;
     public String description;
+    public String base64ImageEncoding;
 
     public RecipeSchema() {}
 }

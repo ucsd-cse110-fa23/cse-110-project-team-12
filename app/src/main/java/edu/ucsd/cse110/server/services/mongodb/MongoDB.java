@@ -86,6 +86,7 @@ public class MongoDB implements MongoDBInterface {
             recipe.userId = recipeDocument.getObjectId("userId").toString();
             recipe.title = recipeDocument.getString("title");
             recipe.description = recipeDocument.getString("description");
+            recipe.base64ImageEncoding = recipeDocument.getString("base64ImageEncoding");
             recipe.mealType = recipeDocument.getString("mealType");
             recipe.ingredients = recipeDocument.getString("ingredients");
             recipe.timeCreated = recipeDocument.getString("timeCreated");
@@ -115,6 +116,7 @@ public class MongoDB implements MongoDBInterface {
                 recipe.userId = recipeDocument.getObjectId("userId").toString();
                 recipe.title = recipeDocument.getString("title");
                 recipe.description = recipeDocument.getString("description");
+                recipe.base64ImageEncoding = recipeDocument.getString("base64ImageEncoding");
                 recipe.mealType = recipeDocument.getString("mealType");
                 recipe.ingredients = recipeDocument.getString("ingredients");
                 recipe.timeCreated = recipeDocument.getString("timeCreated");
@@ -134,6 +136,7 @@ public class MongoDB implements MongoDBInterface {
         Document recipe = new Document("_id", objId)
                 .append("title", rs.title)
                 .append("description", rs.description)
+                .append("base64ImageEncoding", rs.base64ImageEncoding)
                 .append("mealType", rs.mealType)
                 .append("ingredients", rs.ingredients)
                 .append("timeCreated", LocalDateTime.now().toString())
@@ -147,14 +150,15 @@ public class MongoDB implements MongoDBInterface {
     }
 
     @Override
-    public void updateRecipe(String recipeId, String newTitle, String newDescription) {
+    public void updateRecipe(String recipeId, String newTitle, String newDescription, String newImageEncoding) {
         try {
             MongoCollection<Document> recipes = database.getCollection("recipes");
 
             Document query = new Document()
                     .append("_id", new ObjectId(recipeId));
             Document update = new Document("$set", new Document("description", newDescription)
-                    .append("title", newTitle));
+                    .append("title", newTitle))
+                    .append("base64ImageEncoding", newImageEncoding);
                     //.append("timeCreated", LocalDateTime.now().toString()));
 
             UpdateOptions options = new UpdateOptions().upsert(false);
