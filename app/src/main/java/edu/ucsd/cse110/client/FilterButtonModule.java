@@ -154,7 +154,7 @@ public class FilterButtonModule {
 				filterOption = filterOption == FilterOption.Dinner ? FilterOption.All : FilterOption.Dinner; 
 				openSetup(); 
 				open(); 
-				controller.receiveMessageFromModel(new Message(Message.HomeView.FilterRecipeButton,
+				controller.receiveMessageFromUI(new Message(Message.HomeView.FilterRecipeButton,
                         Map.ofEntries(Map.entry("FilterOption", filterOption))));
 			}
 		);
@@ -163,7 +163,7 @@ public class FilterButtonModule {
 				filterOption = filterOption == FilterOption.Lunch ? FilterOption.All : FilterOption.Lunch; 
 				openSetup(); 
 				open(); 
-				controller.receiveMessageFromModel(new Message(Message.HomeView.FilterRecipeButton,
+				controller.receiveMessageFromUI(new Message(Message.HomeView.FilterRecipeButton,
                         Map.ofEntries(Map.entry("FilterOption", filterOption))));
 			}
 		);
@@ -172,7 +172,7 @@ public class FilterButtonModule {
 				filterOption = filterOption == FilterOption.Breakfast ? FilterOption.All : FilterOption.Breakfast;
 				openSetup(); 
 				open(); 
-				controller.receiveMessageFromModel(new Message(Message.HomeView.FilterRecipeButton,
+				controller.receiveMessageFromUI(new Message(Message.HomeView.FilterRecipeButton,
                         Map.ofEntries(Map.entry("FilterOption", filterOption))));
 			}
 		);
