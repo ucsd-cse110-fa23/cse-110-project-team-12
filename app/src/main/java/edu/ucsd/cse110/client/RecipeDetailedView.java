@@ -172,7 +172,7 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
 
 		refreshButton.setOnAction(
             e -> {
-                // regenerate recipe
+                controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.RefreshButton));
             }
         );
 
