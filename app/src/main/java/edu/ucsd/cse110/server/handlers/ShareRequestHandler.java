@@ -28,17 +28,12 @@ public class ShareRequestHandler implements HttpHandler{
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
-        try {
-            String method = httpExchange.getRequestMethod();
-            if (method.equals("GET")) {
-                handleGet(httpExchange);
-            }
-            else{
-                send404(httpExchange);
-            }
+        String method = httpExchange.getRequestMethod();
+        if (method.equals("GET")) {
+            handleGet(httpExchange);
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        else{
+            send404(httpExchange);
         }
     }
 
