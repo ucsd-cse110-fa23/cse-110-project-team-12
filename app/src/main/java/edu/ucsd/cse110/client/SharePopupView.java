@@ -2,50 +2,48 @@ package edu.ucsd.cse110.client;
 
 import java.io.FileInputStream;
 
-import edu.ucsd.cse110.api.Message;
-import edu.ucsd.cse110.api.UIInterface;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
-public class SharePopupView extends StackPane implements UIInterface {
+public class SharePopupView extends StackPane {
+	private Button closeButton;
+	private Label linkLabel;
 	
-	public SharePopupView(String link) {
-		Button closeButton = new Button();
-		closeButton.setOnAction(
-			e -> {
-				// remove share link popup from root
-			}
-		);
+	public SharePopupView() {
+		closeButton = new Button();
 		
-		Label linkLabel = new Label(link);
-		Image clipboard = null;
+		linkLabel = new Label();
+		Image clipboardImage = null;
 		try {
-			clipboard = new Image(new FileInputStream("./src/main/java/edu/ucsd/cse110/client/resources/clipboard.png"));
+			clipboardImage = new Image(new FileInputStream("./src/main/java/edu/ucsd/cse110/client/resources/clipboard.png"));
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		ImageView clipboardView = new ImageView(clipboard);
+		ImageView clipboardView = new ImageView(clipboardImage);
 		clipboardView.setFitWidth(10);
 		clipboardView.setFitHeight(10);
 		Button clipboardButton = new Button();
 		clipboardButton.setGraphic(clipboardView);
 		clipboardButton.setOnAction(
 			e -> {
-				// copy link to clipboard
+				Clipboard clipboard = Clipboard.getSystemClipboard();
+				ClipboardContent content = new ClipboardContent();
+				content.putString(linkLabel.getText());
+				clipboard.setContent(content);
 			}
 		);
 
 		HBox popupBackground = new HBox(linkLabel, clipboardButton);
 
-		addChild(closeButton);
-		addChild(popupBackground);
+		this.getChildren().add(closeButton);
+		this.getChildren().add(popupBackground);
 
 		closeButton.setId("close-button");
 		linkLabel.setId("link-label");
@@ -55,23 +53,11 @@ public class SharePopupView extends StackPane implements UIInterface {
 		this.setPickOnBounds(false);
 	}
 
-	@Override
-	public void receiveMessage(Message m) {
-		// no messegaes to recieve yet
+	public void setLink(String link) {
+		linkLabel.setText(link);
 	}
 
-	@Override
-	public void addChild(Node ui) {
-		this.getChildren().add(ui);
-	}
-
-	@Override
-	public void removeChild(Node ui) {
-		this.getChildren().remove(ui);
-	}
-
-	@Override
-	public Parent getUI() {
-		return this;
+	public Button getCloseButton(){
+		return closeButton;
 	}
 }

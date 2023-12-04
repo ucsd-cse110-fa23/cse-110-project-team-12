@@ -104,6 +104,17 @@ public class RecipeDetailedModel implements ModelInterface {
                 currentPage = PageType.EditLayout;
             }
         }
+        if (m.getMessageType() == Message.RecipeDetailedView.ShareButton) {
+            if (currentPage == PageType.SavedLayout) {
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.OpenSharePopupView,
+                                                    Map.ofEntries(Map.entry("RecipeShareLink", "https://www.google.com"))));
+            }
+        }
+        if (m.getMessageType() == Message.RecipeDetailedView.CloseSharePopupViewButton) {
+            if (currentPage == PageType.SavedLayout) {
+                controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.CloseSharePopupView));
+            }
+        }
     }
 
     private void updateRecipe(String recipeId, String newTitle, String newDescription, String newImageEncoding) {

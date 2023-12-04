@@ -121,7 +121,9 @@ public class Message {
         UpdateInformation {
             Set<String> keys = new HashSet<>(Arrays.asList("RecipeBody"));
             @Override public Set<String> allowedKeys() {return keys;}
-        };
+        }, 
+        ShareButton, 
+        CloseSharePopupViewButton;
     }
     public enum RecipeDetailedModel implements Type {
         CloseRecipeDetailedView,
@@ -138,7 +140,12 @@ public class Message {
         GoToDeleteConfirmationPage,
         RemoveDeleteConfirmation, 
         AddBackButton, 
-        RemoveBackButton;
+        RemoveBackButton,
+        OpenSharePopupView {
+            Set<String> keys = new HashSet<>(Arrays.asList("RecipeShareLink"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        },
+        CloseSharePopupView,
     }
     
     private Type type;
