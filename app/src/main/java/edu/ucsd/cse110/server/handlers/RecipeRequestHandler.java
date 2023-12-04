@@ -8,7 +8,6 @@ import edu.ucsd.cse110.server.services.mongodb.MongoDBInterface;
 
 import java.io.*;
 import java.util.*;
-import java.nio.file.Files;
 
 public class RecipeRequestHandler implements HttpHandler {
     private MongoDBInterface mongodb;
