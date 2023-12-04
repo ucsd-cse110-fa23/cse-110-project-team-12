@@ -141,11 +141,24 @@ public class Message {
         RemoveDeleteConfirmation, 
         AddBackButton, 
         RemoveBackButton,
-        OpenSharePopupView {
+        StartSharePopupView,
+        SetRecipeShareLink {
             Set<String> keys = new HashSet<>(Arrays.asList("RecipeShareLink"));
             @Override public Set<String> allowedKeys() {return keys;}
         },
-        CloseSharePopupView,
+    }
+
+    public enum SharePopupView implements Type {
+        CloseButton,
+        ClipboardButton,
+    }
+
+    public enum SharePopupModel implements Type {
+        CloseSharePopupView, 
+        SetRecipeShareLink {
+            Set<String> keys = new HashSet<>(Arrays.asList("RecipeShareLink"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        },
     }
     
     private Type type;

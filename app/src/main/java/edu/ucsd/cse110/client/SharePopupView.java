@@ -2,21 +2,31 @@ package edu.ucsd.cse110.client;
 
 import java.io.FileInputStream;
 
+import edu.ucsd.cse110.api.Controller;
+import edu.ucsd.cse110.api.Message;
+import edu.ucsd.cse110.api.UIInterface;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
-public class SharePopupView extends StackPane {
+public class SharePopupView extends StackPane implements UIInterface{
+	private Controller controller;
 	private Button closeButton;
 	private Label linkLabel;
 	
-	public SharePopupView() {
+	public SharePopupView(Controller controller) {
+		this.controller = controller;
 		closeButton = new Button();
+		closeButton.setOnAction(
+			e -> {
+				this.controller.receiveMessageFromUI(new Message(Message.SharePopupView.CloseButton));
+			}
+		);
 		
 		linkLabel = new Label();
 		Image clipboardImage = null;
@@ -33,17 +43,14 @@ public class SharePopupView extends StackPane {
 		clipboardButton.setGraphic(clipboardView);
 		clipboardButton.setOnAction(
 			e -> {
-				Clipboard clipboard = Clipboard.getSystemClipboard();
-				ClipboardContent content = new ClipboardContent();
-				content.putString(linkLabel.getText());
-				clipboard.setContent(content);
+				this.controller.receiveMessageFromUI(new Message(Message.SharePopupView.ClipboardButton));
 			}
 		);
 
 		HBox popupBackground = new HBox(linkLabel, clipboardButton);
 
-		this.getChildren().add(closeButton);
-		this.getChildren().add(popupBackground);
+		addChild(closeButton);
+		addChild(popupBackground);
 
 		closeButton.setId("close-button");
 		linkLabel.setId("link-label");
@@ -51,13 +58,29 @@ public class SharePopupView extends StackPane {
 		popupBackground.setId("share-popup-background");
 		this.setId("share-link-popup");
 		this.setPickOnBounds(false);
+		
 	}
 
-	public void setLink(String link) {
-		linkLabel.setText(link);
+	@Override
+	public void receiveMessage(Message m) {
+		if (m.getMessageType() == Message.SharePopupModel.SetRecipeShareLink){
+			String shareLink = (String) m.getKey("RecipeShareLink");
+			linkLabel.setText(shareLink);
+		}
 	}
 
-	public Button getCloseButton(){
-		return closeButton;
+	@Override
+	public void addChild(Node ui) {
+		this.getChildren().add(ui);
+	}
+
+	@Override
+	public void removeChild(Node ui) {
+		this.getChildren().remove(ui);
+	}
+
+	@Override
+	public Parent getUI() {
+		return this;
 	}
 }

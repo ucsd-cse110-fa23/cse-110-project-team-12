@@ -8,13 +8,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.net.*;
 import java.util.*;
 
 public class HomeModel implements ModelInterface {
-    private Controller controller;
-    private List<RecipeSchema> recipes;
-    private UIFactory.Type currentView;
+    Controller controller;
+    List<RecipeSchema> recipes;
+    UIFactory.Type currentView;
 
     public enum FilterOption{
         Breakfast,
@@ -22,7 +21,7 @@ public class HomeModel implements ModelInterface {
         Dinner,
         All,
     }
-    private FilterOption filterOption;
+    FilterOption filterOption;
 
     public enum SortOption{
         TitleAsc, // Ascending Title
@@ -31,7 +30,7 @@ public class HomeModel implements ModelInterface {
         DateAsc // Ascending DateCreated
     }
 
-    private SortOption sortOption;
+    SortOption sortOption;
 
     public HomeModel(Controller c) {
         this.controller = c;
@@ -172,10 +171,5 @@ public class HomeModel implements ModelInterface {
 
     public List<RecipeSchema> getRecipes() {
         return recipes;
-    }
-
-    @Override
-    public Object getState() {
-        return this;
     }
 }

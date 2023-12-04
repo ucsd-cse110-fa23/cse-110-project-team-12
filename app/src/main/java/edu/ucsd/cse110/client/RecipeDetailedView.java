@@ -65,9 +65,6 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
     private ConfirmDeleteButtonModule confirmDeleteModule;
     private Button confirmDeleteButton;
 
-    private SharePopupView sharePopupView;
-    private Button closeSharePopupViewButton;
-
     public RecipeDetailedView(Controller c) {
         controller = c;
 
@@ -160,10 +157,6 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         confirmDeleteModule = new ConfirmDeleteButtonModule();
         confirmDeleteButton = confirmDeleteModule.getDeleteButton();
 
-        // SharePopupView
-
-        sharePopupView = new SharePopupView();
-        closeSharePopupViewButton = sharePopupView.getCloseButton();
         this.getChildren().addAll(content);
         addListeners();
 
@@ -203,12 +196,6 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
 		shareButton.setOnAction(
             e -> {
                 controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.ShareButton));
-            }
-        );
-
-        closeSharePopupViewButton.setOnAction(
-            e -> {
-                controller.receiveMessageFromUI(new Message(Message.RecipeDetailedView.CloseSharePopupViewButton));
             }
         );
 
@@ -292,14 +279,6 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
             removeChild(informationEdit);
 
             this.getChildren().removeAll(backArrowBox, backButton);
-        }
-        if (m.getMessageType() == Message.RecipeDetailedModel.OpenSharePopupView) {
-            String recipeShareLink = (String) m.getKey("RecipeShareLink");
-            sharePopupView.setLink(recipeShareLink);
-            addChild(sharePopupView);
-        }
-        if (m.getMessageType() == Message.RecipeDetailedModel.CloseSharePopupView) {
-            removeChild(sharePopupView);
         }
     }
 

@@ -8,13 +8,14 @@ import edu.ucsd.cse110.client.HomeView;
 import edu.ucsd.cse110.client.LogInView;
 import edu.ucsd.cse110.client.RecipeDetailedView;
 import edu.ucsd.cse110.client.Root;
+import edu.ucsd.cse110.client.SharePopupView;
 import edu.ucsd.cse110.server.schemas.UserSchema;
 import edu.ucsd.cse110.client.NoUI;
 import javafx.scene.Parent;
 
 public class Controller {
-    private Map<ModelFactory.Type, ModelInterface> models;
-    private Map<UIFactory.Type, UIInterface> uis;
+    private EnumMap<ModelFactory.Type, ModelInterface> models;
+    private EnumMap<UIFactory.Type, UIInterface> uis;
 	private UIInterface root;
     private UserSchema currentUser;
     public boolean useUI;
@@ -107,6 +108,16 @@ public class Controller {
         else if (m.getMessageType() == Message.HomeModel.CloseRecipeDetailedView) {
             uis.get(UIFactory.Type.HomePage).removeChild(uis.get(UIFactory.Type.DetailedView).getUI());
             models.remove(ModelFactory.Type.DetailedView);
+        } 
+        else if (m.getMessageType() == Message.RecipeDetailedModel.StartSharePopupView) {
+            makeOrReplaceUI(UIFactory.Type.SharePopup);
+            root.addChild(uis.get(UIFactory.Type.SharePopup).getUI());
+
+            makeOrReplaceModel(ModelFactory.Type.SharePopup);
+        } 
+        else if (m.getMessageType() == Message.SharePopupModel.CloseSharePopupView) {
+            root.removeChild(uis.get(UIFactory.Type.SharePopup).getUI());
+            models.remove(ModelFactory.Type.SharePopup);
         }
         uis.forEach((uiType, ui) -> ui.receiveMessage(m));
         models.forEach((mType, model) -> model.receiveMessage(m));
@@ -117,8 +128,8 @@ public class Controller {
     }
    
     // Testing Use
-    public Object getState(ModelFactory.Type type) {
-        return models.get(type).getState();
+    public ModelInterface getState(ModelFactory.Type type) {
+        return models.get(type);
     }
 
     public boolean existsModel(ModelFactory.Type type) {
@@ -135,6 +146,7 @@ class ModelFactory {
         CreateRecipe,
         HomePage,
         DetailedView,
+        SharePopup,
         CreateAccount,
         LogIn,
     }
@@ -146,6 +158,8 @@ class ModelFactory {
             return new HomeModel(c);
         else if (type == Type.DetailedView)
             return new RecipeDetailedModel(c);
+        else if (type == Type.SharePopup)
+            return new SharePopupModel(c);
         else if (type == Type.CreateAccount)
             return new CreateAccountModel(c);
         else if (type == Type.LogIn)
@@ -159,24 +173,25 @@ class UIFactory {
         CreateRecipe,
         HomePage,
         DetailedView,
+        SharePopup,
 		CreateAccount,
 		LogIn,
-        NoUI,
     }
 
     public static UIInterface make(Type type, Controller c) {
+        if(!c.useUI) return new NoUI();
         if (type == Type.CreateRecipe)
             return new CreateRecipeView(c);
         else if (type == Type.HomePage)
             return new HomeView(c);
         else if (type == Type.DetailedView)
             return new RecipeDetailedView(c);
+        else if (type == Type.SharePopup)
+            return new SharePopupView(c);
         else if (type == Type.CreateAccount)
             return new CreateAccountView(c);
         else if (type == Type.LogIn)
             return new LogInView(c);
-        else if (type == Type.NoUI)
-            return new NoUI();
         return null;
     }
 }

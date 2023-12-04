@@ -9,9 +9,9 @@ import edu.ucsd.cse110.server.schemas.UserSchema;
 import edu.ucsd.cse110.server.services.Utils;
 
 public class LogInModel implements ModelInterface {
-    private Controller controller;
+    Controller controller;
     
-    private String storagePath = "./src/main/java/edu/ucsd/cse110/api/assets/";
+    String storagePath = "./src/main/java/edu/ucsd/cse110/api/assets/";
     
     public LogInModel(Controller c) {
         this.controller = c;
@@ -86,9 +86,5 @@ public class LogInModel implements ModelInterface {
             return Utils.unmarshalJson(response.getResponseBody(), UserSchema.class);
         else
             return null;
-    }
-    
-    public Object getState() {
-        return this;
     }
 }
