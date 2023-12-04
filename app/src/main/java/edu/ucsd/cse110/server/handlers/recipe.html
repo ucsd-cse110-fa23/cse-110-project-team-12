@@ -41,6 +41,16 @@
             padding: 10px;
             overflow-x: hidden;
         }
+        .mealtype {
+            width: 3rem;
+            height: 3rem;
+            margin-right: 1rem;
+        }
+        .recipeTitle {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
         @media screen and (max-screen-size: 600px) {
             .parent{
                 flex-direction: column;
@@ -50,7 +60,7 @@
             }
             .right{
                 width: 100%;
-            }   
+            }
         }
         .foodPhoto{
             width: min(100%, 400px);
@@ -70,7 +80,10 @@
         </div>
 
         <div class="right">
-            <h1>{{Title}}</h1>
+            <div class="recipeTitle">
+                <img src="data:image/png;base64,{{MealTypeLogo}}" alt="Mealtype" class="mealtype">
+                <h1>{{Title}}</h1>
+            </div>
             <p>{{Description}}</p>
         </div>
     </div>

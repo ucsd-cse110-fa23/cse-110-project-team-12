@@ -53,11 +53,22 @@ public class ShareRequestHandler implements HttpHandler{
             byte[] logo = Files.readAllBytes(Paths.get("./src/main/java/edu/ucsd/cse110/client/resources/PPIcon.png"));
             String base64logo = Utils.encodeBase64(logo);
 
+            String mealTypeLogoName = "";
+            if (requestedRecipe.mealType.equals("Breakfast"))
+                mealTypeLogoName = "sun.png";
+            else if (requestedRecipe.mealType.equals("Lunch"))
+                mealTypeLogoName = "cloud.png";
+            else if (requestedRecipe.mealType.equals("Dinner"))
+                mealTypeLogoName = "moon.png";
+            byte[] mealTypeLogo = Files.readAllBytes(Paths.get("./src/main/java/edu/ucsd/cse110/client/resources/" + mealTypeLogoName));
+            String base64MealTypeLogo = Utils.encodeBase64(mealTypeLogo);
+
             requestedRecipe.description = requestedRecipe.description.replace("\n", "<br>");
 
             recipePageString = recipePageString.replace("{{Title}}", requestedRecipe.title);
             recipePageString = recipePageString.replace("{{Description}}", requestedRecipe.description);
             recipePageString = recipePageString.replace("{{RecipeImage}}", requestedRecipe.base64ImageEncoding);
+            recipePageString = recipePageString.replace("{{MealTypeLogo}}", base64MealTypeLogo);
             recipePageString = recipePageString.replace("{{Logo}}", base64logo);
 
             httpExchange.sendResponseHeaders(200, recipePageString.getBytes().length);
