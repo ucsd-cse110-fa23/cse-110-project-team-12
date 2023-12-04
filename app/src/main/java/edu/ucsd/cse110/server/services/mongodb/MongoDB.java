@@ -157,8 +157,8 @@ public class MongoDB implements MongoDBInterface {
             Document query = new Document()
                     .append("_id", new ObjectId(recipeId));
             Document update = new Document("$set", new Document("description", newDescription)
-                    .append("title", newTitle))
-                    .append("base64ImageEncoding", newImageEncoding);
+                    .append("title", newTitle)
+                    .append("base64ImageEncoding", newImageEncoding));
                     //.append("timeCreated", LocalDateTime.now().toString()));
 
             UpdateOptions options = new UpdateOptions().upsert(false);
