@@ -21,6 +21,9 @@ import java.util.*;
 
 public class LogInView extends VBox implements UIInterface {
 	Controller controller;
+	HBox loginSpacer;
+	HBox loginButtonBox;
+	Button signUp;
 	boolean rememberMe;
 
 	public LogInView(Controller c) {
@@ -35,7 +38,7 @@ public class LogInView extends VBox implements UIInterface {
 		// after sucessful server connect
 		this.setAlignment(Pos.TOP_CENTER);
 
-		HBox loginSpacer = new HBox();
+		loginSpacer = new HBox();
 		loginSpacer.setId("login-spacer");
 
 		Label username = new Label("Username");
@@ -60,11 +63,11 @@ public class LogInView extends VBox implements UIInterface {
 		rememberToggle.setId("remember-toggle");
 		rememberBox.setId("remember-box");
 
-		Button signUp = new Button("Sign Up");
 		Button logIn = new Button("Log In");
-		HBox loginButtonBox = new HBox(signUp, logIn);
-		signUp.setId("sign-up");
+		signUp = new Button("Sign Up");
+		loginButtonBox = new HBox(signUp, logIn);
 		logIn.setId("log-in");
+		signUp.setId("sign-up");
 		loginButtonBox.setId("login-button-box");
 
 		this.getChildren().addAll(loginSpacer, userBox, passBox, rememberBox, loginButtonBox);
@@ -111,6 +114,20 @@ public class LogInView extends VBox implements UIInterface {
 					}
 				});
 
+	}
+
+	public void noServerUI() {
+		loginButtonBox.getChildren().remove(signUp);
+
+		loginSpacer.getChildren().clear();
+		Label serverError = new Label("Unable to connect to server, please try again.");
+		serverError.setId("server-error");
+		loginSpacer.getChildren().add(serverError);
+	}
+
+	public void connectedServerUI() {
+		loginButtonBox.getChildren().add(0, signUp);
+		loginSpacer.getChildren().clear();
 	}
 
 	@Override
