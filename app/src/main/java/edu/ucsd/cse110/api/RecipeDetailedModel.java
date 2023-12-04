@@ -108,7 +108,7 @@ public class RecipeDetailedModel implements ModelInterface {
             if (currentPage == PageType.SavedLayout) {
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.StartSharePopupView));
                 controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.SetRecipeShareLink,
-                                                    Map.ofEntries(Map.entry("RecipeShareLink", "https://www.google.com"))));
+                                                    Map.ofEntries(Map.entry("RecipeShareLink", "localhost:8100/share?recipeId=" + recipe._id))));
             }
         }
     }
