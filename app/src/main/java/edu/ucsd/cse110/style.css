@@ -93,9 +93,9 @@
 }
 
 #login-button-box {
-	-fx-padding: 135 0 0 0;
-	-fx-alignment: center;
-	-fx-spacing: 170;
+	-fx-padding: 135 5 0 0;
+	-fx-alignment: center-right;
+	-fx-spacing: 173;
 }
 
 #signup-button-box {
@@ -109,6 +109,13 @@
 	-fx-font-family: 'Helvetica';
 	-fx-font-weight: bold;
 	-fx-font-size: 18;
+}
+
+#server-error {
+	-fx-text-fill: -red;
+	-fx-font-family: 'Helvetica';
+	-fx-font-weight: bold;
+	-fx-font-size: 13;
 }
 
 #app-frame {
