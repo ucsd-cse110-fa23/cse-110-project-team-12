@@ -59,13 +59,8 @@ public class CreateRecipeModel implements ModelInterface {
             handleRecord();
         } else if (m.getMessageType() == Message.RecipeDetailedModel.Refresh) {
             RecipeSchema recipe = (RecipeSchema) m.getKey("RecipeBody");
+            selectedMealType = MealTypeValidator.parseMealType(recipe.mealType);
             selectedIngredients = recipe.ingredients;
-            if (recipe.mealType.equals("Breakfast"))
-                selectedMealType = MealType.Breakfast;
-            else if (recipe.mealType.equals("Lunch"))
-                selectedMealType = MealType.Lunch;
-            else
-                selectedMealType = MealType.Dinner;
 
             finishInputIngredients();
         }
