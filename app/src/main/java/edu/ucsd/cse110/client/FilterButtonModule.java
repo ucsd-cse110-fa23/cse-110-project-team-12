@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.client;
 
 import java.io.FileInputStream;
-import java.util.Map;
 
 import edu.ucsd.cse110.api.HomeModel.FilterOption;
 import edu.ucsd.cse110.api.Controller;
@@ -155,7 +154,7 @@ public class FilterButtonModule {
 				openSetup(); 
 				open(); 
 				controller.receiveMessageFromUI(new Message(Message.HomeView.FilterRecipeButton,
-                        Map.ofEntries(Map.entry("FilterOption", filterOption))));
+                    "FilterOption", filterOption));
 			}
 		);
 		cloudButton.setOnAction(
@@ -164,7 +163,7 @@ public class FilterButtonModule {
 				openSetup(); 
 				open(); 
 				controller.receiveMessageFromUI(new Message(Message.HomeView.FilterRecipeButton,
-                        Map.ofEntries(Map.entry("FilterOption", filterOption))));
+					"FilterOption", filterOption));
 			}
 		);
 		sunButton.setOnAction(
@@ -173,7 +172,7 @@ public class FilterButtonModule {
 				openSetup(); 
 				open(); 
 				controller.receiveMessageFromUI(new Message(Message.HomeView.FilterRecipeButton,
-                        Map.ofEntries(Map.entry("FilterOption", filterOption))));
+                    "FilterOption", filterOption));
 			}
 		);
 

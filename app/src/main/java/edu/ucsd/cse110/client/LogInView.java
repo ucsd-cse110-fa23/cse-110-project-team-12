@@ -17,8 +17,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.util.*;
-
 public class LogInView extends VBox implements UIInterface {
 	Controller controller;
 	boolean rememberMe;
@@ -79,9 +77,9 @@ public class LogInView extends VBox implements UIInterface {
 				e -> {
 					controller.receiveMessageFromModel(
 							new Message(Message.LogInView.LogInButton,
-							Map.ofEntries(Map.entry("Username", userArea.getText()),
-									Map.entry("Password", passArea.getText()),
-									Map.entry("AutomaticLogIn", rememberMe))));
+								"Username", userArea.getText(),
+								"Password", passArea.getText(),
+								"AutomaticLogIn", rememberMe));
 					loginSpacer.getChildren().clear();
 					Label invalidEntry = new Label("Invalid username/password");
 					invalidEntry.setId("invalid-entry");

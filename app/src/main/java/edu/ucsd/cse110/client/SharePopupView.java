@@ -64,7 +64,7 @@ public class SharePopupView extends StackPane implements UIInterface{
 	@Override
 	public void receiveMessage(Message m) {
 		if (m.getMessageType() == Message.SharePopupModel.SetRecipeShareLink){
-			String shareLink = (String) m.getKey("RecipeShareLink");
+			String shareLink = m.getKey("RecipeShareLink");
 			linkLabel.setText(shareLink);
 		}
 	}

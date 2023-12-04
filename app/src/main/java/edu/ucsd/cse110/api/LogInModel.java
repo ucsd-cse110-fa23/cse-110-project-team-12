@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.api;
 
 import java.io.*;
-import java.util.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 
@@ -38,9 +37,9 @@ public class LogInModel implements ModelInterface {
     
     public void receiveMessage(Message m) {
         if (m.getMessageType() == Message.LogInView.LogInButton) {
-            String username = (String) m.getKey("Username");
-            String password = (String) m.getKey("Password");
-            boolean rememberMe = (boolean) m.getKey("AutomaticLogIn");
+            String username = m.getKey("Username");
+            String password = m.getKey("Password");
+            boolean rememberMe = m.getKey("AutomaticLogIn");
 
             UserSchema user = getUser(username, password);
             if (user != null) {
@@ -65,8 +64,7 @@ public class LogInModel implements ModelInterface {
     }
 
     private void logIn(UserSchema user) {
-        controller.receiveMessageFromModel(new Message(Message.LogInModel.SetUser,
-            Map.ofEntries(Map.entry("User", user))));
+        controller.receiveMessageFromModel(new Message(Message.LogInModel.SetUser, "User", user));
         controller.receiveMessageFromModel(new Message(Message.LogInModel.CloseLogInView));
         controller.receiveMessageFromModel(new Message(Message.LogInModel.StartHomeView));
     }

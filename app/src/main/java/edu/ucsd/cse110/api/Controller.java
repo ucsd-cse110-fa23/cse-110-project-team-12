@@ -76,7 +76,7 @@ public class Controller {
             models.remove(ModelFactory.Type.CreateAccount);
         }
         else if (m.getMessageType() == Message.CreateAccountModel.SetUser || m.getMessageType() == Message.LogInModel.SetUser) {
-            currentUser = (UserSchema) m.getKey("User");
+            currentUser = m.getKey("User");
         }
         else if (m.getMessageType() == Message.LogInModel.StartHomeView || m.getMessageType() == Message.CreateAccountModel.StartHomeView) {
             makeOrReplaceUI(UIFactory.Type.HomePage);

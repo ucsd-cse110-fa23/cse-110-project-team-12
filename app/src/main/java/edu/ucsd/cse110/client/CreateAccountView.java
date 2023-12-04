@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.client;
 
 import java.io.FileInputStream;
-import java.util.Map;
 
 import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.Message;
@@ -95,9 +94,9 @@ public class CreateAccountView extends VBox implements UIInterface {
 				} else {
 					controller.receiveMessageFromModel(
 						new Message(Message.CreateAccountView.SignUpButton,
-						Map.ofEntries(Map.entry("Username", userArea.getText()),
-									Map.entry("Password", passArea.getText()),
-									Map.entry("AutomaticLogIn", rememberMe)))
+						"Username", userArea.getText(),
+						"Password", passArea.getText(),
+						"AutomaticLogIn", rememberMe)
 					);
 				}
             }

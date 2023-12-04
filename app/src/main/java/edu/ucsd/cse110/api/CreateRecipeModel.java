@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.api;
 
 import java.io.File;
-import java.util.Map;
 import java.nio.file.Files;
 
 import edu.ucsd.cse110.server.schemas.RecipeSchema;
@@ -51,13 +50,13 @@ public class CreateRecipeModel implements ModelInterface {
                 currentPage = PageType.MealTypeInput;
                 selectedMealType = MealType.None;
                 controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.CreateRecipeGotoPage,
-            "PageType", currentPage.name(),
+                    "PageType", currentPage.name(),
                     "MealType", selectedMealType.name()));
             }
         } else if (m.getMessageType() == Message.CreateRecipeView.RecordButton) {
             handleRecord();
         } else if (m.getMessageType() == Message.RecipeDetailedModel.Refresh) {
-            RecipeSchema recipe = (RecipeSchema) m.getKey("RecipeBody");
+            RecipeSchema recipe = m.getKey("RecipeBody");
             selectedMealType = MealTypeValidator.parseMealType(recipe.mealType);
             selectedIngredients = recipe.ingredients;
 
@@ -172,7 +171,7 @@ public class CreateRecipeModel implements ModelInterface {
     private void finishInputIngredients() {
         currentPage = PageType.Waiting;
         controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.CreateRecipeGotoPage,
-    "PageType", currentPage.name(),
+            "PageType", currentPage.name(),
             "MealType", selectedMealType.name()));
         if (controller.useUI) {
             new Thread(() -> {

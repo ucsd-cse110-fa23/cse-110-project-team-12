@@ -2,7 +2,6 @@ package edu.ucsd.cse110.api;
 
 import java.io.*;
 import java.net.*;
-import java.util.*;
 import java.nio.charset.StandardCharsets;
 
 import edu.ucsd.cse110.server.schemas.UserSchema;
@@ -22,9 +21,9 @@ public class CreateAccountModel implements ModelInterface {
             controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.StartLogInView));
         }
         else if(m.getMessageType() == Message.CreateAccountView.SignUpButton) {
-            String username = (String) m.getKey("Username");
-            String password = (String) m.getKey("Password");
-            boolean rememberMe = (boolean) m.getKey("AutomaticLogIn");
+            String username = m.getKey("Username");
+            String password = m.getKey("Password");
+            boolean rememberMe = m.getKey("AutomaticLogIn");
 
             UserSchema newUser = createUser(username, password);
             if (newUser != null) {

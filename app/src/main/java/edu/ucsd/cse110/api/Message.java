@@ -19,7 +19,7 @@ public class Message {
     public enum LogInView implements Type {
         SignUpButton,
         LogInButton {
-            Set<String> keys = new HashSet<>(Arrays.asList("Username", "Password","AutomaticLogIn"));
+            Set<String> keys = new HashSet<>(Arrays.asList("Username", "Password", "AutomaticLogIn"));
             @Override public Set<String> allowedKeys() {return keys;}
         },
     }
@@ -174,7 +174,7 @@ public class Message {
         payload = new HashMap<>();
         if (kvs.length % 2 != 0)
             throw new IllegalArgumentException("Need even number of key-values.");
-        for (int i=0; i<kvs.length/2; i++) {
+        for (int i=0; i<kvs.length; i+=2) {
             String key = (String) kvs[i];
             Object value = kvs[i+1];
             payload.put(key, value);

@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.client;
 
 import java.io.FileInputStream;
-import java.util.Map;
 
 import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.HomeModel.SortOption;
@@ -151,8 +150,7 @@ public class SortButtonModule {
 				sortOption = SortOption.DateDes;
 				openSetup(); 
 				open(); 
-				controller.receiveMessageFromUI(new Message(Message.HomeView.SortRecipeButton,
-                        Map.ofEntries(Map.entry("SortOption", sortOption))));
+				controller.receiveMessageFromUI(new Message(Message.HomeView.SortRecipeButton, "SortOption", sortOption));
 			}
 		);
 		dateDownButton.setOnAction(
@@ -160,8 +158,7 @@ public class SortButtonModule {
 				sortOption = SortOption.DateAsc;
 				openSetup(); 
 				open(); 
-				controller.receiveMessageFromUI(new Message(Message.HomeView.SortRecipeButton,
-                        Map.ofEntries(Map.entry("SortOption", sortOption))));
+				controller.receiveMessageFromUI(new Message(Message.HomeView.SortRecipeButton, "SortOption", sortOption));
 			}
 		);
 		zAButton.setOnAction(
@@ -169,8 +166,7 @@ public class SortButtonModule {
 				sortOption = SortOption.TitleDes;
 				openSetup(); 
 				open(); 
-				controller.receiveMessageFromUI(new Message(Message.HomeView.SortRecipeButton,
-                        Map.ofEntries(Map.entry("SortOption", sortOption))));
+				controller.receiveMessageFromUI(new Message(Message.HomeView.SortRecipeButton, "SortOption", sortOption));
 			}
 		);
 		aZButton.setOnAction(
@@ -178,8 +174,7 @@ public class SortButtonModule {
 				sortOption = SortOption.TitleAsc;
 				openSetup(); 
 				open(); 
-				controller.receiveMessageFromUI(new Message(Message.HomeView.SortRecipeButton,
-                        Map.ofEntries(Map.entry("SortOption", sortOption))));
+				controller.receiveMessageFromUI(new Message(Message.HomeView.SortRecipeButton, "SortOption", sortOption));
 			}
 		);
 

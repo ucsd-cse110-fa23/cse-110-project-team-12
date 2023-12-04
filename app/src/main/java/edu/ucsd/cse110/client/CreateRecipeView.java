@@ -89,7 +89,7 @@ public class CreateRecipeView extends StackPane implements UIInterface {
 	@Override
 	public void receiveMessage(Message m) {
 		if (m.getMessageType() == Message.CreateRecipeModel.CreateRecipeGotoPage) {
-			setInputView((String) m.getKey("PageType"), (String) m.getKey("MealType"));
+			setInputView(m.getKey("PageType"), m.getKey("MealType"));
 		}
 		else if (m.getMessageType() == Message.CreateRecipeModel.CreateRecipeInvalidMealType) {
 			setInvalidMealType();
