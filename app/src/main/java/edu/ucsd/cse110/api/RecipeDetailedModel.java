@@ -63,7 +63,7 @@ public class RecipeDetailedModel implements ModelInterface {
         if (m.getMessageType() == Message.RecipeDetailedView.UpdateInformation) {
             String updatedRecipeBody = (String) m.getKey("RecipeBody");
             recipe.description = updatedRecipeBody;
-            updateRecipe(recipe._id, recipe.title, updatedRecipeBody);
+            updateRecipe(recipe._id, recipe.title, updatedRecipeBody, recipe.base64ImageEncoding);
         }
         if (m.getMessageType() == Message.RecipeDetailedView.SaveButton) {
             if (currentPage == PageType.UnsavedLayout) {
@@ -106,12 +106,13 @@ public class RecipeDetailedModel implements ModelInterface {
         }
     }
 
-    private void updateRecipe(String recipeId, String newTitle, String newDescription) {
+    private void updateRecipe(String recipeId, String newTitle, String newDescription, String newImageEncoding) {
         String urlString = Controller.serverUrl + "/recipe";
         RecipeSchema changes = new RecipeSchema();
         changes._id = recipeId;
         changes.title = newTitle;
         changes.description = newDescription;
+        changes.base64ImageEncoding = newImageEncoding;
         ServerResponse response = HttpUtils.makeHttpRequest(urlString, "PUT", Utils.marshalJson(changes));
 
         if (response.getStatusCode() != 200)

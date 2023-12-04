@@ -4,6 +4,9 @@ import java.util.*;
 
 import com.google.gson.Gson;
 import com.sun.net.httpserver.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import javax.imageio.ImageIO;
 
 public class Utils {
     public static Map<String, String> getQueryPairs(HttpExchange httpExchange) {
@@ -52,5 +55,30 @@ public class Utils {
 
     public static byte[] decodeBase64(String str) {
         return Base64.getDecoder().decode(str);
+    }
+
+    public static String encodeBufferedImageToBase64(BufferedImage bImg) {
+        try {
+           ByteArrayOutputStream s = new ByteArrayOutputStream();
+           ImageIO.write(bImg, "jpg", s);
+           byte[] res = s.toByteArray();
+           String encoded = encodeBase64(res);
+           return encoded;
+        } catch (Exception e) {
+           e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static BufferedImage decodeBase64ToBufferedImage(String encoded) {
+        try {
+           byte[] decoded = decodeBase64(encoded);
+           ByteArrayInputStream inp = new ByteArrayInputStream(decoded);
+           return ImageIO.read(inp);
+        }
+        catch (Exception e) {
+           e.printStackTrace();
+        }
+        return null;
     }
 }

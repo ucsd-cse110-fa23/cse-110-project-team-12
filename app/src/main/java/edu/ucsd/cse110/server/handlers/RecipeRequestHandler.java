@@ -94,7 +94,7 @@ public class RecipeRequestHandler implements HttpHandler {
             data += scanner.nextLine() + "\n";
         RecipeSchema recipe = Utils.unmarshalJson(data, RecipeSchema.class);
 
-        mongodb.updateRecipe(recipe._id, recipe.title, recipe.description);
+        mongodb.updateRecipe(recipe._id, recipe.title, recipe.description, recipe.base64ImageEncoding);
 
         httpExchange.sendResponseHeaders(200, 0);
         OutputStream outStream = httpExchange.getResponseBody();

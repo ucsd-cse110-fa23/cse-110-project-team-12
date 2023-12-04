@@ -7,6 +7,7 @@ import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.Message;
 import edu.ucsd.cse110.api.UIInterface;
 import edu.ucsd.cse110.server.schemas.RecipeSchema;
+import edu.ucsd.cse110.server.services.Utils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -23,7 +24,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.embed.swing.SwingFXUtils;
 
+import java.awt.image.BufferedImage;
 
 public class RecipeDetailedView extends StackPane implements UIInterface {
     private Controller controller;
@@ -39,6 +42,7 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
     private double titleDefaultSize;
     private double titleWidthLimit;
     private HBox recipeTitleSpacer;
+	private HBox recipeImageBox;
     private TextArea information;
     private TextArea informationEdit;
 
@@ -79,11 +83,13 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         recipeTitleSpacer = new Spacer(recipeTitle, new Insets(0, 30, 0, 30), Pos.CENTER);
 		recipeTitleSpacer.setId("recipe-title-spacer");
 
+		recipeImageBox = new HBox();
+		recipeImageBox.setId("recipe-image-box");
+
         information = new TextArea();
 		information.setWrapText(true);
 		information.setEditable(false);
 		information.setFocusTraversable(false);
-        information.setId("information");
 
         //  UnsavedLayout
         cancelButton = new Button("Cancel");
@@ -192,11 +198,16 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
 
             removeChild(recipeTitleSpacer);
             addChild(recipeTitleSpacer);
+
+			removeChild(recipeImageBox);
+			addChild(recipeImageBox);
+
             information.setEditable(true);
 			information.setFocusTraversable(true);
 			information.setText(recipe.description.trim());
 			information.setEditable(false);
 			information.setFocusTraversable(false);
+            setImage(recipe.base64ImageEncoding);
             addChild(information);
         }
         if (m.getMessageType() == Message.RecipeDetailedModel.UseUnsavedLayout) {
@@ -229,13 +240,30 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
             removeChild(information);
             removeChild(savedButtonBox);
 
-            informationEdit.setText(recipe.description);
+            informationEdit.setText(recipe.description.trim());
             addChild(informationEdit);
         }
         if (m.getMessageType() == Message.RecipeDetailedModel.ExitEditRecipe) {
             removeChild(unsavedButtonBox);
             removeChild(informationEdit);
             this.getChildren().removeAll(backArrowBox, backButton);
+        }
+    }
+
+    private void setImage(String base64ImageEncoding) {
+        try {
+            BufferedImage bufImg = Utils.decodeBase64ToBufferedImage(base64ImageEncoding);
+            Image recipeImage = SwingFXUtils.toFXImage(bufImg, null);
+    
+            ImageView recipeImageView = new ImageView(recipeImage);
+            recipeImageView.setFitWidth(132);
+            recipeImageView.setFitHeight(74);
+    
+            recipeImageBox.getChildren().clear();
+            recipeImageBox.getChildren().add(recipeImageView);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
         }
     }
     

@@ -109,7 +109,7 @@ public class MongoDBTest {
 
         String newTitle = "Buy Apple Pie";
         String newDescription = "1. Buy Apple Pie. \n 2. You have an Apple Pie.";
-        mongoDB.updateRecipe(rs._id, newTitle, newDescription);
+        mongoDB.updateRecipe(rs._id, newTitle, newDescription, "");
         
         RecipeSchema rs_get = mongoDB.getRecipe(rs._id);
         assertTrue(rs._id.equals(rs_get._id));

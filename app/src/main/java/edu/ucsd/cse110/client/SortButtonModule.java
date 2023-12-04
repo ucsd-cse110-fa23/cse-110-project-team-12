@@ -106,7 +106,7 @@ public class SortButtonModule {
 		upTriangleView.setFitHeight(6);
 		HBox upTriangleBox = new HBox(upTriangleView);
 		
-		HBox dateUpCheck = sortOption == SortOption.DateAsc ? new HBox(checkView) : new HBox();
+		HBox dateUpCheck = sortOption == SortOption.DateDes ? new HBox(checkView) : new HBox();
 		Label dateUpText = new Label("Date");
 		HBox dateUpLabel = new HBox(dateUpCheck, dateUpText, upTriangleBox);
 
@@ -123,7 +123,7 @@ public class SortButtonModule {
 		downTriangleView.setFitHeight(6);
 		HBox downTriangleBox = new HBox(downTriangleView);
 		
-		HBox dateDownCheck = sortOption == SortOption.DateDes ? new HBox(checkView) : new HBox();
+		HBox dateDownCheck = sortOption == SortOption.DateAsc ? new HBox(checkView) : new HBox();
 		Label dateDownText = new Label("Date");
 		HBox dateDownLabel = new HBox(dateDownCheck, dateDownText, downTriangleBox);
 
@@ -148,7 +148,7 @@ public class SortButtonModule {
 		closeButton.setOnAction(e -> { close(); });
 		dateUpButton.setOnAction(
 			e -> { 
-				sortOption = SortOption.DateAsc;
+				sortOption = SortOption.DateDes;
 				openSetup(); 
 				open(); 
 				controller.receiveMessageFromModel(new Message(Message.HomeView.SortRecipeButton,
@@ -157,7 +157,7 @@ public class SortButtonModule {
 		);
 		dateDownButton.setOnAction(
 			e -> { 
-				sortOption = SortOption.DateDes;
+				sortOption = SortOption.DateAsc;
 				openSetup(); 
 				open(); 
 				controller.receiveMessageFromModel(new Message(Message.HomeView.SortRecipeButton,
