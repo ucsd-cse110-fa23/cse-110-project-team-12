@@ -28,8 +28,7 @@ public class CreateAccountModel implements ModelInterface {
 
             UserSchema newUser = createUser(username, password);
             if (newUser != null) {
-                controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.SetUser,
-                    Map.ofEntries(Map.entry("User", newUser))));
+                controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.SetUser, "User", newUser));
                 controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.CloseCreateAccountView));
                 controller.receiveMessageFromModel(new Message(Message.CreateAccountModel.StartHomeView));
 
