@@ -695,7 +695,7 @@
 	-fx-background-color: transparent;
 }
 
-#close-button {
+#popup-close-button {
 	-fx-background-color: transparent;
 	-fx-border-width: 0;
 	-fx-min-width: 325;
