@@ -31,7 +31,7 @@ public class DalleRequestHandler implements HttpHandler {
             data += scanner.nextLine() + "\n";
         }
         RecipeSchema recipe = Utils.unmarshalJson(data, RecipeSchema.class);
-        String prompt = "food photography, photography, Super-Resolution, white plate, clean background, " + recipe.title;
+        String prompt = "food photography, photography, Super-Resolution, " + recipe.title;
         BufferedImage dalleImage = dalle.promptDallE(prompt);
 
         if (dalleImage != null) {
