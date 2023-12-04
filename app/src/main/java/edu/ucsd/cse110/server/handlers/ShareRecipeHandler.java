@@ -48,7 +48,7 @@ public class ShareRecipeHandler implements HttpHandler{
         String RecipeFoundHTML = new String(Files.readAllBytes(Paths.get("./src/main/java/edu/ucsd/cse110/server/handlers/recipe.html")));
         
         if (queryVals.containsKey("id")) {
-            RecipeSchema requestedRecipe = mongodb.getRecipe(queryVals.get("id"));
+            RecipeSchema requestedRecipe = mongodb.getRecipe(queryVals.get("recipeId"));
             if(requestedRecipe == null) {
                 httpExchange.sendResponseHeaders(404, NoRecipeFoundHTML.getBytes().length);
                 OutputStream outStream = httpExchange.getResponseBody();
