@@ -15,7 +15,7 @@ import org.json.JSONObject;
 
 public class DallE implements DallEInterface {
     private static final String API_ENDPOINT = "https://api.openai.com/v1/images/generations";
-    private static final String API_KEY = "Tiujj9KHpCxW1k31B5QmT3BlbkFJp9YsVkUhoQlMYoLTxNuH";
+    private static final String API_KEY = "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";
     private static final String MODEL = "dall-e-2";
 
     @Override
@@ -43,7 +43,6 @@ public class DallE implements DallEInterface {
         .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
         .build();
         
-        
         // Send the request and receive the response
         HttpResponse<String> response;
         try {
@@ -52,9 +51,9 @@ public class DallE implements DallEInterface {
             HttpResponse.BodyHandlers.ofString()
             );
         } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
             return null;
         }
-        
         
         // Process the response
         String responseBody = response.body();
@@ -62,11 +61,19 @@ public class DallE implements DallEInterface {
         
         JSONObject responseJson = new JSONObject(responseBody);
 
-        String generatedImageURL = responseJson.getJSONArray("data").getJSONObject(0).getString("url");
+        String generatedImageURL = "";
+
+        try {
+            generatedImageURL = responseJson.getJSONArray("data").getJSONObject(0).getString("url");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
         
         System.out.println("DALL-E Response:");
         System.out.println(generatedImageURL);
-
+        
 
         // Download the Generated Image to Current Directory
         InputStream in;
@@ -75,6 +82,7 @@ public class DallE implements DallEInterface {
             in = new URI(generatedImageURL).toURL().openStream();
             bufferedImage = ImageIO.read(in);
         } catch (IOException | URISyntaxException e) {
+            e.printStackTrace();
             return null;
         }
         return bufferedImage;

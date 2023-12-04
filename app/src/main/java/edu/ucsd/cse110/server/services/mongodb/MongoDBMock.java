@@ -178,7 +178,7 @@ public class MongoDBMock implements MongoDBInterface{
     }
     
     @Override
-    public void updateRecipe(String recipeId, String newTitle, String newDescription) {        
+    public void updateRecipe(String recipeId, String newTitle, String newDescription, String newImageEncoding) {        
         try {
             Path path = Paths.get(storagePath + "recipes.json");
             String content = new String(Files.readAllBytes(path));
