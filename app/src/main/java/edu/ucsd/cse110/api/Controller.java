@@ -109,6 +109,14 @@ public class Controller {
             uis.get(UIFactory.Type.HomePage).removeChild(uis.get(UIFactory.Type.DetailedView).getUI());
             models.remove(ModelFactory.Type.DetailedView);
         } 
+        else if (m.getMessageType() == Message.RecipeDetailedModel.Refresh) {
+            uis.get(UIFactory.Type.HomePage).removeChild(uis.get(UIFactory.Type.DetailedView).getUI());
+            models.remove(ModelFactory.Type.DetailedView);
+
+            makeOrReplaceUI(UIFactory.Type.CreateRecipe);
+            uis.get(UIFactory.Type.HomePage).addChild(uis.get(UIFactory.Type.CreateRecipe).getUI());
+            makeOrReplaceModel(ModelFactory.Type.CreateRecipe);
+        }
         else if (m.getMessageType() == Message.RecipeDetailedModel.StartSharePopupView) {
             makeOrReplaceUI(UIFactory.Type.SharePopup);
             root.addChild(uis.get(UIFactory.Type.SharePopup).getUI());

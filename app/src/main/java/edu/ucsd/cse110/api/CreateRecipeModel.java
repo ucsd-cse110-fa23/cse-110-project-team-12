@@ -57,6 +57,12 @@ public class CreateRecipeModel implements ModelInterface {
             }
         } else if (m.getMessageType() == Message.CreateRecipeView.RecordButton) {
             handleRecord();
+        } else if (m.getMessageType() == Message.RecipeDetailedModel.Refresh) {
+            RecipeSchema recipe = (RecipeSchema) m.getKey("RecipeBody");
+            selectedMealType = MealTypeValidator.parseMealType(recipe.mealType);
+            selectedIngredients = recipe.ingredients;
+
+            finishInputIngredients();
         }
     }
 
@@ -73,7 +79,7 @@ public class CreateRecipeModel implements ModelInterface {
         generatedRecipe.ingredients = selectedIngredients;
         String urlString = Controller.serverUrl + "/chatgpt";
         ServerResponse response = HttpUtils.makeHttpRequest(urlString, "POST", Utils.marshalJson(generatedRecipe));
-        
+
         if (response.getStatusCode() == 200)
             generatedRecipe = Utils.unmarshalJson(response.getResponseBody(), RecipeSchema.class);
         else
@@ -94,18 +100,16 @@ public class CreateRecipeModel implements ModelInterface {
         try {
             byte[] fileBinary = Files.readAllBytes(audioFile.toPath());
             String base64Encoding = Utils.encodeBase64(fileBinary);
-            
+
             String urlString = Controller.serverUrl + "/whisper";
             ServerResponse response = HttpUtils.makeHttpRequest(urlString, "POST", base64Encoding);
-            
+
             if (response.getStatusCode() == 200) {
                 return response.getResponseBody();
-            }
-            else {
+            } else {
                 throw new Exception("Failed to transcribe audio file.");
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return "";
@@ -146,47 +150,55 @@ public class CreateRecipeModel implements ModelInterface {
 
     public void processTranscript(String transcript) {
         if (currentPage == PageType.MealTypeInput) {
-            if (MealTypeValidator.validateMealType(transcript)) {
-                currentPage = PageType.IngredientsInput;
-                selectedMealType = MealTypeValidator.parseMealType(transcript);
-                controller.receiveMessageFromModel(
-                        new Message(Message.CreateRecipeModel.CreateRecipeGotoPage,
-                                Map.ofEntries(Map.entry("PageType", currentPage.name()),
-                                        Map.entry("MealType", selectedMealType.name()))));
-            } else {
-                controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.CreateRecipeInvalidMealType));
-            }
+            finishInputMealType(transcript);
         } else if (currentPage == PageType.IngredientsInput) {
-            currentPage = PageType.Waiting;
-            controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.CreateRecipeGotoPage,
-                    Map.ofEntries(Map.entry("PageType", currentPage.name()),
-                            Map.entry("MealType", selectedMealType.name()))));
+            // Set ingredients directly here because we don't verify ingredients, but we do verify meal type.
             selectedIngredients = transcript;
-            if (controller.useUI) {
-                new Thread(() -> {
-                    createNewChatGPTRecipe();
-                    generateDalleImage();
-                    Platform.runLater(() -> {
-                        controller.receiveMessageFromModel(
-                                new Message(Message.CreateRecipeModel.CloseCreateRecipeView));
-                        controller.receiveMessageFromModel(
-                                new Message(Message.CreateRecipeModel.StartRecipeDetailedView));
-                        controller.receiveMessageFromModel(
-                                new Message(Message.CreateRecipeModel.SendRecipe,
-                                        Map.ofEntries(Map.entry("Recipe", generatedRecipe))));
-                    });
-                }).start();
-            } else {
-                createNewChatGPTRecipe();
-                generateDalleImage();
-                controller.receiveMessageFromModel(
-                        new Message(Message.CreateRecipeModel.CloseCreateRecipeView));
-                controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StartRecipeDetailedView));
-                controller.receiveMessageFromModel(
-                        new Message(Message.CreateRecipeModel.SendRecipe,
-                                Map.ofEntries(Map.entry("Recipe", generatedRecipe))));
-            }
+            finishInputIngredients();
         }
     }
 
+    private void finishInputMealType(String transcript) {
+        if (MealTypeValidator.validateMealType(transcript)) {
+            currentPage = PageType.IngredientsInput;
+            selectedMealType = MealTypeValidator.parseMealType(transcript);
+            controller.receiveMessageFromModel(
+                    new Message(Message.CreateRecipeModel.CreateRecipeGotoPage,
+                            Map.ofEntries(Map.entry("PageType", currentPage.name()),
+                                    Map.entry("MealType", selectedMealType.name()))));
+        } else {
+            controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.CreateRecipeInvalidMealType));
+        }
+    }
+
+    private void finishInputIngredients() {
+        currentPage = PageType.Waiting;
+        controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.CreateRecipeGotoPage,
+                Map.ofEntries(Map.entry("PageType", currentPage.name()),
+                        Map.entry("MealType", selectedMealType.name()))));
+        if (controller.useUI) {
+            new Thread(() -> {
+                createNewChatGPTRecipe();
+                generateDalleImage();
+                Platform.runLater(() -> {
+                    controller.receiveMessageFromModel(
+                            new Message(Message.CreateRecipeModel.CloseCreateRecipeView));
+                    controller.receiveMessageFromModel(
+                            new Message(Message.CreateRecipeModel.StartRecipeDetailedView));
+                    controller.receiveMessageFromModel(
+                            new Message(Message.CreateRecipeModel.SendRecipe,
+                                    Map.ofEntries(Map.entry("Recipe", generatedRecipe))));
+                });
+            }).start();
+        } else {
+            createNewChatGPTRecipe();
+            generateDalleImage();
+            controller.receiveMessageFromModel(
+                    new Message(Message.CreateRecipeModel.CloseCreateRecipeView));
+            controller.receiveMessageFromModel(new Message(Message.CreateRecipeModel.StartRecipeDetailedView));
+            controller.receiveMessageFromModel(
+                    new Message(Message.CreateRecipeModel.SendRecipe,
+                            Map.ofEntries(Map.entry("Recipe", generatedRecipe))));
+        }
+    }
 }

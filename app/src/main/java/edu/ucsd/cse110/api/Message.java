@@ -123,6 +123,7 @@ public class Message {
             @Override public Set<String> allowedKeys() {return keys;}
         }, 
         ShareButton, 
+        RefreshButton,
         CloseSharePopupViewButton;
     }
     public enum RecipeDetailedModel implements Type {
@@ -146,6 +147,10 @@ public class Message {
             Set<String> keys = new HashSet<>(Arrays.asList("RecipeShareLink"));
             @Override public Set<String> allowedKeys() {return keys;}
         },
+        Refresh {
+            Set<String> keys = new HashSet<>(Arrays.asList("RecipeBody"));
+            @Override public Set<String> allowedKeys() {return keys;}
+        }
     }
 
     public enum SharePopupView implements Type {

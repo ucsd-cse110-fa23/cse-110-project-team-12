@@ -111,6 +111,14 @@ public class RecipeDetailedModel implements ModelInterface {
                                                     Map.ofEntries(Map.entry("RecipeShareLink", "localhost:8100/share?recipeId=" + recipe._id))));
             }
         }
+        if (m.getMessageType() == Message.RecipeDetailedView.RefreshButton) {
+            // Will be refreshed.
+            recipe.base64ImageEncoding = "";
+            recipe.title = "";
+            recipe.description = "";
+            controller.receiveMessageFromModel(new Message(Message.RecipeDetailedModel.Refresh,
+                Map.ofEntries(Map.entry("RecipeBody", recipe))));
+        }
     }
 
     private void updateRecipe(String recipeId, String newTitle, String newDescription, String newImageEncoding) {
