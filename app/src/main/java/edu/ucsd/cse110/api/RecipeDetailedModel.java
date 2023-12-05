@@ -19,6 +19,14 @@ public class RecipeDetailedModel implements ModelInterface {
         controller = c;
     }
 
+    public PageType getCurrentPage() {
+        return currentPage;
+    }
+
+    public RecipeSchema getRecipe() {
+        return recipe;
+    }
+
     @Override
     public void receiveMessage(Message m) {
         if (m.getMessageType() == Message.HomeModel.SendRecipe) {
