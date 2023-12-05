@@ -58,8 +58,7 @@ public class HttpUtils {
         }
         catch (Exception e) {
             System.out.println("HTTP Request Exception: " + methodType + " - " + urlString);
-            e.printStackTrace();
+            return new ServerResponse(500, "");
         }
-        return new ServerResponse(404, "");
     }
 }

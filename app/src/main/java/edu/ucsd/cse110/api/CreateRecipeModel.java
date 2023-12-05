@@ -80,8 +80,10 @@ public class CreateRecipeModel implements ModelInterface {
 
         if (response.getStatusCode() == 200)
             generatedRecipe = Utils.unmarshalJson(response.getResponseBody(), RecipeSchema.class);
-        else
+        else {
             System.out.println("Failed to generate chatgpt recipe");
+            controller.receiveMessageFromModel(new Message(Message.HttpRequest.ServerError));
+        }
     }
 
     public void generateDalleImage() {
@@ -90,8 +92,10 @@ public class CreateRecipeModel implements ModelInterface {
 
         if (response.getStatusCode() == 200)
             generatedRecipe = Utils.unmarshalJson(response.getResponseBody(), RecipeSchema.class);
-        else
+        else {
             System.out.println("Failed to generate chatgpt recipe");
+            controller.receiveMessageFromModel(new Message(Message.HttpRequest.ServerError));
+        }
     }
 
     private String getAudioTranscript(File audioFile) {
@@ -105,6 +109,7 @@ public class CreateRecipeModel implements ModelInterface {
             if (response.getStatusCode() == 200) {
                 return response.getResponseBody();
             } else {
+                controller.receiveMessageFromModel(new Message(Message.HttpRequest.ServerError));
                 throw new Exception("Failed to transcribe audio file.");
             }
         } catch (Exception e) {

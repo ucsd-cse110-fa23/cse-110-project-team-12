@@ -165,6 +165,11 @@ public class Message {
             @Override public Set<String> allowedKeys() {return keys;}
         },
     }
+
+    public enum HttpRequest implements Type {
+        ServerError,
+        CloseServerError,
+    }
     
     private Type type;
     private Map<String, Object> payload;

@@ -6,7 +6,6 @@ import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.Message;
 import edu.ucsd.cse110.api.UIInterface;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -19,21 +18,18 @@ import javafx.scene.layout.VBox;
 
 public class LogInView extends VBox implements UIInterface {
 	Controller controller;
+	HBox loginSpacer;
+	HBox loginButtonBox;
+	Button signUp;
 	boolean rememberMe;
 
 	public LogInView(Controller c) {
 		this.controller = c;
-
 		this.setId("log-in-view");
 
 		Header header = new Header();
-		this.setAlignment(Pos.CENTER);
-		this.addChild(header);
 
-		// after sucessful server connect
-		this.setAlignment(Pos.TOP_CENTER);
-
-		HBox loginSpacer = new HBox();
+		loginSpacer = new HBox();
 		loginSpacer.setId("login-spacer");
 
 		Label username = new Label("Username");
@@ -58,14 +54,14 @@ public class LogInView extends VBox implements UIInterface {
 		rememberToggle.setId("remember-toggle");
 		rememberBox.setId("remember-box");
 
-		Button signUp = new Button("Sign Up");
 		Button logIn = new Button("Log In");
-		HBox loginButtonBox = new HBox(signUp, logIn);
-		signUp.setId("sign-up");
+		signUp = new Button("Sign Up");
+		loginButtonBox = new HBox(signUp, logIn);
 		logIn.setId("log-in");
+		signUp.setId("sign-up");
 		loginButtonBox.setId("login-button-box");
 
-		this.getChildren().addAll(loginSpacer, userBox, passBox, rememberBox, loginButtonBox);
+		this.getChildren().addAll(header, loginSpacer, userBox, passBox, rememberBox, loginButtonBox);
 
 		signUp.setOnAction(
 				e-> {

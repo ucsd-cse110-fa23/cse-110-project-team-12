@@ -57,8 +57,10 @@ public class CreateAccountModel implements ModelInterface {
         
         if (response.getStatusCode() == 201)
             return Utils.unmarshalJson(response.getResponseBody(), UserSchema.class);
-        else
+        else {
+            controller.receiveMessageFromModel(new Message(Message.HttpRequest.ServerError));
             return null;
+        }
     }
     
 }

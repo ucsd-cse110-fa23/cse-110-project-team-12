@@ -109,9 +109,11 @@ public class HomeModel implements ModelInterface {
             recipes = Arrays.asList(Utils.unmarshalJson(response.getResponseBody(), RecipeSchema[].class));
             recipes = filterRecipeList(recipes);
             recipes = sortRecipeList(recipes);
+            controller.receiveMessageFromModel(
+                new Message(Message.HomeModel.UpdateRecipeList, "Recipes", recipes));
+        } else {
+            controller.receiveMessageFromModel(new Message(Message.HttpRequest.ServerError));
         }
-        controller.receiveMessageFromModel(
-            new Message(Message.HomeModel.UpdateRecipeList, "Recipes", recipes));
     }
 
     public void updateFilterOption(FilterOption filterOption) {

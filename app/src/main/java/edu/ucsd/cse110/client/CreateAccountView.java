@@ -6,7 +6,6 @@ import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.Message;
 import edu.ucsd.cse110.api.UIInterface;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -28,7 +27,6 @@ public class CreateAccountView extends VBox implements UIInterface {
 	public CreateAccountView(Controller c) {
 		this.controller = c;
 		this.setId("signup-view");
-		this.setAlignment(Pos.TOP_CENTER);
 
 		Header header = new Header();
 

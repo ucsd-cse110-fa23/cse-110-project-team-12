@@ -80,9 +80,12 @@ public class LogInModel implements ModelInterface {
         String urlString = Controller.serverUrl + "/user?username=" + encodedUsername + "&password=" + encodedPassword;
         ServerResponse response = HttpUtils.makeHttpRequest(urlString, "GET", "");
         
-        if (response.getStatusCode() == 200)
+        if (response.getStatusCode() == 200) {
             return Utils.unmarshalJson(response.getResponseBody(), UserSchema.class);
-        else
+        }
+        else {
+            controller.receiveMessageFromModel(new Message(Message.HttpRequest.ServerError));
             return null;
+        }
     }
 }

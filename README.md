@@ -2,6 +2,12 @@
 
 ### [Team 12 Github Repository](https://github.com/ucsd-cse110-fa23/cse-110-project-team-12)
 
+### [Figma Diagram to Use the App](https://www.figma.com/file/0WqcFv8Y6dJTDsmW8fXxyB/PantyPal-UI-Draft?type=design&node-id=0%3A1&mode=design&t=rTkiPVYieqxm3biF-1)
+
+### [MS1 Project Board](https://github.com/orgs/ucsd-cse110-fa23/projects/11)
+
+### [MS2 Project Board](https://github.com/orgs/ucsd-cse110-fa23/projects/95)
+
 #### To start the PantryPal Application:
 
 1. Clone the application repo to your local machine if you have not.
