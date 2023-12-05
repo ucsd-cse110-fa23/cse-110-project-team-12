@@ -121,7 +121,7 @@ public class RecipeDetailedModel implements ModelInterface {
         changes.title = newTitle;
         changes.description = newDescription;
         changes.base64ImageEncoding = newImageEncoding;
-        ServerResponse response = HttpUtils.makeHttpRequest(urlString, "PUT", Utils.marshalJson(changes));
+        ServerResponse response = controller.server.makeHttpRequest(urlString, "PUT", Utils.marshalJson(changes));
 
         if (response.getStatusCode() != 200)
             System.out.println("Update recipe failed. 😭😭😭😭😭😭😭");
@@ -131,7 +131,7 @@ public class RecipeDetailedModel implements ModelInterface {
     private RecipeSchema saveRecipe(RecipeSchema recipe) {
         recipe.userId = controller.getCurrentUser()._id;
         String urlString = Controller.serverUrl + "/recipe";
-        ServerResponse response = HttpUtils.makeHttpRequest(urlString, "POST", Utils.marshalJson(recipe));
+        ServerResponse response = controller.server.makeHttpRequest(urlString, "POST", Utils.marshalJson(recipe));
 
         if (response.getStatusCode() == 201)
             return Utils.unmarshalJson(response.getResponseBody(), RecipeSchema.class);
@@ -142,7 +142,7 @@ public class RecipeDetailedModel implements ModelInterface {
     private void deleteRecipe(String recipeId) {
         String urlString = Controller.serverUrl + "/recipe?recipeId=" + recipeId;
 
-        ServerResponse response = HttpUtils.makeHttpRequest(urlString, "DELETE", "");
+        ServerResponse response = controller.server.makeHttpRequest(urlString, "DELETE", "");
         if (response.getStatusCode() != 200)
             System.out.println("Error delete recipe 😭😭😭😭😭😭😭😭😭😭.");
     }

@@ -78,7 +78,7 @@ public class LogInModel implements ModelInterface {
         String encodedUsername = URLEncoder.encode(username, StandardCharsets.UTF_8);
         String encodedPassword = URLEncoder.encode(password, StandardCharsets.UTF_8);
         String urlString = Controller.serverUrl + "/user?username=" + encodedUsername + "&password=" + encodedPassword;
-        ServerResponse response = HttpUtils.makeHttpRequest(urlString, "GET", "");
+        ServerResponse response = controller.server.makeHttpRequest(urlString, "GET", "");
         
         if (response.getStatusCode() == 200)
             return Utils.unmarshalJson(response.getResponseBody(), UserSchema.class);
