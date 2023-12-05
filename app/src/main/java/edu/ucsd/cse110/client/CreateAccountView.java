@@ -134,7 +134,7 @@ public class CreateAccountView extends VBox implements UIInterface {
 			createSpacer.getChildren().clear();
 				
 			Label invalidEntry = null;
-			invalidEntry = new Label(userArea.getText() + " is taken");
+			invalidEntry = new Label("\"" + userArea.getText() + "\" is taken");
 			invalidEntry.setId("invalid-entry");
 			createSpacer.getChildren().add(invalidEntry);
 		}

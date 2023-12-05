@@ -50,6 +50,9 @@ public class CreateAccountModel implements ModelInterface {
     }
 
     private UserSchema createUser(String username, String password) {
+        if (username == null || password == null || username.equals("") || password.equals(""))
+            return null;
+            
         String encodedUsername = URLEncoder.encode(username, StandardCharsets.UTF_8);
         String encodedPassword = URLEncoder.encode(password, StandardCharsets.UTF_8);
         String urlString = Controller.serverUrl + "/user?username=" + encodedUsername + "&password=" + encodedPassword;
@@ -57,10 +60,9 @@ public class CreateAccountModel implements ModelInterface {
         
         if (response.getStatusCode() == 201)
             return Utils.unmarshalJson(response.getResponseBody(), UserSchema.class);
-        else {
+        else if (response.getStatusCode() == 500) {
             controller.receiveMessageFromModel(new Message(Message.HttpRequest.ServerError));
-            return null;
         }
+        return null;
     }
-    
 }
