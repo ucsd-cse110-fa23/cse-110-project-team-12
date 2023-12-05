@@ -11,6 +11,7 @@ public class UIFactory {
         SharePopup,
 		CreateAccount,
 		LogIn,
+        ServerErrorPopup,
     }
 
     public static UIInterface make(Type type, Controller c) {
@@ -27,6 +28,8 @@ public class UIFactory {
             return new CreateAccountView(c);
         else if (type == Type.LogIn)
             return new LogInView(c);
+        else if (type == Type.ServerErrorPopup)
+            return new ErrorPopupView(c);
         return null;
     }
 }
