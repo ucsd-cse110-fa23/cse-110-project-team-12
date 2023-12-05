@@ -6,7 +6,7 @@ import java.lang.IllegalArgumentException;
 public class HttpRequesterMock implements HttpRequesterInterface {
     Queue<ServerResponse> responses;
 
-    HttpRequesterMock() {
+    public HttpRequesterMock() {
         responses = new LinkedList<>();
     }
 
