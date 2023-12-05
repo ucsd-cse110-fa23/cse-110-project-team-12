@@ -30,8 +30,11 @@ jobs:
         run: chmod +x ./gradlew
 
       # build everything (includes running unit tests)
+      # ampersand makes server run in background, with mocks
       - name: Execute Gradle build
-        run: ./gradlew build
+        run: ./gradlew run -Pmain=edu.ucsd.cse110.server.Server --args="test" &
+             ./gradlew build
+                  
 
       # report the results
       - name: Publish Test Report
