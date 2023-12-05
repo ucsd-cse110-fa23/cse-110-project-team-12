@@ -2,7 +2,7 @@ package edu.ucsd.cse110.api;
 
 import java.util.*;
 
-
+import edu.ucsd.cse110.client.NoUI;
 import edu.ucsd.cse110.client.Root;
 
 import edu.ucsd.cse110.server.schemas.UserSchema;
@@ -30,6 +30,8 @@ public class Controller {
         
         if(useUI)
             root = new Root();
+        else
+            root = new NoUI();
         
         this.receiveMessageFromModel(new Message(Message.HomeModel.StartLogInView));
     }

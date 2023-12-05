@@ -17,7 +17,7 @@ public class LogInModel implements ModelInterface {
         
         // automaic sign-in
         File f = new File(storagePath + "savelogin.txt");
-        if(f.exists()) { 
+        if(f.exists() && c.useUI) { 
             try {
                 String username = "", password = "";
                 BufferedReader br = new BufferedReader(new FileReader(f));

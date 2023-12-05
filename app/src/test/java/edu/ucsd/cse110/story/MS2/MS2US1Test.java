@@ -8,18 +8,7 @@ import java.util.ArrayList;
 import org.checkerframework.checker.guieffect.qual.UIType;
 import org.junit.Test;
 
-import edu.ucsd.cse110.api.HomeModel;
-import edu.ucsd.cse110.api.HttpRequesterInterface;
-import edu.ucsd.cse110.api.HttpRequesterMock;
-import edu.ucsd.cse110.api.Message;
-import edu.ucsd.cse110.api.ServerResponse;
-import edu.ucsd.cse110.api.UIFactory;
-import edu.ucsd.cse110.api.Controller;
-import edu.ucsd.cse110.api.VoicePromptMock;
-import edu.ucsd.cse110.api.ModelFactory;
-import edu.ucsd.cse110.server.schemas.UserSchema;
-import edu.ucsd.cse110.server.services.mongodb.MongoDBInterface;
-import edu.ucsd.cse110.server.services.mongodb.MongoDBMock;
+import edu.ucsd.cse110.api.*;
 
 public class MS2US1Test {
     Controller controller;
@@ -33,37 +22,39 @@ public class MS2US1Test {
     // And I click on the sign-in button
     // Then I am brought to the home screen with my recipe list
     // And My two recipes “Chicken Noodle Soup” and “Lasagna” are displayed
-    // @Test
-    // public void TestMS2US1BDD1() {
-    //     HttpRequesterMock mockHttpRequester = new HttpRequesterMock();
-    //     controller = new Controller(false, mockHttpRequester, new VoicePromptMock(new ArrayList<>()));
+    @Test
+    public void TestMS2US1BDD1() {
+        HttpRequesterMock mockHttpRequester = new HttpRequesterMock();
+        controller = new Controller(false, mockHttpRequester, new VoicePromptMock(new ArrayList<>()));
 
-    //     // Add user with username "david03" and password
+        // Add user with username "david03" and password
 
-    //     // Add two exising recipes "Chicken Noodle Soup" and "Lasagna"
+        // Add two exising recipes "Chicken Noodle Soup" and "Lasagna"
 
-    //     controller.receiveMessageFromUI(new Message(Message.CreateAccountModel.StartLogInView));
+        controller.receiveMessageFromUI(new Message(Message.CreateAccountModel.StartLogInView));
 
-    //     mockHttpRequester.addResponse(
-    //             new ServerResponse(200, "{{\"username\": \"david03\", \"password\": \"mathIsCool03$$%\"}}"));
+        mockHttpRequester.addResponse(
+                new ServerResponse(200, "{{\"username\": \"david03\", \"password\": \"mathIsCool03$$%\"}}"));
 
-    //     controller.receiveMessageFromModel(
-    //             new Message(Message.LogInView.LogInButton,
-    //                     "Username", "david03",
-    //                     "Password", "mathIsCool03$$%",
-    //                     "AutomaticLogIn", true));
+        
 
-    //     HomeModel hm = (HomeModel)controller.getState(ModelFactory.Type.HomePage);
-    //     assertEquals(UIFactory.Type.HomePage,  hm.getCurrentView());
+        controller.receiveMessageFromUI(
+                new Message(Message.LogInView.LogInButton,
+                        "Username", "david03",
+                        "Password", "mathIsCool03$$%",
+                        "AutomaticLogIn", true));
 
-    //     // Fill in "david03 as the username"
-    //     // Fill in mathIsCool03$$%" as the password
+        HomeModel hm = (HomeModel)controller.getState(ModelFactory.Type.HomePage);
+        assertEquals(UIFactory.Type.HomePage,  hm.getCurrentView());
 
-    //     // Sign in
+        // Fill in "david03 as the username"
+        // Fill in mathIsCool03$$%" as the password
 
-    //     // Assert to see if home screen is the view
-    //     // Assert that recipes contain "Chicken Noodle Soup" and "Lasagna"
+        // Sign in
 
-    // }
+        // Assert to see if home screen is the view
+        // Assert that recipes contain "Chicken Noodle Soup" and "Lasagna"
+
+    }
 
 }
