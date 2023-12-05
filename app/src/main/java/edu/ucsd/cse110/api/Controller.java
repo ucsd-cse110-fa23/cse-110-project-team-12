@@ -116,10 +116,17 @@ public class Controller {
             root.addChild(uis.get(UIFactory.Type.SharePopup).getUI());
 
             makeOrReplaceModel(ModelFactory.Type.SharePopup);
-        } 
+        }
         else if (m.getMessageType() == Message.SharePopupModel.CloseSharePopupView) {
             root.removeChild(uis.get(UIFactory.Type.SharePopup).getUI());
             models.remove(ModelFactory.Type.SharePopup);
+        }
+        else if (m.getMessageType() == Message.HttpRequest.ServerError) {
+            makeOrReplaceUI(UIFactory.Type.ServerErrorPopup);
+            root.addChild(uis.get(UIFactory.Type.ServerErrorPopup).getUI());
+        }
+        else if (m.getMessageType() == Message.HttpRequest.CloseServerError) {
+            root.removeChild(uis.get(UIFactory.Type.ServerErrorPopup).getUI());
         }
         uis.forEach((uiType, ui) -> ui.receiveMessage(m));
         models.forEach((mType, model) -> model.receiveMessage(m));
@@ -128,7 +135,7 @@ public class Controller {
     public void receiveMessageFromUI(Message m) {
         models.forEach((mType, model) -> model.receiveMessage(m));
     }
-   
+
     // Testing Use
     public ModelInterface getState(ModelFactory.Type type) {
         return models.get(type);

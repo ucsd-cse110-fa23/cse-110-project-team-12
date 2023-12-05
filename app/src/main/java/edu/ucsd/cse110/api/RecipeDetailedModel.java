@@ -131,8 +131,10 @@ public class RecipeDetailedModel implements ModelInterface {
         changes.base64ImageEncoding = newImageEncoding;
         ServerResponse response = HttpUtils.makeHttpRequest(urlString, "PUT", Utils.marshalJson(changes));
 
-        if (response.getStatusCode() != 200)
+        if (response.getStatusCode() != 200) {
             System.out.println("Update recipe failed. 😭😭😭😭😭😭😭");
+            controller.receiveMessageFromModel(new Message(Message.HttpRequest.ServerError));
+        }
     }
 
     // Returns new recipe with recipe id added.
@@ -143,16 +145,20 @@ public class RecipeDetailedModel implements ModelInterface {
 
         if (response.getStatusCode() == 201)
             return Utils.unmarshalJson(response.getResponseBody(), RecipeSchema.class);
-        else
+        else {
+            controller.receiveMessageFromModel(new Message(Message.HttpRequest.ServerError));
             return null;
+        }
     }
 
     private void deleteRecipe(String recipeId) {
         String urlString = Controller.serverUrl + "/recipe?recipeId=" + recipeId;
 
         ServerResponse response = HttpUtils.makeHttpRequest(urlString, "DELETE", "");
-        if (response.getStatusCode() != 200)
+        if (response.getStatusCode() != 200) {
             System.out.println("Error delete recipe 😭😭😭😭😭😭😭😭😭😭.");
+            controller.receiveMessageFromModel(new Message(Message.HttpRequest.ServerError));
+        }
     }
 
     // private void saveToJSON(String recipeTitle, String recipeBody) {

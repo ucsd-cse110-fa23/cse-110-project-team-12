@@ -2,6 +2,7 @@ package edu.ucsd.cse110.client;
 
 import java.io.FileInputStream;
 
+import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.Message;
 import edu.ucsd.cse110.api.UIInterface;
 import javafx.scene.Node;
@@ -13,10 +14,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 public class ErrorPopupView extends VBox implements UIInterface{
+	private Controller controller;
+
 	private Button refreshButton;
 	private VBox errorSpacer;
 	
-	public ErrorPopupView() {
+	public ErrorPopupView(Controller c) {
+		controller = c;
+
 		this.setId("error-popup");
 
 		Header header = new Header();
@@ -44,7 +49,7 @@ public class ErrorPopupView extends VBox implements UIInterface{
 		refreshButton.setGraphic(refreshView);
 		refreshButton.setOnAction(
 			e -> {
-				errorSpacer.getChildren().removeAll(errorMessage1, errorMessage2);
+				controller.receiveMessageFromModel(new Message(Message.HttpRequest.CloseServerError));
 			}
 		);
 			
