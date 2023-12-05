@@ -4,26 +4,8 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-class ServerResponse {
-    private int statusCode;
-    private String responseBody;
-
-    public ServerResponse(int code, String body) {
-        statusCode = code;
-        responseBody = body;
-    }
-
-    public int getStatusCode() {
-        return statusCode;
-    }
-
-    public String getResponseBody() {
-        return responseBody;
-    }
-}
-
-public class HttpUtils {
-    public static ServerResponse makeHttpRequest(String urlString, String methodType, String requestBody) {
+public class HttpRequester implements HttpRequesterInterface {
+    public ServerResponse makeHttpRequest(String urlString, String methodType, String requestBody) {
         try {
             URL url = new URI(urlString).toURL();
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -60,6 +42,6 @@ public class HttpUtils {
             System.out.println("HTTP Request Exception: " + methodType + " - " + urlString);
             e.printStackTrace();
         }
-        return new ServerResponse(404, "");
+        return new ServerResponse(500, "");
     }
 }

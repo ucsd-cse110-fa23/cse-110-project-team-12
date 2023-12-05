@@ -103,7 +103,7 @@ public class HomeModel implements ModelInterface {
     private void updateRecipeList() {
         String userId = controller.getCurrentUser()._id;
         String urlString = Controller.serverUrl + "/recipe?userId=" + userId;
-        ServerResponse response = HttpUtils.makeHttpRequest(urlString, "GET", "");
+        ServerResponse response = controller.server.makeHttpRequest(urlString, "GET", "");
         
         if (response.getStatusCode() == 200) {
             recipes = Arrays.asList(Utils.unmarshalJson(response.getResponseBody(), RecipeSchema[].class));

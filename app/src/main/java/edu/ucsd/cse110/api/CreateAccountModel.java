@@ -53,7 +53,7 @@ public class CreateAccountModel implements ModelInterface {
         String encodedUsername = URLEncoder.encode(username, StandardCharsets.UTF_8);
         String encodedPassword = URLEncoder.encode(password, StandardCharsets.UTF_8);
         String urlString = Controller.serverUrl + "/user?username=" + encodedUsername + "&password=" + encodedPassword;
-        ServerResponse response = HttpUtils.makeHttpRequest(urlString, "POST", "");
+        ServerResponse response = controller.server.makeHttpRequest(urlString, "POST", "");
         
         if (response.getStatusCode() == 201)
             return Utils.unmarshalJson(response.getResponseBody(), UserSchema.class);

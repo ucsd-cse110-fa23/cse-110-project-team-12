@@ -19,14 +19,16 @@ public class Controller {
 	private UIInterface root;
     private UserSchema currentUser;
     public boolean useUI;
+    public HttpRequesterInterface server;
     public static final String serverUrl = "http://localhost:8100";
 
     // API Interfaces
     public VoicePromptInterface voicePrompt;
 
-    public Controller(boolean useUI, VoicePromptInterface voicePrompt) {
+    public Controller(boolean useUI, HttpRequesterInterface server, VoicePromptInterface voicePrompt) {
         this.useUI = useUI;
         this.voicePrompt = voicePrompt;
+        this.server = server;
 
         models = new EnumMap<>(ModelFactory.Type.class);
         uis = new EnumMap<>(UIFactory.Type.class);

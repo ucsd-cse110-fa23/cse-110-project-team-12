@@ -76,7 +76,7 @@ public class CreateRecipeModel implements ModelInterface {
         generatedRecipe.mealType = mealTypeString;
         generatedRecipe.ingredients = selectedIngredients;
         String urlString = Controller.serverUrl + "/chatgpt";
-        ServerResponse response = HttpUtils.makeHttpRequest(urlString, "POST", Utils.marshalJson(generatedRecipe));
+        ServerResponse response = controller.server.makeHttpRequest(urlString, "POST", Utils.marshalJson(generatedRecipe));
 
         if (response.getStatusCode() == 200)
             generatedRecipe = Utils.unmarshalJson(response.getResponseBody(), RecipeSchema.class);
@@ -86,7 +86,7 @@ public class CreateRecipeModel implements ModelInterface {
 
     public void generateDalleImage() {
         String urlString = Controller.serverUrl + "/dalle";
-        ServerResponse response = HttpUtils.makeHttpRequest(urlString, "POST", Utils.marshalJson(generatedRecipe));
+        ServerResponse response = controller.server.makeHttpRequest(urlString, "POST", Utils.marshalJson(generatedRecipe));
 
         if (response.getStatusCode() == 200)
             generatedRecipe = Utils.unmarshalJson(response.getResponseBody(), RecipeSchema.class);
@@ -100,7 +100,7 @@ public class CreateRecipeModel implements ModelInterface {
             String base64Encoding = Utils.encodeBase64(fileBinary);
 
             String urlString = Controller.serverUrl + "/whisper";
-            ServerResponse response = HttpUtils.makeHttpRequest(urlString, "POST", base64Encoding);
+            ServerResponse response = controller.server.makeHttpRequest(urlString, "POST", base64Encoding);
 
             if (response.getStatusCode() == 200) {
                 return response.getResponseBody();
