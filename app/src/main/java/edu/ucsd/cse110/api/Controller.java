@@ -2,13 +2,7 @@ package edu.ucsd.cse110.api;
 
 import java.util.*;
 
-import edu.ucsd.cse110.client.CreateAccountView;
-import edu.ucsd.cse110.client.CreateRecipeView;
-import edu.ucsd.cse110.client.HomeView;
-import edu.ucsd.cse110.client.LogInView;
-import edu.ucsd.cse110.client.RecipeDetailedView;
 import edu.ucsd.cse110.client.Root;
-import edu.ucsd.cse110.client.SharePopupView;
 import edu.ucsd.cse110.server.schemas.UserSchema;
 import edu.ucsd.cse110.client.NoUI;
 import javafx.scene.Parent;
@@ -30,7 +24,7 @@ public class Controller {
 
         models = new EnumMap<>(ModelFactory.Type.class);
         uis = new EnumMap<>(UIFactory.Type.class);
-        root = new Root();
+        root = useUI ? new Root() : new NoUI();
         
         this.receiveMessageFromModel(new Message(Message.HomeModel.StartLogInView));
     }
@@ -146,60 +140,5 @@ public class Controller {
 
     public boolean existsUI(UIFactory.Type type) {
         return uis.containsKey(type);
-    }
-}
-
-class ModelFactory {
-    public enum Type {
-        CreateRecipe,
-        HomePage,
-        DetailedView,
-        SharePopup,
-        CreateAccount,
-        LogIn,
-    }
-
-    public static ModelInterface make(Type type, Controller c) {
-        if (type == Type.CreateRecipe)
-            return new CreateRecipeModel(c);
-        else if (type == Type.HomePage)
-            return new HomeModel(c);
-        else if (type == Type.DetailedView)
-            return new RecipeDetailedModel(c);
-        else if (type == Type.SharePopup)
-            return new SharePopupModel(c);
-        else if (type == Type.CreateAccount)
-            return new CreateAccountModel(c);
-        else if (type == Type.LogIn)
-            return new LogInModel(c);
-        return null;
-    }
-}
-
-class UIFactory {
-    public enum Type {
-        CreateRecipe,
-        HomePage,
-        DetailedView,
-        SharePopup,
-		CreateAccount,
-		LogIn,
-    }
-
-    public static UIInterface make(Type type, Controller c) {
-        if(!c.useUI) return new NoUI();
-        if (type == Type.CreateRecipe)
-            return new CreateRecipeView(c);
-        else if (type == Type.HomePage)
-            return new HomeView(c);
-        else if (type == Type.DetailedView)
-            return new RecipeDetailedView(c);
-        else if (type == Type.SharePopup)
-            return new SharePopupView(c);
-        else if (type == Type.CreateAccount)
-            return new CreateAccountView(c);
-        else if (type == Type.LogIn)
-            return new LogInView(c);
-        return null;
     }
 }
