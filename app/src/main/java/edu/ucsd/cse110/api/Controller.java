@@ -2,13 +2,6 @@ package edu.ucsd.cse110.api;
 
 import java.util.*;
 
-import edu.ucsd.cse110.api.Message.HttpRequest;
-import edu.ucsd.cse110.client.CreateAccountView;
-import edu.ucsd.cse110.client.CreateRecipeView;
-import edu.ucsd.cse110.client.ErrorPopupView;
-import edu.ucsd.cse110.client.HomeView;
-import edu.ucsd.cse110.client.LogInView;
-import edu.ucsd.cse110.client.RecipeDetailedView;
 import edu.ucsd.cse110.client.Root;
 import edu.ucsd.cse110.server.schemas.UserSchema;
 import edu.ucsd.cse110.client.NoUI;

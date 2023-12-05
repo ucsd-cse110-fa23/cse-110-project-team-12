@@ -205,7 +205,7 @@ public class Message {
     private boolean keyValid(String key) {
         return type.allowedKeys().contains(key);
     }
-
+    @SuppressWarnings("unchecked")
     public <T> T getKey(String key) {
         if (!keyValid(key))
             throw new IllegalArgumentException("Can't use key " + key + " for message type " + type);
