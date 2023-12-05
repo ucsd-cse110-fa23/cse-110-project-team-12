@@ -6,8 +6,16 @@
 	-background: #5b5b5b;
 }
 
-#log-in-view, #signup-view {
+#log-in-view, 
+#signup-view {
 	-fx-background-color: -green;
+	-fx-alignment: top-center;
+}
+
+#error-popup {
+	-fx-background-color: -green;
+	-fx-alignment: top-center;
+	-fx-spacing: 10;
 }
 
 #login-spacer {
@@ -20,6 +28,22 @@
 	-fx-min-height: 95;
 	-fx-max-height: 95;
 	-fx-alignment: bottom-center;
+}
+
+#error-spacer {
+	-fx-min-height: 326;
+	-fx-max-height: 326;
+	-fx-spacing: 15;
+	-fx-alignment: center;
+}
+
+#error-refresh-button {
+	-fx-shape: 'M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0';
+	-fx-background-color: -background;
+	-fx-border-width: 0;
+	-fx-min-width: 40;
+	-fx-min-height: 40;
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 6, 0.1, 0, 4);
 }
 
 #username,
@@ -104,18 +128,23 @@
 	-fx-spacing: 185;
 }
 
-#invalid-entry {
+#invalid-entry,
+#error-message {
 	-fx-text-fill: -red;
 	-fx-font-family: 'Helvetica';
 	-fx-font-weight: bold;
 	-fx-font-size: 18;
 }
 
-#server-error {
-	-fx-text-fill: -red;
-	-fx-font-family: 'Helvetica';
-	-fx-font-weight: bold;
-	-fx-font-size: 13;
+#error-message-background {
+	-fx-background-color: -background;
+	-fx-min-width: 265;
+	-fx-max-width: 265;
+	-fx-min-height: 75;
+	-fx-max-height: 75;
+	-fx-background-radius: 22;
+	-fx-alignment: center;
+	-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 6, 0.1, 0, 4);
 }
 
 #app-frame {
@@ -742,7 +771,7 @@
 	-fx-alignment: center;
 }
 
-#share-link-popup {
+#share-popup {
 	-fx-pref-width: 325;
 	-fx-pref-height: 450;
 	-fx-alignment: bottom-center;

@@ -6,7 +6,6 @@ import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.Message;
 import edu.ucsd.cse110.api.UIInterface;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -26,15 +25,9 @@ public class LogInView extends VBox implements UIInterface {
 
 	public LogInView(Controller c) {
 		this.controller = c;
-
 		this.setId("log-in-view");
 
 		Header header = new Header();
-		this.setAlignment(Pos.CENTER);
-		this.addChild(header);
-
-		// after sucessful server connect
-		this.setAlignment(Pos.TOP_CENTER);
 
 		loginSpacer = new HBox();
 		loginSpacer.setId("login-spacer");
@@ -68,7 +61,7 @@ public class LogInView extends VBox implements UIInterface {
 		signUp.setId("sign-up");
 		loginButtonBox.setId("login-button-box");
 
-		this.getChildren().addAll(loginSpacer, userBox, passBox, rememberBox, loginButtonBox);
+		this.getChildren().addAll(header, loginSpacer, userBox, passBox, rememberBox, loginButtonBox);
 
 		signUp.setOnAction(
 				e-> {
@@ -112,20 +105,6 @@ public class LogInView extends VBox implements UIInterface {
 					}
 				});
 
-	}
-
-	public void noServerUI() {
-		loginButtonBox.getChildren().remove(signUp);
-
-		loginSpacer.getChildren().clear();
-		Label serverError = new Label("Unable to connect to server, please try again.");
-		serverError.setId("server-error");
-		loginSpacer.getChildren().add(serverError);
-	}
-
-	public void connectedServerUI() {
-		loginButtonBox.getChildren().add(0, signUp);
-		loginSpacer.getChildren().clear();
 	}
 
 	@Override
