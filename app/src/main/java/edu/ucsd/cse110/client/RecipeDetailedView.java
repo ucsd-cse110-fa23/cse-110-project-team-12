@@ -21,6 +21,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.WritableImage;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.embed.swing.SwingFXUtils;
@@ -285,8 +287,16 @@ public class RecipeDetailedView extends StackPane implements UIInterface {
         try {
             BufferedImage bufImg = Utils.decodeBase64ToBufferedImage(base64ImageEncoding);
             Image recipeImage = SwingFXUtils.toFXImage(bufImg, null);
+			ImageView recipeImageView = new ImageView(recipeImage);
+            recipeImageView.setFitWidth(132);
+            recipeImageView.setFitHeight(132);
+
+			Image recipeImageResize = recipeImageView.snapshot(null, null);
+
+			PixelReader pixelReader = recipeImageResize.getPixelReader();
+			Image recipeImageCrop = new WritableImage(pixelReader, 0, 29, 132, 74);
     
-            ImageView recipeImageView = new ImageView(recipeImage);
+            recipeImageView = new ImageView(recipeImageCrop);
             recipeImageView.setFitWidth(132);
             recipeImageView.setFitHeight(74);
     

@@ -63,7 +63,7 @@ public class ShareRequestHandler implements HttpHandler{
             byte[] mealTypeLogo = Files.readAllBytes(Paths.get("./src/main/java/edu/ucsd/cse110/client/resources/" + mealTypeLogoName));
             String base64MealTypeLogo = Utils.encodeBase64(mealTypeLogo);
 
-            requestedRecipe.description = requestedRecipe.description.replace("\n", "<br>");
+            requestedRecipe.description = requestedRecipe.description.trim().replace("\n", "<br>");
 
             recipePageString = recipePageString.replace("{{Title}}", requestedRecipe.title);
             recipePageString = recipePageString.replace("{{Description}}", requestedRecipe.description);
