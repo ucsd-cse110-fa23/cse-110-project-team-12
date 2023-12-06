@@ -71,7 +71,7 @@ public class LogInModel implements ModelInterface {
     
     // Returns null if no user found with specified username and password.
     private UserSchema getUser(String username, String password) {
-        if (username == null || password == null)
+        if (username == null || password == null || username.equals("") || password.equals(""))
             return null;
 
         // Needed here so special characters can be passed into the url.
@@ -83,9 +83,9 @@ public class LogInModel implements ModelInterface {
         if (response.getStatusCode() == 200) {
             return Utils.unmarshalJson(response.getResponseBody(), UserSchema.class);
         }
-        else {
+        else if (response.getStatusCode() == 500) {
             controller.receiveMessageFromModel(new Message(Message.HttpRequest.ServerError));
-            return null;
         }
+        return null;
     }
 }
