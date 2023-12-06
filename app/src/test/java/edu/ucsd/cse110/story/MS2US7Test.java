@@ -2,7 +2,6 @@ package edu.ucsd.cse110.story;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,6 @@ import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.HomeModel;
 import edu.ucsd.cse110.api.Message;
 import edu.ucsd.cse110.api.ModelFactory;
-import edu.ucsd.cse110.api.UIFactory;
 import edu.ucsd.cse110.api.VoicePromptMock;
 import edu.ucsd.cse110.api.HomeModel.SortOption;
 import edu.ucsd.cse110.server.schemas.RecipeSchema;
