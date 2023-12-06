@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
@@ -19,7 +18,6 @@ import edu.ucsd.cse110.api.UIFactory;
 import edu.ucsd.cse110.api.Controller;
 import edu.ucsd.cse110.api.CreateAccountModel;
 import edu.ucsd.cse110.api.HomeModel;
-import edu.ucsd.cse110.api.HttpUtils;
 import edu.ucsd.cse110.api.VoicePromptMock;
 import edu.ucsd.cse110.server.services.mongodb.MongoDBInterface;
 import edu.ucsd.cse110.server.services.mongodb.MongoDBMock;
@@ -109,10 +107,7 @@ public class MS2US2Test {
         String username = "Bob";
         String password1 = "password";
 
-        String encodedUsername = URLEncoder.encode(username, StandardCharsets.UTF_8);
-        String encodedPassword = URLEncoder.encode(password1, StandardCharsets.UTF_8);
-        String urlString = Controller.serverUrl + "/user?username=" + encodedUsername + "&password=" + encodedPassword;
-        HttpUtils.makeHttpRequest(urlString, "POST", "");
+        mongo.createUser(username, password1);
 
         String password2 = "IJD3de0**#d";
         boolean autoLogin = false;
