@@ -1,4 +1,4 @@
-package edu.ucsd.cse110.story;
+package edu.ucsd.cse110.story.MS1Tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
