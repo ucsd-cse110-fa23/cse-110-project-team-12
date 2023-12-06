@@ -89,7 +89,15 @@ public class CreateAccountView extends VBox implements UIInterface {
 					invalidEntry = new Label("Passwords must match");
 					invalidEntry.setId("invalid-entry");
 					createSpacer.getChildren().add(invalidEntry);
-				} else {
+				}
+				else if(userArea.getText().length() == 0 || passArea.getText().length() == 0) {
+					createSpacer.getChildren().clear();
+					Label invalidEntry = null;
+					invalidEntry = new Label("Invalid username/password");
+					invalidEntry.setId("invalid-entry");
+					createSpacer.getChildren().add(invalidEntry);
+				} 
+				else {
 					controller.receiveMessageFromModel(
 						new Message(Message.CreateAccountView.SignUpButton,
 						"Username", userArea.getText(),
