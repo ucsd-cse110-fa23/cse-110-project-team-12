@@ -26,4 +26,8 @@ public class SharePopupModel implements ModelInterface {
             clipboard.setContent(content);
         }
     }
+
+    public String getSharelink() {
+        return shareLink;
+    }
 }
