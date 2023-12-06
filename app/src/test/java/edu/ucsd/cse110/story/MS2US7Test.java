@@ -48,40 +48,49 @@ public class MS2US7Test {
         UserSchema user = mongo.createUser("test", "test");
         List<RecipeSchema> recipeList;
 
-        RecipeSchema recipe1 = new RecipeSchema();
+        RecipeSchema recipe1 = new RecipeSchema(); // Oldest
         recipe1.userId = user._id;
-        recipe1.title = "Fiery Chicken";
+        recipe1.title = "Apple Pie Bites";
+        recipe1.description = "Pie";
+        recipe1.mealType = "Dinner";
+        recipe1.ingredients = "Apples";
         mongo.saveRecipe(recipe1);
 
         RecipeSchema recipe2 = new RecipeSchema();
         recipe2.userId = user._id;
         recipe2.title = "Yuzu Cakes";
+        recipe2.description = "Cake";
+        recipe2.mealType = "Lunch";
+        recipe2.ingredients = "Yuzu";
         mongo.saveRecipe(recipe2);
 
-        RecipeSchema recipe3 = new RecipeSchema();
+        RecipeSchema recipe3 = new RecipeSchema(); // Newest
         recipe3.userId = user._id;
-        recipe3.title = "Apple Pie Bites";
+        recipe3.title = "Fiery Chicken";
+        recipe3.description = "Chicken";
+        recipe3.mealType = "Lunch";
+        recipe3.ingredients = "Chicken";
         mongo.saveRecipe(recipe3);
 
         controller.receiveMessageFromModel(new Message(Message.LogInModel.SetUser, "User", user));
         controller.receiveMessageFromModel(new Message(Message.LogInModel.StartHomeView));
 
         HomeModel hm = (HomeModel)controller.getState(ModelFactory.Type.HomePage);
-        
+
         recipeList = hm.getRecipes();
 
-        // recipe list not in alphabetical order
-        assertNotEquals(recipe3, recipeList.get(0));
-        assertNotEquals(recipe1, recipeList.get(1));
-        assertNotEquals(recipe2, recipeList.get(2));
+        // recipe list not in alphabetical order (in date decending order)
+        assertNotEquals(recipe1.title, recipeList.get(0).title);
+        assertNotEquals(recipe3.title, recipeList.get(1).title);
+        assertNotEquals(recipe2.title, recipeList.get(2).title);
 
         // click on the “Alphabetical” radio-button in the “Sort-by” box
         controller.receiveMessageFromUI(new Message(Message.HomeView.SortRecipeButton, "SortOption", SortOption.TitleAsc));
 
         recipeList = hm.getRecipes();
 
-        assertEquals(recipe3, recipeList.get(0));
-        assertEquals(recipe1, recipeList.get(1));
-        assertEquals(recipe2, recipeList.get(2));
+        assertEquals(recipe1.title, recipeList.get(0).title);
+        assertEquals(recipe3.title, recipeList.get(1).title);
+        assertEquals(recipe2.title, recipeList.get(2).title);
     }
 }
