@@ -80,8 +80,8 @@ public class MS2US1Test {
         HomeModel hm = (HomeModel) controller.getState(ModelFactory.Type.HomePage);
 
         // And My two recipes “Chicken Noodle Soup” and “Lasagna” are displayed
-        assertEquals("Lasagna", hm.getRecipes().get(1).title);
-        assertEquals("Chicken Noodle Soup", hm.getRecipes().get(0).title);
+        assertEquals("Lasagna", hm.getRecipes().get(0).title);
+        assertEquals("Chicken Noodle Soup", hm.getRecipes().get(1).title);
 
     }
 }
