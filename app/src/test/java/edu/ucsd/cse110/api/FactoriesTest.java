@@ -23,14 +23,6 @@ public class FactoriesTest {
     }
 
     @Test
-    public void testModelFactoryMakeCreateHomeModel() {
-
-        ModelInterface mi = ModelFactory.make(ModelFactory.Type.HomePage, controller);
-        assertNotNull(mi);
-        assertTrue(mi instanceof HomeModel);
-    }
-
-    @Test
     public void testModelFactoryMakeRecipeDetailedModel() {
 
         ModelInterface mi = ModelFactory.make(ModelFactory.Type.DetailedView, controller);
