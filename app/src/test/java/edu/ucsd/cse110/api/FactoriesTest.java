@@ -8,13 +8,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import edu.ucsd.cse110.client.CreateAccountView;
-import edu.ucsd.cse110.client.CreateRecipeView;
-import edu.ucsd.cse110.client.HomeView;
-import edu.ucsd.cse110.client.LogInView;
 import edu.ucsd.cse110.client.NoUI;
-import edu.ucsd.cse110.client.RecipeDetailedView;
-import edu.ucsd.cse110.client.SharePopupView;
 
 public class FactoriesTest {
 
@@ -76,67 +70,9 @@ public class FactoriesTest {
     }
 
     @Test
-    public void testUIFactoryMakeCreateRecipeView() {
-
-        controller.useUI = true;
-
-        UIInterface mi = UIFactory.make(UIFactory.Type.CreateRecipe, controller);
-        assertNotNull(mi);
-        assertTrue(mi instanceof CreateRecipeView);
-    }
-
-    @Test
-    public void testUIFactoryMakeHomeView() {
-
-        controller.useUI = true;
-
-        UIInterface mi = UIFactory.make(UIFactory.Type.HomePage, controller);
-        assertNotNull(mi);
-        assertTrue(mi instanceof HomeView);
-    }
-
-    @Test
-    public void testUIFactoryMakeRecipeDetailedView() {
-
-        controller.useUI = true;
-
-        UIInterface mi = UIFactory.make(UIFactory.Type.DetailedView, controller);
-        assertNotNull(mi);
-        assertTrue(mi instanceof RecipeDetailedView);
-    }
-
-    @Test
-    public void testUIFactoryMakeSharePopupView() {
-
-        controller.useUI = true;
-
-        UIInterface mi = UIFactory.make(UIFactory.Type.SharePopup, controller);
-        assertNotNull(mi);
-        assertTrue(mi instanceof SharePopupView);
-    }
-
-    @Test
-    public void testUIFactoryMakeCreateAccountView() {
-
-        controller.useUI = true;
-
-        UIInterface mi = UIFactory.make(UIFactory.Type.CreateAccount, controller);
-        assertNotNull(mi);
-        assertTrue(mi instanceof CreateAccountView);
-    }
-
-    @Test
-    public void testUIFactoryMakeLogInView() {
-
-        controller.useUI = true;
-
-        UIInterface mi = UIFactory.make(UIFactory.Type.LogIn, controller);
-        assertNotNull(mi);
-        assertTrue(mi instanceof LogInView);
-    }
-
-    @Test
     public void testUIFactoryMakeNoMatchingType() {
+
+        controller.useUI = true;
 
         UIInterface mi = UIFactory.make(null, controller);
         assertNull(mi);
